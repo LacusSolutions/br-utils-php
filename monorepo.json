@@ -1,7 +1,5 @@
 {
   "name": "lacus-br-utils-monorepo",
-  "description": "Configuração do monorepo para utilitários brasileiros",
-  "version": "1.0.0",
   "packages": [
     "packages/*"
   ],
