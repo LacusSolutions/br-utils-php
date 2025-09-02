@@ -1,6 +1,6 @@
 {
   "name": "lacus/cpf-fmt",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "library",
   "description": "Utility function to format CPF (Brazilian ID document).",
   "license": "MIT",

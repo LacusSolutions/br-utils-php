@@ -1,6 +1,6 @@
 {
   "name": "lacus/cpf-utils",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "library",
   "description": "Utility functions to deal with CPF data (Brazilian personal ID), like generation fake ones, validating and formatting",
   "license": "MIT",
