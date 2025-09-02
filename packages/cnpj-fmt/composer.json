@@ -23,12 +23,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/LacusSoft/br-utils-php.git",
+    "url": "https://github.com/LacusSolutions/br-utils-php.git",
     "directory": "packages/cnpj-fmt/"
   },
   "support": {
-    "issues": "https://github.com/LacusSoft/br-utils-php/issues",
-    "source": "https://github.com/LacusSoft/br-utils-php"
+    "issues": "https://github.com/LacusSolutions/br-utils-php/issues",
+    "source": "https://github.com/LacusSolutions/br-utils-php"
   },
   "homepage": "https://cpf-utils.vercel.app/",
   "scripts": {
