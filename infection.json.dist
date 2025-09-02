@@ -1,0 +1,25 @@
+{
+  "source": {
+    "directories": [
+      "src",
+      "packages/*/src"
+    ],
+    "excludes": [
+      "vendor",
+      "tests",
+      "packages/*/tests"
+    ]
+  },
+  "logs": {
+    "text": "infection.log",
+    "html": "infection.html",
+    "json": "infection.json"
+  },
+  "mutators": {
+    "@default": true
+  },
+  "testFramework": "phpunit",
+  "bootstrap": "vendor/autoload.php",
+  "initialTestsPhpOptions": "-d zend.enable_gc=0",
+  "testFrameworkOptions": "--configuration=phpunit.xml.dist"
+}

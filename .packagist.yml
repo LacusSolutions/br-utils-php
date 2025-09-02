@@ -1,0 +1,22 @@
+# Configuração para publicação no Packagist
+# Este arquivo deve ser configurado no repositório do GitHub
+
+# Configurações gerais
+github: true
+github-oauth: true
+
+# Configurações de segurança
+security: true
+security-advisories: true
+
+# Configurações de cache
+cache: true
+cache-ttl: 3600
+
+# Configurações de webhook
+webhook: true
+webhook-url: https://packagist.org/api/github
+
+# Configurações de notificação
+notify: true
+notify-email: julio@lacus.com.br

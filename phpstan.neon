@@ -1,0 +1,13 @@
+parameters:
+  level: 8
+  paths:
+    - src
+    - packages/*/src
+  excludePaths:
+    - vendor
+    - tests
+    - packages/*/tests
+  checkMissingIterableValueType: false
+  checkGenericClassInNonGenericObjectType: false
+  ignoreErrors:
+    - '#Call to an undefined method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+#'

@@ -1,0 +1,63 @@
+{
+  "name": "lacus/br-utils",
+  "version": "0.0.0",
+  "type": "library",
+  "description": "Utility function to format CNPJ (Brazilian company ID).",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Julio L. Muller",
+      "email": "juliolmuller@outlook.com",
+      "homepage": "https://juliolmuller.github.io"
+    }
+  ],
+  "keywords": [
+    "cpf",
+    "cnpj",
+    "cep",
+    "rg",
+    "state",
+    "city",
+    "validar",
+    "validador",
+    "validate",
+    "validation",
+    "formatar",
+    "format",
+    "gerar",
+    "gerador",
+    "generate",
+    "generator",
+    "pt-br",
+    "br"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LacusSoft/br-utils-php.git",
+    "directory": "packages/br-utils/"
+  },
+  "support": {
+    "issues": "https://github.com/LacusSoft/br-utils-php/issues",
+    "source": "https://github.com/LacusSoft/br-utils-php"
+  },
+  "homepage": "https://cpf-utils.vercel.app/",
+  "scripts": {
+    "test": "phpunit"
+  },
+  "require": {
+    "php": "^7.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Lacus\\BrUtils\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Lacus\\BrUtils\\Tests\\": "tests/"
+    }
+  }
+}

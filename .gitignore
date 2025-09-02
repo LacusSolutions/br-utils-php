@@ -1,0 +1,14 @@
+/vendor/
+/composer.lock
+/node_modules/
+/.phpunit.cache/
+/coverage/
+/build/
+*.log
+*.cache
+.phpunit.result.cache
+infection.log
+infection.html
+infection.json
+.env*
+!.env.example
