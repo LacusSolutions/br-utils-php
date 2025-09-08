@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lacus\CpfUtils;
+namespace Lacus\Cpf\Utils;
 
 /**
  * Utilitários para CPF brasileiro

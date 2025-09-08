@@ -47,12 +47,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\CpfUtils\\": "src/"
+      "Lacus\\Cpf\\Utils\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\CpfUtils\\Tests\\": "tests/"
+      "Lacus\\Cpf\\Utils\\Tests\\": "tests/"
     }
   }
 }
