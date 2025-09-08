@@ -19,6 +19,7 @@
     "fix": "php-cs-fixer fix",
     "infection": "infection --min-msi=80 --min-covered-msi=80",
     "test": "phpunit",
+    "test:watch": "phpunit-watcher watch",
     "test-coverage": "phpunit --coverage-html coverage",
     "test:br-utils": "phpunit --testsuite='BR Utils'",
     "test:cnpj-fmt": "phpunit --testsuite='CNPJ Formatter'",
@@ -48,7 +49,8 @@
     "phpstan/phpstan": "^1.10",
     "phpunit/phpunit": "^10.0",
     "ramsey/conventional-commits": "^1.6",
-    "roave/security-advisories": "dev-latest"
+    "roave/security-advisories": "dev-latest",
+    "spatie/phpunit-watcher": "^1.24"
   },
   "autoload": {
     "psr-4": {

@@ -32,13 +32,15 @@
   },
   "homepage": "https://cpf-utils.vercel.app/",
   "scripts": {
-    "test": "phpunit"
+    "test": "phpunit",
+    "test:watch": "phpunit-watcher watch"
   },
   "require": {
-    "php": "^7.3"
+    "php": ">=7.3"
   },
   "require-dev": {
-    "phpunit/phpunit": "^10.0"
+    "phpunit/phpunit": "^10.0",
+    "spatie/phpunit-watcher": "^1.24"
   },
   "autoload": {
     "psr-4": {
