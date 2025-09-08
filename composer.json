@@ -11,8 +11,32 @@
       "homepage": "https://juliolmuller.github.io"
     }
   ],
+  "scripts": {
+    "test": "phpunit",
+    "test-coverage": "phpunit --coverage-html coverage",
+    "test:br-utils": "phpunit --testsuite='BR Utils'",
+    "test:cnpj-fmt": "phpunit --testsuite='CNPJ Formatter'",
+    "test:cnpj-gen": "phpunit --testsuite='CNPJ Generator'",
+    "test:cnpj-utils": "phpunit --testsuite='CNPJ Utils'",
+    "test:cnpj-val": "phpunit --testsuite='CNPJ Validator'",
+    "test:cpf-fmt": "phpunit --testsuite='CPF Formatter'",
+    "test:cpf-gen": "phpunit --testsuite='CPF Generator'",
+    "test:cpf-utils": "phpunit --testsuite='CPF Utils'",
+    "test:formatters": "phpunit --testsuite='CPF Formatter' --testsuite='CNPJ Formatter'",
+    "test:generators": "phpunit --testsuite='CPF Generator' --testsuite='CNPJ Generator'",
+    "test:validators": "phpunit --testsuite='CPF Validator' --testsuite='CNPJ Validator'",
+    "test:cnpj": "phpunit --testsuite='CNPJ Validator' --testsuite='CNPJ Generator' --testsuite='CNPJ Formatter' --testsuite='CNPJ Utils'",
+    "test:cpf": "phpunit --testsuite='CPF Validator' --testsuite='CPF Generator' --testsuite='CPF Formatter' --testsuite='CPF Utils'",
+    "test:utils": "phpunit --testsuite='CPF Utils' --testsuite='CNPJ Utils' --testsuite='BR Utils'",
+    "test:cpf-val": "phpunit --testsuite='CPF Validator'",
+    "test:all": "phpunit --testsuite='All Tests'",
+    "analyze": "phpstan analyse",
+    "fix": "php-cs-fixer fix",
+    "check": "php-cs-fixer fix --dry-run --diff",
+    "infection": "infection --min-msi=80 --min-covered-msi=80"
+  },
   "require": {
-    "php": "^7.3"
+    "php": ">=7.3"
   },
   "require-dev": {
     "phpunit/phpunit": "^10.0",
@@ -23,21 +47,29 @@
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\": "src/"
+      "Lacus\\BrUtils\\": "packages/br-utils/src/",
+      "Lacus\\CnpjFmt\\": "packages/cnpj-fmt/src/",
+      "Lacus\\CnpjGen\\": "packages/cnpj-gen/src/",
+      "Lacus\\CnpjUtils\\": "packages/cnpj-utils/src/",
+      "Lacus\\CnpjVal\\": "packages/cnpj-val/src/",
+      "Lacus\\CpfFmt\\": "packages/cpf-fmt/src/",
+      "Lacus\\CpfGen\\": "packages/cpf-gen/src/",
+      "Lacus\\CpfUtils\\": "packages/cpf-utils/src/",
+      "Lacus\\CpfVal\\": "packages/cpf-val/src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\Tests\\": "tests/"
+      "Lacus\\BrUtils\\Tests\\": "packages/br-utils/tests/",
+      "Lacus\\CnpjFmt\\Tests\\": "packages/cnpj-fmt/tests/",
+      "Lacus\\CnpjGen\\Tests\\": "packages/cnpj-gen/tests/",
+      "Lacus\\CnpjUtils\\Tests\\": "packages/cnpj-utils/tests/",
+      "Lacus\\CnpjVal\\Tests\\": "packages/cnpj-val/tests/",
+      "Lacus\\CpfFmt\\Tests\\": "packages/cpf-fmt/tests/",
+      "Lacus\\CpfGen\\Tests\\": "packages/cpf-gen/tests/",
+      "Lacus\\CpfUtils\\Tests\\": "packages/cpf-utils/tests/",
+      "Lacus\\CpfVal\\Tests\\": "packages/cpf-val/tests/"
     }
-  },
-  "scripts": {
-    "test": "phpunit",
-    "test-coverage": "phpunit --coverage-html coverage",
-    "analyse": "phpstan analyse",
-    "fix": "php-cs-fixer fix",
-    "check": "php-cs-fixer fix --dry-run --diff",
-    "infection": "infection --min-msi=80 --min-covered-msi=80"
   },
   "config": {
     "sort-packages": true,

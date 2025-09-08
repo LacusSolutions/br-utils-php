@@ -56,10 +56,25 @@ composer require lacus/br-utils
 
 ## Desenvolvimento
 
+### Testes
+
 ```bash
-# Executar testes
+# Executar todos os testes
 composer test
 
+# Executar com cobertura
+composer test-coverage
+
+# Testar pacotes específicos
+composer test:cpf-val      # Validador de CPF
+composer test:cnpj-gen     # Gerador de CNPJ
+composer test:validators   # Todos os validadores
+composer test:cpf          # Todos os pacotes CPF
+```
+
+### Qualidade de Código
+
+```bash
 # Análise estática
 composer analyse
 
@@ -72,6 +87,8 @@ composer check
 # Mutação testing
 composer infection
 ```
+
+Para mais detalhes sobre testes, consulte [TESTING.md](TESTING.md).
 
 ## Requisitos
 

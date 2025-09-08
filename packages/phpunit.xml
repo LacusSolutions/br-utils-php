@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+  bootstrap="vendor/autoload.php"
+  processIsolation="false"
+  stopOnFailure="false"
+  colors="true"
+>
+  <testsuites>
+    <testsuite name="CPF Validator">
+      <directory>cpf-val/tests</directory>
+    </testsuite>
+    <testsuite name="CNPJ Validator">
+      <directory>cnpj-val/tests</directory>
+    </testsuite>
+    <testsuite name="CPF Generator">
+      <directory>cpf-gen/tests</directory>
+    </testsuite>
+    <testsuite name="CNPJ Generator">
+      <directory>cnpj-gen/tests</directory>
+    </testsuite>
+    <testsuite name="CPF Formatter">
+      <directory>cpf-fmt/tests</directory>
+    </testsuite>
+    <testsuite name="CNPJ Formatter">
+      <directory>cnpj-fmt/tests</directory>
+    </testsuite>
+    <testsuite name="CPF Utils">
+      <directory>cpf-utils/tests</directory>
+    </testsuite>
+    <testsuite name="CNPJ Utils">
+      <directory>cnpj-utils/tests</directory>
+    </testsuite>
+    <testsuite name="BR Utils">
+      <directory>br-utils/tests</directory>
+    </testsuite>
+  </testsuites>
+  <coverage>
+    <include>
+      <directory suffix=".php">cpf-val/src</directory>
+      <directory suffix=".php">cnpj-val/src</directory>
+      <directory suffix=".php">cpf-gen/src</directory>
+      <directory suffix=".php">cnpj-gen/src</directory>
+      <directory suffix=".php">cpf-fmt/src</directory>
+      <directory suffix=".php">cnpj-fmt/src</directory>
+      <directory suffix=".php">cpf-utils/src</directory>
+      <directory suffix=".php">cnpj-utils/src</directory>
+      <directory suffix=".php">br-utils/src</directory>
+    </include>
+  </coverage>
+</phpunit>
