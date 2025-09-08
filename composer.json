@@ -43,12 +43,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\CnpjGen\\": "src/"
+      "Lacus\\Cnpj\\Gen\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\CnpjGen\\Tests\\": "tests/"
+      "Lacus\\Cnpj\\Gen\\Tests\\": "tests/"
     }
   }
 }
