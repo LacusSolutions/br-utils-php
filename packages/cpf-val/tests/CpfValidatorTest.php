@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Lacus\CpfVal\Tests;
+namespace Lacus\Cpf\Val\Tests;
 
-use Lacus\CpfVal\CpfValidator;
+use Lacus\Cpf\Val\CpfValidator;
 use PHPUnit\Framework\TestCase;
 
 class CpfValidatorTest extends TestCase

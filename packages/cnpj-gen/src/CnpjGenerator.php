@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lacus\CnpjGen;
+namespace Lacus\Cnpj\Gen;
 
 /**
  * Gerador de CNPJ brasileiro válido

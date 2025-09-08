@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lacus\CpfFmt;
+namespace Lacus\Cpf\Fmt;
 
 /**
  * Formatador de CPF brasileiro

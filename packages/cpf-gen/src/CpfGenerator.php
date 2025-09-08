@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lacus\CpfGen;
+namespace Lacus\Cpf\Gen;
 
 /**
  * Gerador de CPF brasileiro válido

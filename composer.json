@@ -48,27 +48,27 @@
   "autoload": {
     "psr-4": {
       "Lacus\\BrUtils\\": "packages/br-utils/src/",
-      "Lacus\\CnpjFmt\\": "packages/cnpj-fmt/src/",
-      "Lacus\\CnpjGen\\": "packages/cnpj-gen/src/",
-      "Lacus\\CnpjUtils\\": "packages/cnpj-utils/src/",
-      "Lacus\\CnpjVal\\": "packages/cnpj-val/src/",
-      "Lacus\\CpfFmt\\": "packages/cpf-fmt/src/",
-      "Lacus\\CpfGen\\": "packages/cpf-gen/src/",
-      "Lacus\\CpfUtils\\": "packages/cpf-utils/src/",
-      "Lacus\\CpfVal\\": "packages/cpf-val/src/"
+      "Lacus\\Cnpj\\Fmt\\": "packages/cnpj-fmt/src/",
+      "Lacus\\Cnpj\\Gen\\": "packages/cnpj-gen/src/",
+      "Lacus\\Cnpj\\Utils\\": "packages/cnpj-utils/src/",
+      "Lacus\\Cnpj\\Val\\": "packages/cnpj-val/src/",
+      "Lacus\\Cpf\\Fmt\\": "packages/cpf-fmt/src/",
+      "Lacus\\Cpf\\Gen\\": "packages/cpf-gen/src/",
+      "Lacus\\Cpf\\Utils\\": "packages/cpf-utils/src/",
+      "Lacus\\Cpf\\Val\\": "packages/cpf-val/src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
       "Lacus\\BrUtils\\Tests\\": "packages/br-utils/tests/",
-      "Lacus\\CnpjFmt\\Tests\\": "packages/cnpj-fmt/tests/",
-      "Lacus\\CnpjGen\\Tests\\": "packages/cnpj-gen/tests/",
-      "Lacus\\CnpjUtils\\Tests\\": "packages/cnpj-utils/tests/",
-      "Lacus\\CnpjVal\\Tests\\": "packages/cnpj-val/tests/",
-      "Lacus\\CpfFmt\\Tests\\": "packages/cpf-fmt/tests/",
-      "Lacus\\CpfGen\\Tests\\": "packages/cpf-gen/tests/",
-      "Lacus\\CpfUtils\\Tests\\": "packages/cpf-utils/tests/",
-      "Lacus\\CpfVal\\Tests\\": "packages/cpf-val/tests/"
+      "Lacus\\Cnpj\\Fmt\\Tests\\": "packages/cnpj-fmt/tests/",
+      "Lacus\\Cnpj\\Gen\\Tests\\": "packages/cnpj-gen/tests/",
+      "Lacus\\Cnpj\\Utils\\Tests\\": "packages/cnpj-utils/tests/",
+      "Lacus\\Cnpj\\Val\\Tests\\": "packages/cnpj-val/tests/",
+      "Lacus\\Cpf\\Fmt\\Tests\\": "packages/cpf-fmt/tests/",
+      "Lacus\\Cpf\\Gen\\Tests\\": "packages/cpf-gen/tests/",
+      "Lacus\\Cpf\\Utils\\Tests\\": "packages/cpf-utils/tests/",
+      "Lacus\\Cpf\\Val\\Tests\\": "packages/cpf-val/tests/"
     }
   },
   "config": {

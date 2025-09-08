@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Lacus\CnpjFmt\Tests;
+namespace Lacus\Cnpj\Fmt\Tests;
 
-use Lacus\CnpjFmt\CnpjFormatter;
+use Lacus\Cnpj\Fmt\CnpjFormatter;
 use PHPUnit\Framework\TestCase;
 
 class CnpjFormatterTest extends TestCase
