@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Lacus\CnpjVal\Tests;
+namespace Lacus\Cnpj\Val\Tests;
 
-use Lacus\CnpjVal\CnpjValidator;
+use Lacus\Cnpj\Val\CnpjValidator;
 use PHPUnit\Framework\TestCase;
 
 class CnpjValidatorTest extends TestCase
