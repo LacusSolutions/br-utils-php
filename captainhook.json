@@ -1,0 +1,33 @@
+{
+  "pre-commit": {
+    "enabled": false,
+    "actions": [
+      {
+        "action": "\\CaptainHook\\App\\Hook\\PHP\\Action\\Linting"
+      },
+      {
+        "action": "composer fix"
+      }
+    ]
+  },
+  "commit-msg": {
+    "enabled": false,
+    "actions": [
+      {
+        "action": "\\CaptainHook\\App\\Hook\\Message\\Action\\Beams",
+        "options": {
+          "subjectLength": 50,
+          "bodyLineLength": 72
+        }
+      }
+    ]
+  },
+  "pre-push": {
+    "enabled": false,
+    "actions": [
+      {
+        "action": "composer test"
+      }
+    ]
+  }
+}
