@@ -11,14 +11,10 @@
     ]
   },
   "commit-msg": {
-    "enabled": false,
+    "enabled": true,
     "actions": [
       {
-        "action": "\\CaptainHook\\App\\Hook\\Message\\Action\\Beams",
-        "options": {
-          "subjectLength": 50,
-          "bodyLineLength": 72
-        }
+        "action": "\\Ramsey\\CaptainHook\\ValidateConventionalCommit"
       }
     ]
   },

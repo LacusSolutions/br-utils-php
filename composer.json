@@ -12,6 +12,12 @@
     }
   ],
   "scripts": {
+    "prepare": "captainhook",
+    "commit": "conventional-commits prepare",
+    "analyze": "phpstan analyse",
+    "check": "php-cs-fixer fix --dry-run --diff",
+    "fix": "php-cs-fixer fix",
+    "infection": "infection --min-msi=80 --min-covered-msi=80",
     "test": "phpunit",
     "test-coverage": "phpunit --coverage-html coverage",
     "test:br-utils": "phpunit --testsuite='BR Utils'",
@@ -29,11 +35,7 @@
     "test:cpf": "phpunit --testsuite='CPF Validator' --testsuite='CPF Generator' --testsuite='CPF Formatter' --testsuite='CPF Utils'",
     "test:utils": "phpunit --testsuite='CPF Utils' --testsuite='CNPJ Utils' --testsuite='BR Utils'",
     "test:cpf-val": "phpunit --testsuite='CPF Validator'",
-    "test:all": "phpunit --testsuite='All Tests'",
-    "analyze": "phpstan analyse",
-    "fix": "php-cs-fixer fix",
-    "check": "php-cs-fixer fix --dry-run --diff",
-    "infection": "infection --min-msi=80 --min-covered-msi=80"
+    "test:all": "phpunit --testsuite='All Tests'"
   },
   "require": {
     "php": ">=7.3"
@@ -45,6 +47,7 @@
     "infection/infection": "^0.26",
     "phpstan/phpstan": "^1.10",
     "phpunit/phpunit": "^10.0",
+    "ramsey/conventional-commits": "^1.6",
     "roave/security-advisories": "dev-latest"
   },
   "autoload": {
