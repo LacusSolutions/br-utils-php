@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lacus\CnpjUtils;
+namespace Lacus\Cnpj\Utils;
 
 /**
  * Utilitários para CNPJ brasileiro
