@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Lacus\Cnpj\Gen\Tests;
+namespace Lacus\Generators\Cnpj\Tests;
 
-use Lacus\Cnpj\Gen\CnpjGenerator;
+use Lacus\Generators\Cnpj\CnpjGenerator;
 use PHPUnit\Framework\TestCase;
 
 class CnpjGeneratorTest extends TestCase
