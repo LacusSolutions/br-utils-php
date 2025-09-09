@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Lacus\Cnpj\Utils\Tests;
+namespace Lacus\Cnpj\Tests;
 
-use Lacus\Cnpj\Utils\CnpjUtils;
+use Lacus\Cnpj\CnpjUtils;
 use PHPUnit\Framework\TestCase;
 
 class CnpjUtilsTest extends TestCase
