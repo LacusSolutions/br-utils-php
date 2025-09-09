@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Lacus\Cpf\Gen\Tests;
+namespace Lacus\Generators\Cpf\Tests;
 
-use Lacus\Cpf\Gen\CpfGenerator;
+use Lacus\Generators\Cpf\CpfGenerator;
 use PHPUnit\Framework\TestCase;
 
 class CpfGeneratorTest extends TestCase

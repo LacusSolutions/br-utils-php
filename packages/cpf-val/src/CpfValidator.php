@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lacus\Cpf\Val;
+namespace Lacus\Validators\Cpf;
 
 /**
  * Validador de CPF brasileiro
