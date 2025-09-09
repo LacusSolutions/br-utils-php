@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Lacus\Cpf\Utils\Tests;
+namespace Lacus\Cpf\Tests;
 
-use Lacus\Cpf\Utils\CpfUtils;
+use Lacus\Cpf\CpfUtils;
 use PHPUnit\Framework\TestCase;
 
 class CpfUtilsTest extends TestCase
