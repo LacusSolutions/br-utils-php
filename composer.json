@@ -44,12 +44,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\Cnpj\\Val\\": "src/"
+      "Lacus\\Validators\\Cnpj\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\Cnpj\\Val\\Tests\\": "tests/"
+      "Lacus\\Validators\\Cnpj\\Tests\\": "tests/"
     }
   }
 }

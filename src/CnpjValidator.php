@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lacus\Cnpj\Val;
+namespace Lacus\Validators\Cnpj;
 
 /**
  * Validador de CNPJ brasileiro
