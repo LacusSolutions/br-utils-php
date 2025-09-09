@@ -44,12 +44,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\Cnpj\\Fmt\\": "src/"
+      "Lacus\\Formatters\\Cnpj\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\Cnpj\\Fmt\\Tests\\": "tests/"
+      "Lacus\\Formatters\\Cnpj\\Tests\\": "tests/"
     }
   }
 }
