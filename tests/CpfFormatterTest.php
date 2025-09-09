@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Lacus\Cpf\Fmt\Tests;
+namespace Lacus\Formatters\Cpf\Tests;
 
-use Lacus\Cpf\Fmt\CpfFormatter;
+use Lacus\Formatters\Cpf\CpfFormatter;
 use PHPUnit\Framework\TestCase;
 
 class CpfFormatterTest extends TestCase
