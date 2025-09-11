@@ -56,7 +56,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\Formatters\\Cnpj\\Tests\\": "tests/"
+      "Lacus\\CnpjFmt\\Tests\\": "tests/"
     }
   }
 }
