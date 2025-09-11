@@ -7,7 +7,7 @@
 ![Last Update Date](https://img.shields.io/github/last-commit/LacusSolutions/br-utils-php)
 ![Project License](https://img.shields.io/packagist/l/lacus/cpf-fmt)
 
-Utility function to format CPF (Brazilian ID document).
+Utility function/class to format CPF (Brazilian ID document).
 
 ## PHP Support
 
