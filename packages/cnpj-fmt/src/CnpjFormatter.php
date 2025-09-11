@@ -2,22 +2,99 @@
 
 declare(strict_types=1);
 
-namespace Lacus\Formatters\Cnpj;
+namespace Lacus\CnpjFmt;
 
 class CnpjFormatter
 {
-    public function format(string $cnpj): string
-    {
-        $cnpj = $this->clean($cnpj);
+    private CnpjFormatterOptions $options;
 
-        if (strlen($cnpj) !== 14) {
-            throw new \InvalidArgumentException('CNPJ deve ter 14 dígitos');
+    public function __construct(
+        ?bool $escape = null,
+        ?bool $hidden = null,
+        ?string $hiddenKey = null,
+        ?int $hiddenStart = null,
+        ?int $hiddenEnd = null,
+        ?string $dotKey = null,
+        ?string $slashKey = null,
+        ?string $dashKey = null,
+        ?callable $onFail = null,
+    ) {
+        $this->options = new CnpjFormatterOptions(
+            $escape,
+            $hidden,
+            $hiddenKey,
+            $hiddenStart,
+            $hiddenEnd,
+            $dotKey,
+            $slashKey,
+            $dashKey,
+            $onFail,
+        );
+    }
+
+    public function format(
+        string $cnpjString,
+        ?bool $escape = null,
+        ?bool $hidden = null,
+        ?string $hiddenKey = null,
+        ?int $hiddenStart = null,
+        ?int $hiddenEnd = null,
+        ?string $dotKey = null,
+        ?string $slashKey = null,
+        ?string $dashKey = null,
+        ?callable $onFail = null,
+    ): string {
+        $actualOptions = $this->getOptions()->merge(
+            $escape,
+            $hidden,
+            $hiddenKey,
+            $hiddenStart,
+            $hiddenEnd,
+            $dotKey,
+            $slashKey,
+            $dashKey,
+            $onFail,
+        );
+
+        $cnpjNumbersString = preg_replace('/[^0-9]/', '', $cnpjString);
+        $cnpjNumbersArray = str_split($cnpjNumbersString);
+
+        if (count($cnpjNumbersArray) !== CNPJ_LENGTH) {
+            $error = new \Error('Parameter "' . $cnpjString . '" does not contain ' . CNPJ_LENGTH . ' digits.');
+
+            return $actualOptions->getOnFail()($cnpjString, $error);
         }
 
-        return substr($cnpj, 0, 2) . '.' .
-               substr($cnpj, 2, 3) . '.' .
-               substr($cnpj, 5, 3) . '/' .
-               substr($cnpj, 8, 4) . '-' .
-               substr($cnpj, 12, 2);
+        if ($actualOptions->isHidden()) {
+            $hiddenStart = $actualOptions->getHiddenStart();
+            $hiddenEnd = $actualOptions->getHiddenEnd();
+            $hiddenKey = $actualOptions->getHiddenKey();
+
+            for ($i = $hiddenStart; $i <= $hiddenEnd; $i++) {
+                $cnpjNumbersArray[$i] = $hiddenKey;
+            }
+        }
+
+        $dotKey = $actualOptions->getDotKey();
+        $dashKey = $actualOptions->getDashKey();
+        $slashKey = $actualOptions->getSlashKey();
+
+        array_splice($cnpjNumbersArray, 12, 0, $dashKey);
+        array_splice($cnpjNumbersArray, 8, 0, $slashKey);
+        array_splice($cnpjNumbersArray, 5, 0, $dotKey);
+        array_splice($cnpjNumbersArray, 2, 0, $dotKey);
+
+        $prettyCnpj = implode('', $cnpjNumbersArray);
+
+        if ($actualOptions->isEscaped()) {
+            return htmlspecialchars($prettyCnpj, ENT_QUOTES, 'UTF-8');
+        }
+
+        return $prettyCnpj;
+    }
+
+    public function getOptions(): CnpjFormatterOptions
+    {
+        return $this->options;
     }
 }
