@@ -2,87 +2,39 @@
 
 declare(strict_types=1);
 
-namespace Lacus\Generators\Cnpj;
+namespace Lacus\CnpjGen;
 
-/**
- * Gerador de CNPJ brasileiro válido
- */
 class CnpjGenerator
 {
-    /**
-     * Gera um CNPJ válido
-     */
-    public function generate(): string
-    {
-        $cnpj = $this->generateRandomDigits(12);
-        $cnpj .= $this->calculateFirstDigit($cnpj);
-        $cnpj .= $this->calculateSecondDigit($cnpj);
+    private CnpjGeneratorOptions $options;
 
-        return $cnpj;
+    public function __construct(
+        ?bool $format = null,
+        ?string $prefix = null,
+    ) {
+        $this->options = new CnpjGeneratorOptions(
+            $format,
+            $prefix,
+        );
     }
 
-    /**
-     * Gera um CNPJ válido formatado
-     */
-    public function generateFormatted(): string
-    {
-        $cnpj = $this->generate();
-        return $this->format($cnpj);
+    public function generate(
+        ?bool $format = null,
+        ?string $prefix = null,
+    ): string {
+        $actualOptions = $this->getOptions()->merge(
+            $format,
+            $prefix,
+        );
+
+        // TODO: Implement the logic to generate a valid CNPJ
+        $generatedCnpj = '';
+
+        return $generatedCnpj;
     }
 
-    /**
-     * Gera múltiplos CNPJs válidos
-     */
-    public function generateMultiple(int $count): array
+    public function getOptions(): CnpjGeneratorOptions
     {
-        $cnpjs = [];
-        for ($i = 0; $i < $count; $i++) {
-            $cnpjs[] = $this->generate();
-        }
-        return $cnpjs;
-    }
-
-    private function generateRandomDigits(int $length): string
-    {
-        $digits = '';
-        for ($i = 0; $i < $length; $i++) {
-            $digits .= random_int(0, 9);
-        }
-        return $digits;
-    }
-
-    private function calculateFirstDigit(string $cnpj): string
-    {
-        $weights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-        $sum = 0;
-
-        for ($i = 0; $i < 12; $i++) {
-            $sum += (int) $cnpj[$i] * $weights[$i];
-        }
-
-        $remainder = $sum % 11;
-        return $remainder < 2 ? '0' : (string) (11 - $remainder);
-    }
-
-    private function calculateSecondDigit(string $cnpj): string
-    {
-        $weights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-        $sum = 0;
-
-        for ($i = 0; $i < 13; $i++) {
-            $sum += (int) $cnpj[$i] * $weights[$i];
-        }
-
-        $remainder = $sum % 11;
-        return $remainder < 2 ? '0' : (string) (11 - $remainder);
-    }
-
-    private function format(string $cnpj): string
-    {
-        return substr($cnpj, 0, 2) . '.' .
-               substr($cnpj, 2, 3) . '.' .
-               substr($cnpj, 5, 3) . '/' .
-               substr($cnpj, 8, 4) . '-' .
-               substr($cnpj, 12, 2);
+        return $this->options;
     }
 }

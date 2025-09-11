@@ -2,7 +2,7 @@
   "name": "lacus/cnpj-gen",
   "version": "0.0.1",
   "type": "library",
-  "description": "Utility function to generate valid CNPJ (Brazilian company ID).",
+  "description": "Utility function to format CNPJ (Brazilian company  ID).",
   "license": "MIT",
   "authors": [
     {
@@ -13,12 +13,11 @@
   ],
   "keywords": [
     "cnpj",
-    "generate",
-    "generator",
-    "gerador",
-    "gerar",
-    "faker",
-    "fake",
+    "format",
+    "formatting",
+    "formatar",
+    "mascara",
+    "mask",
     "pt-br",
     "br"
   ],
@@ -31,7 +30,7 @@
     "issues": "https://github.com/LacusSolutions/br-utils-php/issues",
     "source": "https://github.com/LacusSolutions/br-utils-php"
   },
-  "homepage": "https://cpf-utils.vercel.app/",
+  "homepage": "https://cnpj-utils.vercel.app/",
   "scripts": {
     "test": "phpunit",
     "test:watch": "phpunit-watcher watch",
@@ -49,12 +48,15 @@
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\Generators\\Cnpj\\": "src/"
-    }
+      "Lacus\\CnpjGen\\": "src/"
+    },
+    "files": [
+      "src/cnpj-gen.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\Generators\\Cnpj\\Tests\\": "tests/"
+      "Lacus\\CnpjGen\\Tests\\": "tests/"
     }
   }
 }
