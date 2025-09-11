@@ -9,17 +9,31 @@ use PHPUnit\Framework\TestCase;
 
 class CpfFormatterOptionsTest extends TestCase
 {
+    public function testConstructorWithAllNoParameters(): void
+    {
+        $options = new CpfFormatterOptions();
+
+        $this->assertFalse($options->isEscaped());
+        $this->assertFalse($options->isHidden());
+        $this->assertEquals('*', $options->getHiddenKey());
+        $this->assertEquals(3, $options->getHiddenStart());
+        $this->assertEquals(10, $options->getHiddenEnd());
+        $this->assertEquals('.', $options->getDotKey());
+        $this->assertEquals('-', $options->getDashKey());
+        $this->assertIsCallable($options->getOnFail());
+    }
+
     public function testConstructorWithAllNullParameters(): void
     {
         $options = new CpfFormatterOptions(
-            null, // escape
-            null, // hidden
-            null, // hiddenKey
-            null, // hiddenStart
-            null, // hiddenEnd
-            null, // dotKey
-            null, // dashKey
-            null  // onFail
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
         );
 
         $this->assertFalse($options->isEscaped());
@@ -39,14 +53,14 @@ class CpfFormatterOptionsTest extends TestCase
         };
 
         $options = new CpfFormatterOptions(
-            true,  // escape
-            true,  // hidden
-            '#',   // hiddenKey
-            1,     // hiddenStart
-            8,     // hiddenEnd
-            '|',   // dotKey
-            '~',   // dashKey
-            $onFailCallback
+            true,
+            true,
+            '#',
+            1,
+            8,
+            '|',
+            '~',
+            $onFailCallback,
         );
 
         $this->assertTrue($options->isEscaped());
@@ -62,25 +76,25 @@ class CpfFormatterOptionsTest extends TestCase
     public function testMergeWithPartialOverrides(): void
     {
         $originalOptions = new CpfFormatterOptions(
-            false, // escape
-            false, // hidden
-            '*',   // hiddenKey
-            3,     // hiddenStart
-            10,    // hiddenEnd
-            '.',   // dotKey
-            '-',   // dashKey
-            null   // onFail
+            false,
+            false,
+            '*',
+            3,
+            10,
+            '.',
+            '-',
+            null,
         );
 
         $mergedOptions = $originalOptions->merge(
-            true,  // escape (override)
-            null,  // hidden (keep original)
-            '#',   // hiddenKey (override)
-            null,  // hiddenStart (keep original)
-            null,  // hiddenEnd (keep original)
-            '|',   // dotKey (override)
-            null,  // dashKey (keep original)
-            null   // onFail (keep original)
+            true,        // override
+            null,        // keep original
+            '#',      // override
+            null,   // keep original
+            null,     // keep original
+            '|',         // override
+            null,       // keep original
+            null         // keep original
         );
 
         $this->assertTrue($mergedOptions->isEscaped());
@@ -94,7 +108,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetEscape(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $options->setEscape(true);
         $this->assertTrue($options->isEscaped());
@@ -105,7 +119,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetHide(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $options->setHide(true);
         $this->assertTrue($options->isHidden());
@@ -116,7 +130,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetHiddenKey(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $options->setHiddenKey('X');
         $this->assertEquals('X', $options->getHiddenKey());
@@ -127,7 +141,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetHiddenRangeWithValidValues(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $options->setHiddenRange(0, 10);
         $this->assertEquals(0, $options->getHiddenStart());
@@ -140,7 +154,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetHiddenRangeWithSwappedValues(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         // Test that start > end gets swapped
         $options->setHiddenRange(8, 2);
@@ -150,7 +164,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetHiddenRangeWithInvalidStart(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Option "hiddenStart" must be an integer between 0 and 10.');
@@ -159,7 +173,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetHiddenRangeWithInvalidEnd(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Option "hiddenRange.end" must be an integer between 0 and 10.');
@@ -168,7 +182,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetHiddenRangeWithStartTooHigh(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Option "hiddenStart" must be an integer between 0 and 10.');
@@ -177,7 +191,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetDotKey(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $options->setDotKey('|');
         $this->assertEquals('|', $options->getDotKey());
@@ -188,7 +202,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetDashKey(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $options->setDashKey('~');
         $this->assertEquals('~', $options->getDashKey());
@@ -199,7 +213,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetOnFailWithValidCallback(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $callback = function (string $value): string {
             return 'ERROR: ' . $value;
@@ -211,7 +225,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetOnFailWithInvalidCallback(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('must be of type callable, string given');
@@ -220,7 +234,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetOnFailWithArray(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('must be of type callable, array given');
@@ -229,7 +243,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetOnFailWithNull(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('must be of type callable, null given');
@@ -239,7 +253,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testSetOnFailWithInt(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('must be of type callable, int given');
@@ -249,7 +263,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testBoundaryValuesForHiddenRange(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         // Test minimum values
         $options->setHiddenRange(0, 0);
@@ -264,7 +278,7 @@ class CpfFormatterOptionsTest extends TestCase
 
     public function testDefaultOnFailCallbackBehavior(): void
     {
-        $options = new CpfFormatterOptions(null, null, null, null, null, null, null, null);
+        $options = new CpfFormatterOptions();
 
         $callback = $options->getOnFail();
         $result = $callback('test input');
@@ -283,14 +297,16 @@ class CpfFormatterOptionsTest extends TestCase
     public function testMergeWithAllNullsPreservesOriginalValues(): void
     {
         $originalOptions = new CpfFormatterOptions(
-            true,  // escape
-            true,  // hidden
-            '#',   // hiddenKey
-            1,     // hiddenStart
-            8,     // hiddenEnd
-            '|',   // dotKey
-            '~',   // dashKey
-            function (string $value): string { return 'ERROR: ' . $value; }
+            true,
+            true,
+            '#',
+            1,
+            8,
+            '|',
+            '~',
+            function (string $value): string {
+                return 'ERROR: ' . $value;
+            },
         );
 
         $mergedOptions = $originalOptions->merge(null, null, null, null, null, null, null, null);
@@ -311,13 +327,13 @@ class CpfFormatterOptionsTest extends TestCase
         };
 
         $options = new CpfFormatterOptions(
-            true,  // escape
-            null,  // hidden (should default to false)
-            null,  // hiddenKey (should default to '*')
-            5,     // hiddenStart
-            null,  // hiddenEnd (should default to 10)
-            null,  // dotKey (should default to '.')
-            '~',   // dashKey
+            true,
+            null,      // should default to false
+            null,   // should default to '*'
+            5,
+            null,   // should default to 10
+            null,      // should default to '.'
+            '~',
             $onFailCallback
         );
 
