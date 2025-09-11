@@ -2,7 +2,7 @@
   "name": "lacus/cpf-val",
   "version": "0.0.1",
   "type": "library",
-  "description": "Utility function to validate CPF (Brazilian ID document).",
+  "description": "Utility function to format CPF (Brazilian company  ID).",
   "license": "MIT",
   "authors": [
     {
@@ -13,11 +13,11 @@
   ],
   "keywords": [
     "cpf",
-    "valid",
-    "validate",
-    "validator",
-    "validador",
-    "validar",
+    "format",
+    "formatting",
+    "formatar",
+    "mascara",
+    "mask",
     "pt-br",
     "br"
   ],
@@ -48,12 +48,15 @@
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\Validators\\Cpf\\": "src/"
-    }
+      "Lacus\\CpfVal\\": "src/"
+    },
+    "files": [
+      "src/cpf-val.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\Validators\\Cpf\\Tests\\": "tests/"
+      "Lacus\\CpfVal\\Tests\\": "tests/"
     }
   }
 }
