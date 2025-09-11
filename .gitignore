@@ -1,12 +1,14 @@
 .DS_Store
 .vscode/
-/.phpunit.cache/
+.phpunit.cache/
 .phpunit.result.cache
 vendor/
 
-**/*.cache
-**/*.log
-**/.lcov.info.*
+*.bak
+*.cache
+*.log
+*.phar
+.lcov.info.*
 
 .env*
 !.env.example
@@ -14,3 +16,5 @@ vendor/
 infection.log
 infection.html
 infection.json
+
+/packages/**/composer.lock
