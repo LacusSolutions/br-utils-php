@@ -56,7 +56,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\Formatters\\Cpf\\Tests\\": "tests/"
+      "Lacus\\CpfFmt\\Tests\\": "tests/"
     }
   }
 }
