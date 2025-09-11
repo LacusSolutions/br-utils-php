@@ -2,43 +2,93 @@
 
 declare(strict_types=1);
 
-namespace Lacus\Formatters\Cpf;
+namespace Lacus\CpfFmt;
 
-/**
- * Formatador de CPF brasileiro
- */
 class CpfFormatter
 {
-    /**
-     * Formata um CPF com máscara (XXX.XXX.XXX-XX)
-     */
-    public function format(string $cpf): string
-    {
-        $cpf = $this->clean($cpf);
+    private CpfFormatterOptions $options;
 
-        if (strlen($cpf) !== 11) {
-            throw new \InvalidArgumentException('CPF deve ter 11 dígitos');
+    public function __construct(
+        ?bool $escape = null,
+        ?bool $hidden = null,
+        ?string $hiddenKey = null,
+        ?int $hiddenStart = null,
+        ?int $hiddenEnd = null,
+        ?string $dotKey = null,
+        ?string $dashKey = null,
+        ?callable $onFail = null,
+    ) {
+        $this->options = new CpfFormatterOptions(
+            $escape,
+            $hidden,
+            $hiddenKey,
+            $hiddenStart,
+            $hiddenEnd,
+            $dotKey,
+            $dashKey,
+            $onFail,
+        );
+    }
+
+    public function format(
+        string $cpfString,
+        ?bool $escape = null,
+        ?bool $hidden = null,
+        ?string $hiddenKey = null,
+        ?int $hiddenStart = null,
+        ?int $hiddenEnd = null,
+        ?string $dotKey = null,
+        ?string $dashKey = null,
+        ?callable $onFail = null,
+    ): string {
+        $actualOptions = $this->getOptions()->merge(
+            $escape,
+            $hidden,
+            $hiddenKey,
+            $hiddenStart,
+            $hiddenEnd,
+            $dotKey,
+            $dashKey,
+            $onFail,
+        );
+
+        $cpfNumbersString = preg_replace('/[^0-9]/', '', $cpfString);
+        $cpfNumbersArray = str_split($cpfNumbersString);
+
+        if (count($cpfNumbersArray) !== CPF_LENGTH) {
+            $error = new \Error('Parameter "' . $cpfString . '" does not contain ' . CPF_LENGTH . ' digits.');
+
+            return $actualOptions->getOnFail()($cpfString, $error);
         }
 
-        return substr($cpf, 0, 3) . '.' .
-               substr($cpf, 3, 3) . '.' .
-               substr($cpf, 6, 3) . '-' .
-               substr($cpf, 9, 2);
+        if ($actualOptions->isHidden()) {
+            $hiddenStart = $actualOptions->getHiddenStart();
+            $hiddenEnd = $actualOptions->getHiddenEnd();
+            $hiddenKey = $actualOptions->getHiddenKey();
+
+            for ($i = $hiddenStart; $i <= $hiddenEnd; $i++) {
+                $cpfNumbersArray[$i] = $hiddenKey;
+            }
+        }
+
+        $dashKey = $actualOptions->getDashKey();
+        $dotKey = $actualOptions->getDotKey();
+
+        array_splice($cpfNumbersArray, 9, 0, $dashKey);
+        array_splice($cpfNumbersArray, 6, 0, $dotKey);
+        array_splice($cpfNumbersArray, 3, 0, $dotKey);
+
+        $prettyCpf = implode('', $cpfNumbersArray);
+
+        if ($actualOptions->isEscaped()) {
+            return htmlspecialchars($prettyCpf, ENT_QUOTES, 'UTF-8');
+        }
+
+        return $prettyCpf;
     }
 
-    /**
-     * Remove formatação de um CPF
-     */
-    public function clean(string $cpf): string
+    public function getOptions(): CpfFormatterOptions
     {
-        return preg_replace('/[^0-9]/', '', $cpf);
-    }
-
-    /**
-     * Verifica se um CPF está formatado
-     */
-    public function isFormatted(string $cpf): bool
-    {
-        return preg_match('/^\d{3}\.\d{3}\.\d{3}-\d{2}$/', $cpf) === 1;
+        return $this->options;
     }
 }

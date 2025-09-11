@@ -48,8 +48,11 @@
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\Formatters\\Cpf\\": "src/"
-    }
+      "Lacus\\CpfFmt\\": "src/"
+    },
+    "files": [
+      "src/cpf-fmt.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
