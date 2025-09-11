@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lacus\CpfFmt\Tests;
 
 use Lacus\CpfFmt\CpfFormatter;
+use Lacus\CpfFmt\CpfFormatterOptions;
 
 class CpfFormatterClassTest extends CpfFormatterTestCase
 {
@@ -43,7 +44,7 @@ class CpfFormatterClassTest extends CpfFormatterTestCase
     {
         $options = $this->formatter->getOptions();
 
-        $this->assertInstanceOf(\Lacus\CpfFmt\CpfFormatterOptions::class, $options);
+        $this->assertInstanceOf(CpfFormatterOptions::class, $options);
         $this->assertFalse($options->isEscaped());
         $this->assertFalse($options->isHidden());
         $this->assertEquals('*', $options->getHiddenKey());
