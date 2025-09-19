@@ -1,19 +1,19 @@
 # Lacus :: cnpj-fmt
 
-![Packagist Version](https://img.shields.io/packagist/v/lacus/cnpj-fmt)
-![Packagist Downloads](https://img.shields.io/packagist/dm/lacus/cnpj-fmt)
-![PHP Version](https://img.shields.io/packagist/php-v/lacus/cnpj-fmt)
-![Test Status](https://img.shields.io/github/actions/workflow/status/LacusSolutions/br-utils-php/ci.yml?label=ci/cd)
-![Last Update Date](https://img.shields.io/github/last-commit/LacusSolutions/br-utils-php)
-![Project License](https://img.shields.io/packagist/l/lacus/cnpj-fmt)
+[![Packagist Version](https://img.shields.io/packagist/v/lacus/cnpj-fmt)](https://packagist.org/packages/lacus/cnpj-fmt)
+[![Packagist Downloads](https://img.shields.io/packagist/dm/lacus/cnpj-fmt)](https://packagist.org/packages/lacus/cnpj-fmt)
+[![PHP Version](https://img.shields.io/packagist/php-v/lacus/cnpj-fmt)](https://www.php.net/)
+[![Test Status](https://img.shields.io/github/actions/workflow/status/LacusSolutions/br-utils-php/ci.yml?label=ci/cd)](https://github.com/LacusSolutions/br-utils-php/actions)
+[![Last Update Date](https://img.shields.io/github/last-commit/LacusSolutions/br-utils-php)](https://github.com/LacusSolutions/br-utils-php)
+[![Project License](https://img.shields.io/github/license/LacusSolutions/br-utils-php)](https://github.com/LacusSolutions/br-utils-php/blob/main/LICENSE)
 
 Utility function/class to format CNPJ (Brazilian employer ID).
 
 ## PHP Support
 
-![PHP 8.1](https://img.shields.io/badge/PHP-8.1-777BB4?logo=php&logoColor=white) | ![PHP 8.2](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white) | ![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white) |
+| ![PHP 8.1](https://img.shields.io/badge/PHP-8.1-777BB4?logo=php&logoColor=white) | ![PHP 8.2](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white) | ![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white) |
 |--- | --- | --- |
-| 8.1+ ✔ | 8.2+ ✔ | 8.3+ ✔ |
+| Passing ✔ | Passing ✔ | Passing ✔ |
 
 ## Installation
 
@@ -92,17 +92,22 @@ echo cnpj_fmt($cnpj, dotKey: '', slashKey: '|', dashKey: '_');     // returns '0
 | `dashKey` | `?string` | `'-'` | String to replace dash character |
 | `onFail` | `?callable` | `fn($v) => $v` | Fallback function for invalid input |
 
-## Contributing
+## Contribution & Support
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+We welcome contributions! Please see our [Contributing Guidelines](https://github.com/LacusSolutions/br-utils-php/blob/main/CONTRIBUTING.md) for details. But if you find this project helpful, please consider:
+
+- ⭐ Starring the repository
+- 🤝 Contributing to the codebase
+- 💡 [Suggesting new features](https://github.com/LacusSolutions/br-utils-php/issues)
+- 🐛 [Reporting bugs](https://github.com/LacusSolutions/br-utils-php/issues)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/LacusSolutions/br-utils-php/blob/main/LICENSE) file for details.
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for a list of changes and version history.
+See [CHANGELOG](https://github.com/LacusSolutions/br-utils-php/blob/main/packages/cnpj-fmt/CHANGELOG.md) for a list of changes and version history.
 
 ---
 
