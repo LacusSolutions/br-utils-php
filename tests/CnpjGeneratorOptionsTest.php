@@ -95,7 +95,7 @@ class CnpjGeneratorOptionsTest extends TestCase
         $this->assertFalse($options->isFormatting());
     }
 
-    public function testSetPrefix(): void
+    public function testSetPrefixWithFewDigits(): void
     {
         $options = new CnpjGeneratorOptions();
 
@@ -104,5 +104,34 @@ class CnpjGeneratorOptionsTest extends TestCase
 
         $options->setPrefix('8888');
         $this->assertEquals('8888', $options->getPrefix());
+    }
+
+    public function testSetPrefixWithNonNumericChars(): void
+    {
+        $options = new CnpjGeneratorOptions();
+
+        $options->setPrefix('123acb');
+        $this->assertEquals('123', $options->getPrefix());
+
+        $options->setPrefix('This is a test');
+        $this->assertEquals('', $options->getPrefix());
+    }
+
+    public function testSetPrefixThrowsErrorWithTooManyDigits(): void
+    {
+        $options = new CnpjGeneratorOptions();
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Option "prefix" must be a string containing between 0 and 12 digits.');
+        $options->setPrefix('12345678000910');
+    }
+
+    public function testSetPrefixThrowsErrorWithInvalidBranchID(): void
+    {
+        $options = new CnpjGeneratorOptions();
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('The branch ID (characters 8 to 11) cannot be "0000".');
+        $options->setPrefix('123456780000');
     }
 }
