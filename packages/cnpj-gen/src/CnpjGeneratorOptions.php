@@ -41,7 +41,24 @@ class CnpjGeneratorOptions
 
     public function setPrefix(string $value): void
     {
-        $this->options['prefix'] = $value;
+        $min = 0;
+        $max = CNPJ_LENGTH - 2;
+        $digitsOnly = preg_replace('/[^0-9]/', '', $value);
+        $prefixLength = strlen($digitsOnly);
+
+        if ($prefixLength > CNPJ_LENGTH - 2) {
+            throw new \TypeError(
+                'Option "prefix" must be a string containing between '
+                . $min . ' and '
+                . $max . ' digits.',
+            );
+        }
+
+        if ($prefixLength > 8 && substr($digitsOnly, 8) === '0000') {
+            throw new \TypeError('The branch ID (characters 8 to 11) cannot be "0000".');
+        }
+
+        $this->options['prefix'] = $digitsOnly;
     }
 
     public function getPrefix(): string
