@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CpfGen;
 
-const CPF_LENGTH = 14;
+const CPF_LENGTH = 11;
 
 class CpfGeneratorOptions
 {
@@ -41,7 +41,20 @@ class CpfGeneratorOptions
 
     public function setPrefix(string $value): void
     {
-        $this->options['prefix'] = $value;
+        $min = 0;
+        $max = CPF_LENGTH - 2;
+        $digitsOnly = preg_replace('/[^0-9]/', '', $value);
+        $prefixLength = strlen($digitsOnly);
+
+        if ($prefixLength > $max) {
+            throw new \TypeError(
+                'Option "prefix" must be a string containing between '
+                . $min . ' and '
+                . $max . ' digits.',
+            );
+        }
+
+        $this->options['prefix'] = $digitsOnly;
     }
 
     public function getPrefix(): string
