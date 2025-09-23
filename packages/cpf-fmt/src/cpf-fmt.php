@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CpfFmt;
 
+const CPF_LENGTH = 11;
+
 function cpf_fmt(
     string $cpfString,
     ?bool $escape = null,

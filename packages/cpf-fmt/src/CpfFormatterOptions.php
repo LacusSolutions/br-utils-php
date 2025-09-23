@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Lacus\CpfFmt;
 
-const CPF_LENGTH = 11;
-
 class CpfFormatterOptions
 {
     private array $options;
