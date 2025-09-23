@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjFmt;
 
-const CNPJ_LENGTH = 14;
-
 class CnpjFormatterOptions
 {
     private array $options;
