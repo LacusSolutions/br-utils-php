@@ -25,7 +25,6 @@ class CnpjValidator
             return false;
         }
 
-
         $firstVerifierDigitIndex = CNPJ_LENGTH - 2;
         $providedFirstVerifierDigit = $cnpjNumbersArray[$firstVerifierDigitIndex];
         $baseFirstVerifierDigitCalculation = array_slice($cnpjNumbersArray, 0, $firstVerifierDigitIndex);
