@@ -2,7 +2,7 @@
   "name": "lacus/cpf-val",
   "version": "0.0.1",
   "type": "library",
-  "description": "Utility function to format CPF (Brazilian company  ID).",
+  "description": "Utility function to validate CPF (Brazilian personal ID)",
   "license": "MIT",
   "authors": [
     {
