@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Lacus\CpfGen;
 
-const CPF_LENGTH = 11;
-
 class CpfGeneratorOptions
 {
     private array $options;
