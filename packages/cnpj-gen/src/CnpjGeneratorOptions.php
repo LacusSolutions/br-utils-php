@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjGen;
 
-const CNPJ_LENGTH = 14;
-
 class CnpjGeneratorOptions
 {
     private array $options;
