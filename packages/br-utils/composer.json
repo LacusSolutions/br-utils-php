@@ -1,6 +1,6 @@
 {
   "name": "lacus/br-utils",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "library",
   "description": "Utility resources to deal with Brazilian-related data.",
   "license": "MIT",

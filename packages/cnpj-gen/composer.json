@@ -1,6 +1,6 @@
 {
   "name": "lacus/cnpj-gen",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "library",
   "description": "Utility function to generate valid CNPJ (Brazilian employer ID)",
   "license": "MIT",
