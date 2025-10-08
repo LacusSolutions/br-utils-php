@@ -60,10 +60,6 @@ jobs:
   sync-package:
     needs: detect-packages
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
-      pull-requests: write
     strategy:
       matrix: ${{ fromJson(needs.detect-packages.outputs.matrix) }}
       fail-fast: false # Continue syncing other packages even if one fails
