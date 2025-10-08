@@ -60,6 +60,8 @@ jobs:
   sync-package:
     needs: detect-packages
     runs-on: ubuntu-latest
+    outputs:
+      results: ${{ steps.push-subtree.outputs.results }}
     strategy:
       matrix: ${{ fromJson(needs.detect-packages.outputs.matrix) }}
       fail-fast: false # Continue syncing other packages even if one fails
@@ -75,6 +77,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Push Subtree "${{ matrix.name }}" (${{ matrix.type }})
+        id: push-subtree
         run: |
           echo "🔄 Syncing '${{ matrix.name }}'..."
           echo "📦 Package:    ${{ matrix.name }}"
@@ -82,9 +85,42 @@ jobs:
           echo "🔗 Repository: ${{ matrix.repo }}"
           echo "🌿 Branch:     ${{ matrix.branch }}"
 
-          if git subtree push --prefix="${{ matrix.prefix }}" "${{ matrix.repo }}" "${{ matrix.branch }}"; then
-            echo "✅ Successfully synced '${{ matrix.name }}'"
+          push_output=$(git subtree push --prefix="${{ matrix.prefix }}" "${{ matrix.repo }}" "${{ matrix.branch }}" 2>&1)
+          push_exit_code=$?
+
+          if [ $push_exit_code -eq 0 ]; then
+            if echo "$push_output" | grep -q "Everything up-to-date"; then
+              echo "ℹ️ '${{ matrix.name }}' already up-to-date with ${{ matrix.type }}"
+              status="ℹ️ up-to-date"
+            else
+              echo "✅ '${{ matrix.name }}' successfully synced with ${{ matrix.type }}"
+              status="✅ synced"
+            fi
           else
-            echo "❌ Failed to sync '${{ matrix.name }}'"
+            echo "❌ '${{ matrix.name }}' failed to sync with ${{ matrix.type }}"
+            status="❌ failed"
             exit 1
           fi
+
+          result_json="{\"name\":\"${{ matrix.name }}\",\"type\":\"${{ matrix.type }}\",\"status\":\"$status\"}"
+          echo "results=$result_json" >> $GITHUB_OUTPUT
+
+  build-summary:
+    needs: [detect-packages, sync-package]
+    runs-on: ubuntu-latest
+    if: always() # Run even if some sync jobs fail
+    steps:
+      - name: Build Synchronization Summary
+        run: |
+          echo "## 📊 Synchronization Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Workflow Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Completed**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "| Package | Type | Status | Message |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|------|--------|---------|" >> $GITHUB_STEP_SUMMARY
+
+          for result in ${{ fromJson(needs.sync-package.outputs.results) }}; do
+            echo "| ${result.name} | ${result.type} | ${result.status} |" >> $GITHUB_STEP_SUMMARY
+          done
