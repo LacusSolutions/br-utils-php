@@ -42,7 +42,7 @@ jobs:
             target_type="repository"
             repo_url="git@github.com:LacusSolutions/br-utils-php_$package_name.git"
             branch="main"
-            PACKAGES+=("{\"name\":\"$package_name\",\"prefix\":\"$package_prefix\",\"repo\":\"$repo_url\",\"branch\":\"$branch\"}")
+            PACKAGES+=("{\"name\":\"$package_name\",\"prefix\":\"$package_prefix\",\"repo\":\"$repo_url\",\"branch\":\"$branch\",\"type\":\"$target_type\"}")
           done
 
           # Convert array to JSON and save metadata to matrix output
