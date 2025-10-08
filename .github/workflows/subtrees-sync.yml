@@ -60,8 +60,6 @@ jobs:
   sync-package:
     needs: detect-packages
     runs-on: ubuntu-latest
-    outputs:
-      results: ${{ steps.push-subtree.outputs.results }}
     strategy:
       matrix: ${{ fromJson(needs.detect-packages.outputs.matrix) }}
       fail-fast: false # Continue syncing other packages even if one fails
@@ -101,26 +99,3 @@ jobs:
             status="❌ failed"
             exit 1
           fi
-
-          result_json="{\"name\":\"${{ matrix.name }}\",\"type\":\"${{ matrix.type }}\",\"status\":\"$status\"}"
-          echo "results=$result_json" >> $GITHUB_OUTPUT
-
-  build-summary:
-    needs: [detect-packages, sync-package]
-    runs-on: ubuntu-latest
-    if: always() # Run even if some sync jobs fail
-    steps:
-      - name: Build Synchronization Summary
-        run: |
-          echo "## 📊 Synchronization Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Workflow Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Completed**: $(date)" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          echo "| Package | Type | Status | Message |" >> $GITHUB_STEP_SUMMARY
-          echo "|---------|------|--------|---------|" >> $GITHUB_STEP_SUMMARY
-
-          for result in ${{ fromJson(needs.sync-package.outputs.results) }}; do
-            echo "| ${result.name} | ${result.type} | ${result.status} |" >> $GITHUB_STEP_SUMMARY
-          done
