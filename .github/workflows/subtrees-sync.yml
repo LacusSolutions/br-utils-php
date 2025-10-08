@@ -13,7 +13,7 @@ jobs:
       matrix: ${{ steps.list-packages.outputs.matrix }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
       - name: Detect Packages to Sync
         id: list-packages
@@ -30,8 +30,17 @@ jobs:
               continue
             fi
 
+            # Subtree on another branch
             package_prefix="$PACKAGES_DIR/$package_name"
-            repo_url="https://github.com/LacusSolutions/br-utils-php_$package_name.git"
+            target_type="branch"
+            repo_url="git@github.com:LacusSolutions/br-utils-php.git"
+            branch="$package_name/main"
+            PACKAGES+=("{\"name\":\"$package_name\",\"prefix\":\"$package_prefix\",\"repo\":\"$repo_url\",\"branch\":\"$branch\",\"type\":\"$target_type\"}")
+
+            # Subtree on another repository
+            package_prefix="$PACKAGES_DIR/$package_name"
+            target_type="repository"
+            repo_url="git@github.com:LacusSolutions/br-utils-php_$package_name.git"
             branch="main"
             PACKAGES+=("{\"name\":\"$package_name\",\"prefix\":\"$package_prefix\",\"repo\":\"$repo_url\",\"branch\":\"$branch\"}")
           done
@@ -60,13 +69,20 @@ jobs:
       fail-fast: false # Continue syncing other packages even if one fails
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
-      - name: Configure Git
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup SSH Key
+        uses: webfactory/ssh-agent@a6f90b1f127823b31d4d4a8d96047790581349bd # v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Add Known Hosts
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          mkdir -p ~/.ssh
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
-      - name: Sync Package "${{ matrix.name }}"
+      - name: Push Subtree "${{ matrix.name }}" (${{ matrix.type }})
         run: |
           echo "🔄 Syncing '${{ matrix.name }}'..."
           echo "📦 Package:    ${{ matrix.name }}"
