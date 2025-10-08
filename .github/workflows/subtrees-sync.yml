@@ -20,10 +20,16 @@ jobs:
         run: |
           PACKAGES_DIR="packages"
           echo "🔍 Discovering packages in $PACKAGES_DIR directory..."
-          PACKAGES_NAMES=$(find "$PACKAGES_DIR" -mindepth 1 -maxdepth 1 -type d | cut -d'/' -f2)
+          PACKAGES_NAMES=$(find "$PACKAGES_DIR" -mindepth 1 -maxdepth 1 -type d -not -empty | sed 's|^.*/||' | sort)
 
           PACKAGES=()
-          for package_name in "$PACKAGES_NAMES"; do
+          for package_name in $PACKAGES_NAMES; do
+            # Skip if package_name is empty or contains invalid characters
+            if [[ -z "$package_name" || "$package_name" =~ [^a-zA-Z0-9_-] ]]; then
+              echo "⚠️  Skipping invalid package name: '$package_name'"
+              continue
+            fi
+
             package_prefix="$PACKAGES_DIR/$package_name"
             repo_url="https://github.com/LacusSolutions/br-utils-php_$package_name.git"
             branch="main"
@@ -31,10 +37,16 @@ jobs:
           done
 
           # Convert array to JSON and save metadata to matrix output
+          if [ ${#PACKAGES[@]} -eq 0 ]; then
+            echo "❌ No valid packages found"
+            echo "matrix={\"include\":[]}" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
           printf -v packages_json '%s,' "${PACKAGES[@]}"
           packages_json="[${packages_json%,}]"
           echo "matrix={\"include\":$packages_json}" >> $GITHUB_OUTPUT
-          echo "📦 $(echo "$PACKAGES_NAMES" | wc -l) packages found"
+          echo "📦 ${#PACKAGES[@]} packages found"
 
   sync-package:
     needs: detect-packages
