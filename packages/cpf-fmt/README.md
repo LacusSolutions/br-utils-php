@@ -9,11 +9,11 @@
 
 Utility function/class to format CPF (Brazilian ID document).
 
-## PHP Support
 
-| ![PHP 8.1](https://img.shields.io/badge/PHP-8.1-777BB4?logo=php&logoColor=white) | ![PHP 8.2](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white) | ![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white) |
-|--- | --- | --- |
-| Passing ✔ | Passing ✔ | Passing ✔ |
+
+| ![PHP 8.1](https://img.shields.io/badge/PHP-8.1-777BB4?logo=php&logoColor=white) | ![PHP 8.2](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white) | ![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white) | ![PHP 8.4](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white) |
+|--- | --- | --- | --- |
+| Passing ✔ | Passing ✔ | Passing ✔ | Passing ✔ |
 
 ## Installation
 
