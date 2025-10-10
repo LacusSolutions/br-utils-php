@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjFmt\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 use function Lacus\CnpjFmt\cnpj_fmt;
 
-class CnpjFormatterFunctionTest extends CnpjFormatterTestCase
+class CnpjFormatterFunctionTest extends TestCase
 {
+    use CnpjFormatterTestCases;
+
     protected function format(
         string $cnpjString,
         ?bool $escape = null,

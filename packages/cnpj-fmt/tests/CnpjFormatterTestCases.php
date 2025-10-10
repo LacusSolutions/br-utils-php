@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjFmt\Tests;
 
-use PHPUnit\Framework\TestCase;
-
-abstract class CnpjFormatterTestCase extends TestCase
+trait CnpjFormatterTestCases
 {
     abstract protected function format(
         string $cnpjString,
