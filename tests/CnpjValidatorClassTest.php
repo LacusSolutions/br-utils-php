@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Lacus\CnpjVal\Tests;
 
 use Lacus\CnpjVal\CnpjValidator;
-use Lacus\CnpjVal\CnpjValidatorOptions;
+use PHPUnit\Framework\TestCase;
 
-class CnpjValidatorClassTest extends CnpjValidatorTestCase
+class CnpjValidatorClassTest extends TestCase
 {
+    use CnpjValidatorTestCases;
+
     private CnpjValidator $validator;
 
     protected function setUp(): void

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjVal\Tests;
 
-use PHPUnit\Framework\TestCase;
-
-abstract class CnpjValidatorTestCase extends TestCase
+trait CnpjValidatorTestCases
 {
     abstract protected function isValid(string $cnpjString): bool;
 
