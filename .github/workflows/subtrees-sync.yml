@@ -12,11 +12,9 @@ jobs:
     outputs:
       matrix: ${{ steps.list-packages.outputs.matrix }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - name: Detect Packages to Sync
-        id: list-packages
+      - id: list-packages
         run: |
           PACKAGES_DIR="packages"
           echo "🔍 Discovering packages in $PACKAGES_DIR directory..."
@@ -64,18 +62,15 @@ jobs:
       matrix: ${{ fromJson(needs.detect-packages.outputs.matrix) }}
       fail-fast: false # Continue syncing other packages even if one fails
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Setup SSH Key
-        uses: webfactory/ssh-agent@a6f90b1f127823b31d4d4a8d96047790581349bd # v0.9.1
+      - uses: webfactory/ssh-agent@a6f90b1f127823b31d4d4a8d96047790581349bd # v0.9.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Push Subtree "${{ matrix.name }}" (${{ matrix.type }})
-        id: push-subtree
+      - id: push-subtree
         run: |
           echo "🔄 Syncing '${{ matrix.name }}'..."
           echo "📦 Package:    ${{ matrix.name }}"
