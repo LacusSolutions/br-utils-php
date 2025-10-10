@@ -1,6 +1,5 @@
 {
   "name": "lacus/cpf-val",
-  "version": "1.0.0",
   "type": "library",
   "description": "Utility function to validate CPF (Brazilian personal ID)",
   "license": "MIT",
@@ -13,19 +12,14 @@
   ],
   "keywords": [
     "cpf",
-    "format",
-    "formatting",
-    "formatar",
-    "mascara",
-    "mask",
+    "valid",
+    "validate",
+    "validator",
+    "validador",
+    "validar",
     "pt-br",
     "br"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/LacusSolutions/br-utils-php.git",
-    "directory": "packages/cpf-val/"
-  },
   "support": {
     "issues": "https://github.com/LacusSolutions/br-utils-php/issues",
     "source": "https://github.com/LacusSolutions/br-utils-php"
