@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Lacus\CpfFmt\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 use function Lacus\CpfFmt\cpf_fmt;
 
-class CpfFormatterFunctionTest extends CpfFormatterTestCase
+class CpfFormatterFunctionTest extends TestCase
 {
+    use CpfFormatterTestCases;
+
     protected function format(
         string $cpfString,
         ?bool $escape = null,
