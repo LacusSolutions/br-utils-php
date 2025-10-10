@@ -18,25 +18,51 @@
     "check": "php-cs-fixer fix --dry-run --diff",
     "fix": "php-cs-fixer fix",
     "infection": "infection --min-msi=80 --min-covered-msi=80",
-    "test": "phpunit",
-    "test:watch": "phpunit-watcher watch",
-    "test-coverage": "phpunit --coverage-html coverage",
-    "test:br-utils": "phpunit --testsuite='BR Utils'",
-    "test:cnpj-fmt": "phpunit --testsuite='CNPJ Formatter'",
-    "test:cnpj-gen": "phpunit --testsuite='CNPJ Generator'",
-    "test:cnpj-utils": "phpunit --testsuite='CNPJ Utils'",
-    "test:cnpj-val": "phpunit --testsuite='CNPJ Validator'",
-    "test:cpf-fmt": "phpunit --testsuite='CPF Formatter'",
-    "test:cpf-gen": "phpunit --testsuite='CPF Generator'",
-    "test:cpf-utils": "phpunit --testsuite='CPF Utils'",
-    "test:formatters": "phpunit --testsuite='CPF Formatter' --testsuite='CNPJ Formatter'",
-    "test:generators": "phpunit --testsuite='CPF Generator' --testsuite='CNPJ Generator'",
-    "test:validators": "phpunit --testsuite='CPF Validator' --testsuite='CNPJ Validator'",
-    "test:cnpj": "phpunit --testsuite='CNPJ Validator' --testsuite='CNPJ Generator' --testsuite='CNPJ Formatter' --testsuite='CNPJ Utils'",
-    "test:cpf": "phpunit --testsuite='CPF Validator' --testsuite='CPF Generator' --testsuite='CPF Formatter' --testsuite='CPF Utils'",
-    "test:utils": "phpunit --testsuite='CPF Utils' --testsuite='CNPJ Utils' --testsuite='BR Utils'",
-    "test:cpf-val": "phpunit --testsuite='CPF Validator'",
-    "test:all": "phpunit --testsuite='All Tests'"
+    "test:sync-configs": "php scripts/phpunit-sync-configs.php",
+    "test:cnpj-fmt": "cd packages/cnpj-fmt && composer test",
+    "test:cnpj-gen": "cd packages/cnpj-gen && composer test",
+    "test:cnpj-val": "cd packages/cnpj-val && composer test",
+    "test:cnpj-utils": "cd packages/cnpj-utils && composer test",
+    "test:cpf-fmt": "cd packages/cpf-fmt && composer test",
+    "test:cpf-gen": "cd packages/cpf-gen && composer test",
+    "test:cpf-val": "cd packages/cpf-val && composer test",
+    "test:cpf-utils": "cd packages/cpf-utils && composer test",
+    "test:br-utils": "cd packages/br-utils && composer test",
+    "test:formatters": [
+      "@test:cnpj-fmt",
+      "@test:cpf-fmt"
+    ],
+    "test:generators": [
+      "@test:cpf-gen",
+      "@test:cnpj-gen"
+    ],
+    "test:validators": [
+      "@test:cpf-val",
+      "@test:cnpj-val"
+    ],
+    "test:utils": [
+      "@test:cnpj-utils",
+      "@test:cpf-utils",
+      "@test:br-utils"
+    ],
+    "test:cnpj": [
+      "@test:cnpj-fmt",
+      "@test:cnpj-gen",
+      "@test:cnpj-val",
+      "@test:cnpj-utils"
+    ],
+    "test:cpf": [
+      "@test:cpf-val",
+      "@test:cpf-gen",
+      "@test:cpf-fmt",
+      "@test:cpf-utils"
+    ],
+    "test:all": [
+      "@test:formatters",
+      "@test:generators",
+      "@test:validators",
+      "@test:utils"
+    ]
   },
   "config": {
     "sort-packages": true,
@@ -54,10 +80,8 @@
     "friendsofphp/php-cs-fixer": "^3.87",
     "infection/infection": "~0.28.1",
     "phpstan/phpstan": "^2.1",
-    "phpunit/phpunit": "^10.5",
     "ramsey/conventional-commits": "^1.6",
-    "roave/security-advisories": "dev-latest",
-    "spatie/phpunit-watcher": "~1.24"
+    "roave/security-advisories": "dev-latest"
   },
   "autoload": {
     "psr-4": {

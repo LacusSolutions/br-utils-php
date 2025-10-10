@@ -11,7 +11,7 @@
   stopOnFailure="false"
 >
   <testsuites>
-    <testsuite name="CNPJ Utils Test Suite">
+    <testsuite name="{{PACKAGE_NAME}} Test Suite">
       <directory>tests/</directory>
     </testsuite>
   </testsuites>
