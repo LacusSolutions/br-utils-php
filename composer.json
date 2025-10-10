@@ -1,6 +1,5 @@
 {
   "name": "lacus/cpf-fmt",
-  "version": "1.0.0",
   "type": "library",
   "description": "Utility function to format CPF (Brazilian personal ID)",
   "license": "MIT",
@@ -21,11 +20,6 @@
     "pt-br",
     "br"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/LacusSolutions/br-utils-php.git",
-    "directory": "packages/cpf-fmt/"
-  },
   "support": {
     "issues": "https://github.com/LacusSolutions/br-utils-php/issues",
     "source": "https://github.com/LacusSolutions/br-utils-php"
