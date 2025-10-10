@@ -2,123 +2,74 @@
 
 declare(strict_types=1);
 
-namespace Lacus\Cpf;
+namespace Lacus\CpfUtils;
 
-/**
- * Utilitários para CPF brasileiro
- */
 class CpfUtils
 {
-    /**
-     * Extrai informações de um CPF
-     */
-    public function extractInfo(string $cpf): array
-    {
-        $cpf = $this->clean($cpf);
+    private CpfFormatter $formatter;
+    private CpfGenerator $generator;
+    private CpfValidator $validator;
 
-        return [
-            'cpf' => $cpf,
-            'formatted' => $this->format($cpf),
-            'region' => $this->getRegion($cpf),
-            'isValid' => $this->isValid($cpf),
-        ];
+    public function __construct(
+        array $formatter = [],
+        array $generator = [],
+    ) {
+        $this->formatter = new CpfFormatter(...$formatter);
+        $this->generator = new CpfGenerator(...$generator);
+        $this->validator = new CpfValidator();
     }
 
-    /**
-     * Obtém a região de emissão do CPF
-     */
-    public function getRegion(string $cpf): string
-    {
-        $cpf = $this->clean($cpf);
-        $regionCode = (int) substr($cpf, 8, 1);
-
-        $regions = [
-            0 => 'RS',
-            1 => 'DF, GO, MS, MT, TO',
-            2 => 'AC, AM, AP, PA, RO, RR',
-            3 => 'CE, MA, PI',
-            4 => 'AL, PB, PE, RN',
-            5 => 'BA, SE',
-            6 => 'MG',
-            7 => 'ES, RJ',
-            8 => 'SP',
-            9 => 'PR, SC',
-        ];
-
-        return $regions[$regionCode] ?? 'Desconhecida';
+    public function format(
+        string $cpfString,
+        ?bool $escape = null,
+        ?bool $hidden = null,
+        ?string $hiddenKey = null,
+        ?int $hiddenStart = null,
+        ?int $hiddenEnd = null,
+        ?string $dotKey = null,
+        ?string $dashKey = null,
+        ?callable $onFail = null,
+    ): string {
+        return $this->formatter->format(
+            $cpfString,
+            $escape,
+            $hidden,
+            $hiddenKey,
+            $hiddenStart,
+            $hiddenEnd,
+            $dotKey,
+            $dashKey,
+            $onFail,
+        );
     }
 
-    /**
-     * Remove formatação de um CPF
-     */
-    private function clean(string $cpf): string
-    {
-        return preg_replace('/[^0-9]/', '', $cpf);
+    public function generate(
+        ?bool $format = null,
+        ?string $prefix = null,
+    ): string {
+        return $this->generator->generate(
+            $format,
+            $prefix,
+        );
     }
 
-    /**
-     * Formata um CPF
-     */
-    private function format(string $cpf): string
+    public function isValid(string $cpfString): bool
     {
-        return substr($cpf, 0, 3) . '.' .
-               substr($cpf, 3, 3) . '.' .
-               substr($cpf, 6, 3) . '-' .
-               substr($cpf, 9, 2);
+        return $this->validator->isValid($cpfString);
     }
 
-    /**
-     * Valida um CPF
-     */
-    private function isValid(string $cpf): bool
+    public function getFormatter(): CpfFormatter
     {
-        if (strlen($cpf) !== 11) {
-            return false;
-        }
-
-        if (preg_match('/^(\d)\1{10}$/', $cpf) === 1) {
-            return false;
-        }
-
-        return $this->validateDigits($cpf);
+        return $this->formatter;
     }
 
-    /**
-     * Valida os dígitos verificadores
-     */
-    private function validateDigits(string $cpf): bool
+    public function getGenerator(): CpfGenerator
     {
-        $firstDigit = $this->calculateFirstDigit(substr($cpf, 0, 9));
-        $secondDigit = $this->calculateSecondDigit(substr($cpf, 0, 10));
-
-        return $cpf[9] === $firstDigit && $cpf[10] === $secondDigit;
+        return $this->generator;
     }
 
-    /**
-     * Calcula o primeiro dígito verificador
-     */
-    private function calculateFirstDigit(string $cpf): string
+    public function getValidator(): CpfValidator
     {
-        $sum = 0;
-        for ($i = 0; $i < 9; $i++) {
-            $sum += (int) $cpf[$i] * (10 - $i);
-        }
-
-        $remainder = $sum % 11;
-        return $remainder < 2 ? '0' : (string) (11 - $remainder);
-    }
-
-    /**
-     * Calcula o segundo dígito verificador
-     */
-    private function calculateSecondDigit(string $cpf): string
-    {
-        $sum = 0;
-        for ($i = 0; $i < 10; $i++) {
-            $sum += (int) $cpf[$i] * (11 - $i);
-        }
-
-        $remainder = $sum % 11;
-        return $remainder < 2 ? '0' : (string) (11 - $remainder);
+        return $this->validator;
     }
 }
