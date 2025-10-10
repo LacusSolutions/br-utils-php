@@ -4,23 +4,19 @@ declare(strict_types=1);
 
 namespace Lacus\CpfUtils\Tests;
 
-use Lacus\CpfUtils\CpfUtils;
 use Lacus\CpfFmt\Tests\CpfFormatterTestCases;
-use Lacus\CpfGen\Tests\CpfGeneratorTestCases;
-use Lacus\CpfVal\Tests\CpfValidatorTestCases;
+use Lacus\CpfUtils\CpfFormatter;
 use PHPUnit\Framework\TestCase;
 
-class CpfUtilsTest extends TestCase
+class CpfFormatterClassTest extends TestCase
 {
     use CpfFormatterTestCases;
-    use CpfGeneratorTestCases;
-    use CpfValidatorTestCases;
 
-    private CpfUtils $utils;
+    private CpfFormatter $formatter;
 
     protected function setUp(): void
     {
-        $this->utils = new CpfUtils();
+        $this->formatter = new CpfFormatter();
     }
 
     protected function format(
@@ -34,7 +30,7 @@ class CpfUtilsTest extends TestCase
         ?string $dashKey = null,
         ?callable $onFail = null,
     ): string {
-        return $this->utils->format(
+        return $this->formatter->format(
             $cpfString,
             $escape,
             $hidden,
@@ -45,19 +41,5 @@ class CpfUtilsTest extends TestCase
             $dashKey,
             $onFail,
         );
-    }
-
-    protected function generate(
-        ?bool $format = null,
-        ?string $prefix = null,
-    ): string {
-        return $this->utils->generate(
-            $format,
-            $prefix,
-        );
-    }
-
-    protected function isValid(string $cpfString): bool {
-        return $this->utils->isValid($cpfString);
     }
 }
