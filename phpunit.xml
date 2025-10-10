@@ -3,26 +3,31 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
   bootstrap="vendor/autoload.php"
-  cacheDirectory=".phpunit.cache"
+  cacheDirectory="vendor/.phpunit.cache/"
+  beStrictAboutOutputDuringTests="true"
+  colors="true"
+  failOnRisky="true"
   processIsolation="false"
   stopOnFailure="false"
-  colors="true"
 >
   <testsuites>
     <testsuite name="CPF Validator Test Suite">
-      <directory>tests</directory>
+      <directory>tests/</directory>
     </testsuite>
   </testsuites>
+  <source>
+    <include>
+      <directory suffix=".php">src/</directory>
+    </include>
+    <exclude>
+      <directory>vendor/</directory>
+      <directory>tests/</directory>
+    </exclude>
+  </source>
   <php>
     <env name="APP_ENV" value="testing"/>
   </php>
-  <source>
-    <include>
-      <directory suffix=".php">src</directory>
-    </include>
-    <exclude>
-      <directory>vendor</directory>
-      <directory>tests</directory>
-    </exclude>
-  </source>
+  <logging>
+    <junit outputFile=".phpunit.cache/test-results.xml"/>
+  </logging>
 </phpunit>
