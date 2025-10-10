@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CpfVal\Tests;
 
-use PHPUnit\Framework\TestCase;
-
-abstract class CpfValidatorTestCase extends TestCase
+trait CpfValidatorTestCases
 {
     abstract protected function isValid(string $cpfString): bool;
 

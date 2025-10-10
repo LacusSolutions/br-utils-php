@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Lacus\CpfVal\Tests;
 
 use Lacus\CpfVal\CpfValidator;
-use Lacus\CpfVal\CpfValidatorOptions;
+use PHPUnit\Framework\TestCase;
 
-class CpfValidatorClassTest extends CpfValidatorTestCase
+class CpfValidatorClassTest extends TestCase
 {
+    use CpfValidatorTestCases;
+
     private CpfValidator $validator;
 
     protected function setUp(): void
