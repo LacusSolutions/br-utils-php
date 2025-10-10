@@ -6,9 +6,12 @@ namespace Lacus\CpfFmt\Tests;
 
 use Lacus\CpfFmt\CpfFormatter;
 use Lacus\CpfFmt\CpfFormatterOptions;
+use PHPUnit\Framework\TestCase;
 
-class CpfFormatterClassTest extends CpfFormatterTestCase
+class CpfFormatterClassTest extends TestCase
 {
+    use CpfFormatterTestCases;
+
     private CpfFormatter $formatter;
 
     protected function setUp(): void

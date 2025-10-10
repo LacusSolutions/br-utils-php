@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CpfFmt\Tests;
 
-use PHPUnit\Framework\TestCase;
-
-abstract class CpfFormatterTestCase extends TestCase
+trait CpfFormatterTestCases
 {
     abstract protected function format(
         string $cpfString,
