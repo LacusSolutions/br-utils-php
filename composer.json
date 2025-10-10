@@ -14,7 +14,7 @@
   "scripts": {
     "prepare": "captainhook",
     "commit": "conventional-commits prepare",
-    "analyze": "phpstan analyse",
+    "lint": "phpstan analyse",
     "check": "php-cs-fixer fix --dry-run --diff",
     "fix": "php-cs-fixer fix",
     "infection": "infection --min-msi=80 --min-covered-msi=80",
