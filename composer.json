@@ -1,6 +1,5 @@
 {
   "name": "lacus/cpf-gen",
-  "version": "1.0.0",
   "type": "library",
   "description": "Utility function to generate valid CPF (Brazilian personal ID)",
   "license": "MIT",
@@ -13,19 +12,15 @@
   ],
   "keywords": [
     "cpf",
-    "format",
-    "formatting",
-    "formatar",
-    "mascara",
-    "mask",
+    "generate",
+    "generator",
+    "gerador",
+    "gerar",
+    "faker",
+    "fake",
     "pt-br",
     "br"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/LacusSolutions/br-utils-php.git",
-    "directory": "packages/cpf-gen/"
-  },
   "support": {
     "issues": "https://github.com/LacusSolutions/br-utils-php/issues",
     "source": "https://github.com/LacusSolutions/br-utils-php"
