@@ -6,9 +6,12 @@ namespace Lacus\CnpjGen\Tests;
 
 use Lacus\CnpjGen\CnpjGenerator;
 use Lacus\CnpjGen\CnpjGeneratorOptions;
+use PHPUnit\Framework\TestCase;
 
-class CnpjGeneratorClassTest extends CnpjGeneratorTestCase
+class CnpjGeneratorClassTest extends TestCase
 {
+    use CnpjGeneratorTestCases;
+
     private CnpjGenerator $generator;
 
     protected function setUp(): void
