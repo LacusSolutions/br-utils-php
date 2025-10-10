@@ -45,7 +45,10 @@
     "sort-packages": true
   },
   "require": {
-    "php": ">=8.1"
+    "php": ">=8.1",
+    "lacus/cpf-fmt": "^1.0",
+    "lacus/cpf-gen": "^1.0",
+    "lacus/cpf-val": "^1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^10.5",
@@ -53,12 +56,15 @@
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\Cpf\\": "src/"
-    }
+      "Lacus\\CpfUtils\\": "src/"
+    },
+    "files": [
+      "src/cpf-utils.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\Cpf\\Tests\\": "tests/"
+      "Lacus\\CpfUtils\\Tests\\": "tests/"
     }
   }
 }
