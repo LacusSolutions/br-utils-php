@@ -6,9 +6,12 @@ namespace Lacus\CnpjFmt\Tests;
 
 use Lacus\CnpjFmt\CnpjFormatter;
 use Lacus\CnpjFmt\CnpjFormatterOptions;
+use PHPUnit\Framework\TestCase;
 
-class CnpjFormatterClassTest extends CnpjFormatterTestCase
+class CnpjFormatterClassTest extends TestCase
 {
+    use CnpjFormatterTestCases;
+
     private CnpjFormatter $formatter;
 
     protected function setUp(): void
