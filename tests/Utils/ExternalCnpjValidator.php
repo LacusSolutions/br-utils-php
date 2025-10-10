@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Lacus\CnpjGen\Tests\Traits;
+namespace Lacus\CnpjGen\Tests\Utils;
 
-trait CnpjValidator
+trait ExternalCnpjValidator
 {
     use EnvironmentVariables;
 

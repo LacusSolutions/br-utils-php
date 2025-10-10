@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjGen\Tests;
 
-use Lacus\CnpjGen\Tests\Traits\CnpjValidator;
-use PHPUnit\Framework\TestCase;
+use Lacus\CnpjGen\Tests\Utils\ExternalCnpjValidator;
 
-abstract class CnpjGeneratorTestCase extends TestCase
+trait CnpjGeneratorTestCases
 {
-    use CnpjValidator;
+    use ExternalCnpjValidator;
 
     abstract protected function generate(
         ?bool $format = null,
