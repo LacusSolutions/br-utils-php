@@ -6,9 +6,12 @@ namespace Lacus\CpfGen\Tests;
 
 use Lacus\CpfGen\CpfGenerator;
 use Lacus\CpfGen\CpfGeneratorOptions;
+use PHPUnit\Framework\TestCase;
 
-class CpfGeneratorClassTest extends CpfGeneratorTestCase
+class CpfGeneratorClassTest extends TestCase
 {
+    use CpfGeneratorTestCases;
+
     private CpfGenerator $generator;
 
     protected function setUp(): void
