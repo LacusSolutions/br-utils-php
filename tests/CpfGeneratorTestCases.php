@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Lacus\CpfGen\Tests;
 
-use Lacus\CpfGen\Tests\Traits\CpfValidator;
-use PHPUnit\Framework\TestCase;
+use Lacus\CpfGen\Tests\Utils\ExternalCpfValidator;
 
-abstract class CpfGeneratorTestCase extends TestCase
+trait CpfGeneratorTestCases
 {
-    use CpfValidator;
+    use ExternalCpfValidator;
 
     abstract protected function generate(
         ?bool $format = null,
