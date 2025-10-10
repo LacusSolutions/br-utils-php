@@ -70,4 +70,4 @@ jobs:
       - run: composer validate --strict
       - run: composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
 
-      - run: composer test:all
+      - run: composer test
