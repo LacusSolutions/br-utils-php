@@ -228,7 +228,7 @@ class CpfFormatterOptionsTest extends TestCase
         $options = new CpfFormatterOptions();
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of type callable, string given');
+        $this->expectExceptionMessage('must be of type Closure, string given');
         $options->setOnFail('not a callback');
     }
 
@@ -237,7 +237,7 @@ class CpfFormatterOptionsTest extends TestCase
         $options = new CpfFormatterOptions();
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of type callable, array given');
+        $this->expectExceptionMessage('must be of type Closure, array given');
         $options->setOnFail(['not', 'callable']);
     }
 
@@ -246,8 +246,7 @@ class CpfFormatterOptionsTest extends TestCase
         $options = new CpfFormatterOptions();
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of type callable, null given');
-        /** @phpstan-ignore-next-line */
+        $this->expectExceptionMessage('must be of type Closure, null given');
         $options->setOnFail(null);
     }
 
@@ -256,8 +255,7 @@ class CpfFormatterOptionsTest extends TestCase
         $options = new CpfFormatterOptions();
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('must be of type callable, int given');
-        /** @phpstan-ignore-next-line */
+        $this->expectExceptionMessage('must be of type Closure, int given');
         $options->setOnFail(123);
     }
 

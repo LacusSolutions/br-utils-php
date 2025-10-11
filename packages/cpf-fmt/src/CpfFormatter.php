@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CpfFmt;
 
+use Closure;
+
 class CpfFormatter
 {
     private CpfFormatterOptions $options;
@@ -16,7 +18,7 @@ class CpfFormatter
         ?int $hiddenEnd = null,
         ?string $dotKey = null,
         ?string $dashKey = null,
-        ?callable $onFail = null,
+        ?Closure $onFail = null,
     ) {
         $this->options = new CpfFormatterOptions(
             $escape,
@@ -39,7 +41,7 @@ class CpfFormatter
         ?int $hiddenEnd = null,
         ?string $dotKey = null,
         ?string $dashKey = null,
-        ?callable $onFail = null,
+        ?Closure $onFail = null,
     ): string {
         $actualOptions = $this->getOptions()->merge(
             $escape,
