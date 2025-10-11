@@ -4,9 +4,19 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjFmt;
 
+use Closure;
+
 class CnpjFormatterOptions
 {
-    private array $options;
+    private bool $escape;
+    private bool $hidden;
+    private string $hiddenKey;
+    private int $hiddenStart;
+    private int $hiddenEnd;
+    private string $dotKey;
+    private string $slashKey;
+    private string $dashKey;
+    private Closure $onFail;
 
     public function __construct(
         ?bool $escape = null,
@@ -17,7 +27,7 @@ class CnpjFormatterOptions
         ?string $dotKey = null,
         ?string $slashKey = null,
         ?string $dashKey = null,
-        ?callable $onFail = null,
+        ?Closure $onFail = null,
     ) {
         $this->setEscape($escape ?? false);
         $this->setHide($hidden ?? false);
@@ -40,7 +50,7 @@ class CnpjFormatterOptions
         ?string $dotKey = null,
         ?string $slashKey = null,
         ?string $dashKey = null,
-        ?callable $onFail = null,
+        ?Closure $onFail = null,
     ): self
     {
         return new self(
@@ -58,32 +68,32 @@ class CnpjFormatterOptions
 
     public function setEscape(bool $value): void
     {
-        $this->options['escape'] = $value;
+        $this->escape = $value;
     }
 
     public function isEscaped(): bool
     {
-        return $this->options['escape'];
+        return $this->escape;
     }
 
     public function setHide(bool $value): void
     {
-        $this->options['hidden'] = $value;
+        $this->hidden = $value;
     }
 
     public function isHidden(): bool
     {
-        return $this->options['hidden'];
+        return $this->hidden;
     }
 
     public function setHiddenKey(string $value): void
     {
-        $this->options['hiddenKey'] = $value;
+        $this->hiddenKey = $value;
     }
 
     public function getHiddenKey(): string
     {
-        return $this->options['hiddenKey'];
+        return $this->hiddenKey;
     }
 
     public function setHiddenRange(int $start, int $end): void
@@ -113,57 +123,57 @@ class CnpjFormatterOptions
             $end = $aux;
         }
 
-        $this->options['hiddenStart'] = $start;
-        $this->options['hiddenEnd'] = $end;
+        $this->hiddenStart = $start;
+        $this->hiddenEnd = $end;
     }
 
     public function getHiddenStart(): int
     {
-        return $this->options['hiddenStart'];
+        return $this->hiddenStart;
     }
 
     public function getHiddenEnd(): int
     {
-        return $this->options['hiddenEnd'];
+        return $this->hiddenEnd;
     }
 
     public function setDotKey(string $value): void
     {
-        $this->options['dotKey'] = $value;
+        $this->dotKey = $value;
     }
 
     public function getDotKey(): string
     {
-        return $this->options['dotKey'];
+        return $this->dotKey;
     }
 
     public function setSlashKey(string $value): void
     {
-        $this->options['slashKey'] = $value;
+        $this->slashKey = $value;
     }
 
     public function getSlashKey(): string
     {
-        return $this->options['slashKey'];
+        return $this->slashKey;
     }
 
     public function setDashKey(string $value): void
     {
-        $this->options['dashKey'] = $value;
+        $this->dashKey = $value;
     }
 
     public function getDashKey(): string
     {
-        return $this->options['dashKey'];
+        return $this->dashKey;
     }
 
-    public function setOnFail(callable $callback): void
+    public function setOnFail(Closure $callback): void
     {
-        $this->options['onFail'] = $callback;
+        $this->onFail = $callback;
     }
 
-    public function getOnFail(): callable
+    public function getOnFail(): Closure
     {
-        return $this->options['onFail'];
+        return $this->onFail;
     }
 }
