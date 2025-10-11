@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CpfFmt;
 
+use Closure;
+
 const CPF_LENGTH = 11;
 
 function cpf_fmt(
@@ -15,7 +17,7 @@ function cpf_fmt(
     ?int $hiddenEnd = null,
     ?string $dotKey = null,
     ?string $dashKey = null,
-    ?callable $onFail = null,
+    ?Closure $onFail = null,
 ): string {
     $formatter = new CpfFormatter(
         $escape,
