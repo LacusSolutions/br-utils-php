@@ -87,7 +87,7 @@ class CpfFormatterOptions
         $min = 0;
         $max = CPF_LENGTH - 1;
 
-        if (!is_int($start) || $start < $min || $start > $max) {
+        if ($start < $min || $start > $max) {
             throw new \TypeError(
                 'Option "hiddenStart" must be an integer between '
                 . $min . ' and '
@@ -95,7 +95,7 @@ class CpfFormatterOptions
             );
         }
 
-        if (!is_int($end) || $end < $min || $end > $max) {
+        if ($end < $min || $end > $max) {
             throw new \TypeError(
                 'Option "hiddenRange.end" must be an integer between '
                 . $min . ' and '
@@ -145,12 +145,6 @@ class CpfFormatterOptions
 
     public function setOnFail(callable $callback): void
     {
-        if (!is_callable($callback)) {
-            throw new \TypeError(
-                'The option "onFail" must be a callable function.'
-            );
-        }
-
         $this->options['onFail'] = $callback;
     }
 
