@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjFmt;
 
+use Closure;
+
 class CnpjFormatter
 {
     private CnpjFormatterOptions $options;
@@ -17,7 +19,7 @@ class CnpjFormatter
         ?string $dotKey = null,
         ?string $slashKey = null,
         ?string $dashKey = null,
-        ?callable $onFail = null,
+        ?Closure $onFail = null,
     ) {
         $this->options = new CnpjFormatterOptions(
             $escape,
@@ -42,7 +44,7 @@ class CnpjFormatter
         ?string $dotKey = null,
         ?string $slashKey = null,
         ?string $dashKey = null,
-        ?callable $onFail = null,
+        ?Closure $onFail = null,
     ): string {
         $actualOptions = $this->getOptions()->merge(
             $escape,

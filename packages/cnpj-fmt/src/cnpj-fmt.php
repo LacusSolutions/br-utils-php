@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjFmt;
 
+use Closure;
+
 const CNPJ_LENGTH = 14;
 
 function cnpj_fmt(
@@ -16,7 +18,7 @@ function cnpj_fmt(
     ?string $dotKey = null,
     ?string $slashKey = null,
     ?string $dashKey = null,
-    ?callable $onFail = null,
+    ?Closure $onFail = null,
 ): string {
     $formatter = new CnpjFormatter(
         $escape,
