@@ -10,6 +10,10 @@ class CpfUtils
     private CpfGenerator $generator;
     private CpfValidator $validator;
 
+    /**
+     * @param array<mixed> $formatter
+     * @param array<mixed> $generator
+     */
     public function __construct(
         array $formatter = [],
         array $generator = [],
