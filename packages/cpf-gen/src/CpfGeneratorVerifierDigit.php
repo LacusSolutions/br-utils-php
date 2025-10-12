@@ -6,6 +6,9 @@ namespace Lacus\CpfGen;
 
 class CpfGeneratorVerifierDigit
 {
+    /**
+     * @param array<int> $cpfSequence
+     */
     public function calculate(array $cpfSequence): int
     {
         $min = CPF_LENGTH - 2;

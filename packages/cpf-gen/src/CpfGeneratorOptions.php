@@ -6,7 +6,8 @@ namespace Lacus\CpfGen;
 
 class CpfGeneratorOptions
 {
-    private array $options;
+    private bool $format;
+    private string $prefix;
 
     public function __construct(
         ?bool $format = null,
@@ -29,12 +30,12 @@ class CpfGeneratorOptions
 
     public function setFormat(bool $value): void
     {
-        $this->options['format'] = $value;
+        $this->format = $value;
     }
 
     public function isFormatting(): bool
     {
-        return $this->options['format'];
+        return $this->format;
     }
 
     public function setPrefix(string $value): void
@@ -52,11 +53,11 @@ class CpfGeneratorOptions
             );
         }
 
-        $this->options['prefix'] = $digitsOnly;
+        $this->prefix = $digitsOnly;
     }
 
     public function getPrefix(): string
     {
-        return $this->options['prefix'];
+        return $this->prefix;
     }
 }

@@ -49,6 +49,10 @@ class CpfGenerator
         return $this->options;
     }
 
+    /**
+     * @param array<int> $prefixNumbers
+     * @return array<int>
+     */
     private function generatePersonalId(array $prefixNumbers): array
     {
         $personalIdLength = 9;
