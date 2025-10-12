@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lacus\CpfVal\Tests;
 
-use InvalidArgumentException;
 use TypeError;
 
 trait CpfValidatorTestCases
@@ -177,6 +176,6 @@ trait CpfValidatorTestCases
     public function testFunctionIsNotValid(): void
     {
         $this->expectException(TypeError::class);
-        $this->isValid(function() {});
+        $this->isValid(function () {});
     }
 }

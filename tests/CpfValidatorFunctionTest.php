@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lacus\CpfVal\Tests;
 
-use PHPUnit\Framework\TestCase;
-
 use function Lacus\CpfVal\cpf_val;
+
+use PHPUnit\Framework\TestCase;
 
 class CpfValidatorFunctionTest extends TestCase
 {
