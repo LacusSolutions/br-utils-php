@@ -10,7 +10,7 @@ trait EnvironmentVariables
 
     public static function setUpBeforeClass(): void
     {
-        if (!self::$envLoaded) {
+        if (! self::$envLoaded) {
             self::loadTestEnv();
             self::$envLoaded = true;
         }
@@ -21,8 +21,9 @@ trait EnvironmentVariables
         $envFile = getcwd() . DIRECTORY_SEPARATOR . '.env.test';
         $envExampleFile = getcwd() . DIRECTORY_SEPARATOR . '.env.example';
 
-        if (!file_exists($envFile)) {
+        if (! file_exists($envFile)) {
             copy($envExampleFile, $envFile);
+
             return;
         }
 

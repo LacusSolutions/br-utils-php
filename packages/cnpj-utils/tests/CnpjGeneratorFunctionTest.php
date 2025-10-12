@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Lacus\CnpjUtils\Tests;
 
 use Lacus\CnpjGen\Tests\CnpjGeneratorTestCases;
-use PHPUnit\Framework\TestCase;
 
 use function Lacus\CnpjUtils\cnpj_gen;
+
+use PHPUnit\Framework\TestCase;
 
 class CnpjGeneratorFunctionTest extends TestCase
 {

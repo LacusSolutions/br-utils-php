@@ -22,8 +22,7 @@ class CpfGeneratorOptions
     public function merge(
         ?bool $format = null,
         ?string $prefix = null,
-    ): self
-    {
+    ): self {
         return new self(
             $format ?? $this->isFormatting(),
             $prefix ?? $this->getPrefix(),

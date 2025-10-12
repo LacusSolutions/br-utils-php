@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Lacus\CnpjUtils\Tests;
 
 use Closure;
-use Lacus\CnpjUtils\CnpjUtils;
 use Lacus\CnpjFmt\Tests\CnpjFormatterTestCases;
 use Lacus\CnpjGen\Tests\CnpjGeneratorTestCases;
+use Lacus\CnpjUtils\CnpjUtils;
 use Lacus\CnpjVal\Tests\CnpjValidatorTestCases;
 use PHPUnit\Framework\TestCase;
 
@@ -60,7 +60,8 @@ class CnpjUtilsTest extends TestCase
         );
     }
 
-    protected function isValid(string $cnpjString): bool {
+    protected function isValid(string $cnpjString): bool
+    {
         return $this->utils->isValid($cnpjString);
     }
 }
