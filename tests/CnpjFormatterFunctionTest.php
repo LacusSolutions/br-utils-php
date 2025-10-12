@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Lacus\CnpjFmt\Tests;
 
 use Closure;
-use PHPUnit\Framework\TestCase;
 
 use function Lacus\CnpjFmt\cnpj_fmt;
+
+use PHPUnit\Framework\TestCase;
 
 class CnpjFormatterFunctionTest extends TestCase
 {

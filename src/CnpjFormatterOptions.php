@@ -53,8 +53,7 @@ class CnpjFormatterOptions
         ?string $slashKey = null,
         ?string $dashKey = null,
         ?Closure $onFail = null,
-    ): self
-    {
+    ): self {
         return new self(
             $escape ?? $this->isEscaped(),
             $hidden ?? $this->isHidden(),

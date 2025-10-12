@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Lacus\CnpjFmt\Tests;
 
 use InvalidArgumentException;
-use TypeError;
 use Lacus\CnpjFmt\CnpjFormatterOptions;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 
 class CnpjFormatterOptionsTest extends TestCase
 {
