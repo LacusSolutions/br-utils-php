@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjFmt\Tests;
 
+use Closure;
+
 trait CnpjFormatterTestCases
 {
     abstract protected function format(
@@ -16,7 +18,7 @@ trait CnpjFormatterTestCases
         ?string $dotKey = null,
         ?string $slashKey = null,
         ?string $dashKey = null,
-        ?callable $onFail = null,
+        ?Closure $onFail = null,
     ): string;
 
     public function testCnpjWithDotsAndDashFormatsToSameFormat(): void
