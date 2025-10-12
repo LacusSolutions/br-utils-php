@@ -10,6 +10,10 @@ class CnpjUtils
     private CnpjGenerator $generator;
     private CnpjValidator $validator;
 
+    /**
+     * @param array<mixed> $formatter
+     * @param array<mixed> $generator
+     */
     public function __construct(
         array $formatter = [],
         array $generator = [],
