@@ -42,7 +42,7 @@ class CpfGeneratorOptions
     {
         $min = 0;
         $max = CPF_LENGTH - 2;
-        $digitsOnly = preg_replace('/[^0-9]/', '', $value);
+        $digitsOnly = preg_replace('/[^0-9]/', '', $value) ?? '';
         $prefixLength = strlen($digitsOnly);
 
         if ($prefixLength > $max) {
