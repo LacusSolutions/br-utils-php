@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CpfUtils\Tests;
 
+use Closure;
 use Lacus\CpfFmt\Tests\CpfFormatterTestCases;
 use Lacus\CpfUtils\CpfFormatter;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +29,7 @@ class CpfFormatterClassTest extends TestCase
         ?int $hiddenEnd = null,
         ?string $dotKey = null,
         ?string $dashKey = null,
-        ?callable $onFail = null,
+        ?Closure $onFail = null,
     ): string {
         return $this->formatter->format(
             $cpfString,
