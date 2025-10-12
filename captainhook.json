@@ -1,12 +1,12 @@
 {
   "pre-commit": {
-    "enabled": false,
+    "enabled": true,
     "actions": [
       {
         "action": "\\CaptainHook\\App\\Hook\\PHP\\Action\\Linting"
       },
       {
-        "action": "composer fix"
+        "action": "composer lint:fix"
       }
     ]
   },
@@ -19,10 +19,10 @@
     ]
   },
   "pre-push": {
-    "enabled": false,
+    "enabled": true,
     "actions": [
       {
-        "action": "composer test"
+        "action": "composer lint"
       }
     ]
   }
