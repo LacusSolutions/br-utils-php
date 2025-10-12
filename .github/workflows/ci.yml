@@ -65,8 +65,13 @@ jobs:
           path: vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
 
-      - run: cd packages/${{ matrix.package }}
-      - run: composer validate --strict
-      - run: composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
+      - run: |
+          cd packages/${{ matrix.package }}
+          composer validate --strict
+      - run: |
+          cd packages/${{ matrix.package }}
+          composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
 
-      - run: composer test
+      - run: |
+          cd packages/${{ matrix.package }}
+          composer test
