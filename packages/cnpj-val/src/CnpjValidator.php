@@ -17,7 +17,7 @@ class CnpjValidator
 
     public function isValid(string $cnpjString): bool
     {
-        $cnpjNumbersString = preg_replace('/[^0-9]/', '', $cnpjString);
+        $cnpjNumbersString = preg_replace('/[^0-9]/', '', $cnpjString) ?? '';
         $cnpjNumbersStringArray = str_split($cnpjNumbersString);
         $cnpjNumbersArray = array_map('intval', $cnpjNumbersStringArray);
 

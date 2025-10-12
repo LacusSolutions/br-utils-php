@@ -54,7 +54,7 @@ class CpfFormatter
             $onFail,
         );
 
-        $cpfNumbersString = preg_replace('/[^0-9]/', '', $cpfString);
+        $cpfNumbersString = preg_replace('/[^0-9]/', '', $cpfString) ?? '';
         $cpfNumbersArray = str_split($cpfNumbersString);
 
         if (count($cpfNumbersArray) !== CPF_LENGTH) {

@@ -17,7 +17,7 @@ class CpfValidator
 
     public function isValid(string $cpfString): bool
     {
-        $cpfNumbersString = preg_replace('/[^0-9]/', '', $cpfString);
+        $cpfNumbersString = preg_replace('/[^0-9]/', '', $cpfString) ?? '';
         $cpfNumbersStringArray = str_split($cpfNumbersString);
         $cpfNumbersArray = array_map('intval', $cpfNumbersStringArray);
 
