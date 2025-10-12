@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjUtils;
 
+use Closure;
+
 function cnpj_fmt(
     string $cnpjString,
     ?bool $escape = null,
@@ -14,7 +16,7 @@ function cnpj_fmt(
     ?string $dotKey = null,
     ?string $slashKey = null,
     ?string $dashKey = null,
-    ?callable $onFail = null,
+    ?Closure $onFail = null,
 ): string {
     return \Lacus\CnpjFmt\cnpj_fmt(
         $cnpjString,

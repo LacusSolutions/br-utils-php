@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjUtils;
 
+use Closure;
+
 class CnpjUtils
 {
     private CnpjFormatter $formatter;
@@ -33,7 +35,7 @@ class CnpjUtils
         ?string $dotKey = null,
         ?string $slashKey = null,
         ?string $dashKey = null,
-        ?callable $onFail = null,
+        ?Closure $onFail = null,
     ): string {
         return $this->formatter->format(
             $cnpjString,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjUtils\Tests;
 
+use Closure;
 use Lacus\CnpjFmt\Tests\CnpjFormatterTestCases;
 use PHPUnit\Framework\TestCase;
 
@@ -23,7 +24,7 @@ class CnpjFormatterFunctionTest extends TestCase
         ?string $dotKey = null,
         ?string $slashKey = null,
         ?string $dashKey = null,
-        ?callable $onFail = null,
+        ?Closure $onFail = null,
     ): string {
         return cnpj_fmt(
             $cnpjString,
