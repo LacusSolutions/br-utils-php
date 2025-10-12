@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CpfUtils;
 
+use Closure;
+
 class CpfUtils
 {
     private CpfFormatter $formatter;
@@ -32,7 +34,7 @@ class CpfUtils
         ?int $hiddenEnd = null,
         ?string $dotKey = null,
         ?string $dashKey = null,
-        ?callable $onFail = null,
+        ?Closure $onFail = null,
     ): string {
         return $this->formatter->format(
             $cpfString,

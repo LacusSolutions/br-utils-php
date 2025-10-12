@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CpfFmt\Tests;
 
+use Closure;
 use PHPUnit\Framework\TestCase;
 
 use function Lacus\CpfFmt\cpf_fmt;
@@ -21,7 +22,7 @@ class CpfFormatterFunctionTest extends TestCase
         ?int $hiddenEnd = null,
         ?string $dotKey = null,
         ?string $dashKey = null,
-        ?callable $onFail = null,
+        ?Closure $onFail = null,
     ): string {
         return cpf_fmt(
             $cpfString,

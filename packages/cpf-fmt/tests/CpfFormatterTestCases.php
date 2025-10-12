@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CpfFmt\Tests;
 
+use Closure;
+
 trait CpfFormatterTestCases
 {
     abstract protected function format(
@@ -15,7 +17,7 @@ trait CpfFormatterTestCases
         ?int $hiddenEnd = null,
         ?string $dotKey = null,
         ?string $dashKey = null,
-        ?callable $onFail = null,
+        ?Closure $onFail = null,
     ): string;
 
     public function testCpfWithDotsAndDashFormatsToSameFormat(): void

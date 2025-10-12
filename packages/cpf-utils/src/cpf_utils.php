@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CpfUtils;
 
+use Closure;
+
 function cpf_fmt(
     string $cpfString,
     ?bool $escape = null,
@@ -13,7 +15,7 @@ function cpf_fmt(
     ?int $hiddenEnd = null,
     ?string $dotKey = null,
     ?string $dashKey = null,
-    ?callable $onFail = null,
+    ?Closure $onFail = null,
 ): string {
     return \Lacus\CpfFmt\cpf_fmt(
         $cpfString,
