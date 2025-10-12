@@ -70,13 +70,7 @@ jobs:
       - run: composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
         working-directory: packages/${{ matrix.package }}
 
-      - run: |
-          # print env var
-          echo "API_URL: ${{ env.API_URL }}"
-          # print 5 first characters of secret ebv vars
-          echo "API_TOKEN: $(echo "${{ env.API_TOKEN }}" | head -c 5)"
-
-          composer test
+      - run: composer test
         working-directory: packages/${{ matrix.package }}
         env:
           API_URL: ${{ vars.BR_UTILS_API_URL }}
