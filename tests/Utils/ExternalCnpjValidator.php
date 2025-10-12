@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjGen\Tests\Utils;
 
+use Exception;
+
 trait ExternalCnpjValidator
 {
     use EnvironmentVariables;
@@ -14,7 +16,7 @@ trait ExternalCnpjValidator
         $apiToken = $_ENV['API_TOKEN'] ?? getenv('API_TOKEN');
 
         if (!$apiUrl || !$apiToken) {
-            throw new \Exception('API environment variables not defined.');
+            throw new Exception('API environment variables not defined.');
         }
 
         $curl = curl_init();
@@ -34,7 +36,7 @@ trait ExternalCnpjValidator
         curl_close($curl);
 
         if ($httpCode >= 400) {
-            throw new \Exception("HTTP error ({$httpCode}) with CNPJ \"{$cnpjString}\"");
+            throw new Exception("HTTP error ({$httpCode}) with CNPJ \"{$cnpjString}\"");
         }
 
         return json_decode($response, true)['result'] ?? false;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjGen\Tests;
 
+use InvalidArgumentException;
 use Lacus\CnpjGen\Tests\Utils\ExternalCnpjValidator;
 
 trait CnpjGeneratorTestCases
@@ -105,10 +106,10 @@ trait CnpjGeneratorTestCases
 
     public function testPrefixedValueCannotAcceptStringWithMoreThan12Digits(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->generate(false, '12.345.678/0000-99');
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->generate(false, '12345678000099');
     }
 }

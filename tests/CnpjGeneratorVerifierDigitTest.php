@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjGen\Tests;
 
+use InvalidArgumentException;
 use Lacus\CnpjGen\CnpjGeneratorVerifierDigit;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +21,7 @@ class CnpjGeneratorVerifierDigitTest extends TestCase
     {
         $cnpjSequence = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2];
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('To calculate the verifier digit, the CNPJ sequence must be between 12 and 13 digits long, but got 11 digits ("01230123012").');
         $this->verifierDigit->calculate($cnpjSequence);
     }
@@ -29,7 +30,7 @@ class CnpjGeneratorVerifierDigitTest extends TestCase
     {
         $cnpjSequence = [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3];
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('To calculate the verifier digit, the CNPJ sequence must be between 12 and 13 digits long, but got 14 digits ("01234012340123").');
         $this->verifierDigit->calculate($cnpjSequence);
     }

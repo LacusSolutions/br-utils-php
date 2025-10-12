@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjGen;
 
+use InvalidArgumentException;
+
 class CnpjGeneratorVerifierDigit
 {
     /**
@@ -16,12 +18,10 @@ class CnpjGeneratorVerifierDigit
         $sequenceLength = count($cnpjSequence);
 
         if ($sequenceLength < $min || $sequenceLength > $max) {
-            throw new \TypeError(
-                'To calculate the verifier digit, the CNPJ sequence must be between '
-                . $min . ' and '
-                . $max . ' digits long, but got '
-                . $sequenceLength . ' digits ("'
-                . implode('', $cnpjSequence) . '").',
+            throw new InvalidArgumentException(
+                "To calculate the verifier digit, the CNPJ sequence must be between {$min} and {$max} digits long, but got {$sequenceLength} digits (\""
+                . implode('', $cnpjSequence)
+                . "\").",
             );
         }
 
