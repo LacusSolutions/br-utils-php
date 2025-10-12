@@ -80,6 +80,7 @@ class BrUtils
     private function hasRepeatedDigits(string $document): bool
     {
         $length = strlen($document);
+
         return preg_match('/^(\d)\1{' . ($length - 1) . '}$/', $document) === 1;
     }
 
@@ -102,22 +103,26 @@ class BrUtils
     private function calculateCpfFirstDigit(string $cpf): string
     {
         $sum = 0;
+
         for ($i = 0; $i < 9; $i++) {
             $sum += (int) $cpf[$i] * (10 - $i);
         }
 
         $remainder = $sum % 11;
+
         return $remainder < 2 ? '0' : (string) (11 - $remainder);
     }
 
     private function calculateCpfSecondDigit(string $cpf): string
     {
         $sum = 0;
+
         for ($i = 0; $i < 10; $i++) {
             $sum += (int) $cpf[$i] * (11 - $i);
         }
 
         $remainder = $sum % 11;
+
         return $remainder < 2 ? '0' : (string) (11 - $remainder);
     }
 
@@ -131,6 +136,7 @@ class BrUtils
         }
 
         $remainder = $sum % 11;
+
         return $remainder < 2 ? '0' : (string) (11 - $remainder);
     }
 
@@ -144,6 +150,7 @@ class BrUtils
         }
 
         $remainder = $sum % 11;
+
         return $remainder < 2 ? '0' : (string) (11 - $remainder);
     }
 }
