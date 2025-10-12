@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CpfGen;
 
+use InvalidArgumentException;
+
 class CpfGeneratorOptions
 {
     private bool $format;
@@ -46,10 +48,8 @@ class CpfGeneratorOptions
         $prefixLength = strlen($digitsOnly);
 
         if ($prefixLength > $max) {
-            throw new \TypeError(
-                'Option "prefix" must be a string containing between '
-                . $min . ' and '
-                . $max . ' digits.',
+            throw new InvalidArgumentException(
+                "Option \"prefix\" must be a string containing between {$min} and {$max} digits."
             );
         }
 

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Lacus\CpfFmt\Tests;
 
 use Closure;
+use InvalidArgumentException;
+use TypeError;
 
 trait CpfFormatterTestCases
 {
@@ -231,9 +233,9 @@ trait CpfFormatterTestCases
         $this->assertEquals('ABC', $cpf);
     }
 
-    public function testOptionWithRangeStartMinusOneThrowsTypeError(): void
+    public function testOptionWithRangeStartMinusOneThrowsException(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->format(
             '80976511061',
@@ -242,9 +244,9 @@ trait CpfFormatterTestCases
         );
     }
 
-    public function testOptionWithRangeStartGreaterThan10ThrowsTypeError(): void
+    public function testOptionWithRangeStartGreaterThan10ThrowsException(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->format(
             '80976511061',
@@ -253,9 +255,9 @@ trait CpfFormatterTestCases
         );
     }
 
-    public function testOptionWithRangeEndMinusOneThrowsTypeError(): void
+    public function testOptionWithRangeEndMinusOneThrowsException(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->format(
             '80976511061',
@@ -264,9 +266,9 @@ trait CpfFormatterTestCases
         );
     }
 
-    public function testOptionWithRangeEndGreaterThan10ThrowsTypeError(): void
+    public function testOptionWithRangeEndGreaterThan10ThrowsException(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->format(
             '80976511061',
@@ -275,9 +277,9 @@ trait CpfFormatterTestCases
         );
     }
 
-    public function testOptionWithOnFailAsNotFunctionThrowsTypeError(): void
+    public function testOptionWithOnFailAsNotFunctionThrowsException(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
 
         $this->format(
             '80976511061',

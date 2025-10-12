@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CpfGen\Tests\Utils;
 
+use Exception;
+
 trait ExternalCpfValidator
 {
     use EnvironmentVariables;
@@ -14,7 +16,7 @@ trait ExternalCpfValidator
         $apiToken = $_ENV['API_TOKEN'] ?? getenv('API_TOKEN');
 
         if (!$apiUrl || !$apiToken) {
-            throw new \Exception('API environment variables not defined.');
+            throw new Exception('API environment variables not defined.');
         }
 
         $curl = curl_init();
@@ -34,7 +36,7 @@ trait ExternalCpfValidator
         curl_close($curl);
 
         if ($httpCode >= 400) {
-            throw new \Exception("HTTP error ({$httpCode}) with CPF \"{$cpfString}\"");
+            throw new Exception("HTTP error ({$httpCode}) with CPF \"{$cpfString}\"");
         }
 
         return json_decode($response, true)['result'] ?? false;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjGen\Tests;
 
+use InvalidArgumentException;
 use Lacus\CnpjGen\CnpjGeneratorOptions;
 use PHPUnit\Framework\TestCase;
 
@@ -121,7 +122,7 @@ class CnpjGeneratorOptionsTest extends TestCase
     {
         $options = new CnpjGeneratorOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Option "prefix" must be a string containing between 0 and 12 digits.');
         $options->setPrefix('12345678000910');
     }
@@ -130,7 +131,7 @@ class CnpjGeneratorOptionsTest extends TestCase
     {
         $options = new CnpjGeneratorOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The branch ID (characters 8 to 11) cannot be "0000".');
         $options->setPrefix('123456780000');
     }

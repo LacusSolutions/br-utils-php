@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CpfFmt\Tests;
 
+use InvalidArgumentException;
+use TypeError;
 use Lacus\CpfFmt\CpfFormatterOptions;
 use PHPUnit\Framework\TestCase;
 
@@ -166,8 +168,9 @@ class CpfFormatterOptionsTest extends TestCase
     {
         $options = new CpfFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Option "hiddenStart" must be an integer between 0 and 10.');
+
         $options->setHiddenRange(-1, 5);
     }
 
@@ -175,8 +178,9 @@ class CpfFormatterOptionsTest extends TestCase
     {
         $options = new CpfFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Option "hiddenRange.end" must be an integer between 0 and 10.');
+
         $options->setHiddenRange(5, 11);
     }
 
@@ -184,8 +188,9 @@ class CpfFormatterOptionsTest extends TestCase
     {
         $options = new CpfFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Option "hiddenStart" must be an integer between 0 and 10.');
+
         $options->setHiddenRange(11, 5);
     }
 
@@ -227,8 +232,9 @@ class CpfFormatterOptionsTest extends TestCase
     {
         $options = new CpfFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessage('must be of type Closure, string given');
+
         $options->setOnFail('not a callback');
     }
 
@@ -236,8 +242,9 @@ class CpfFormatterOptionsTest extends TestCase
     {
         $options = new CpfFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessage('must be of type Closure, array given');
+
         $options->setOnFail(['not', 'callable']);
     }
 
@@ -245,8 +252,9 @@ class CpfFormatterOptionsTest extends TestCase
     {
         $options = new CpfFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessage('must be of type Closure, null given');
+
         $options->setOnFail(null);
     }
 
@@ -254,8 +262,9 @@ class CpfFormatterOptionsTest extends TestCase
     {
         $options = new CpfFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessage('must be of type Closure, int given');
+
         $options->setOnFail(123);
     }
 
@@ -277,9 +286,10 @@ class CpfFormatterOptionsTest extends TestCase
     public function testDefaultOnFailCallbackBehavior(): void
     {
         $options = new CpfFormatterOptions();
-
         $callback = $options->getOnFail();
+
         $result = $callback('test input');
+
         $this->assertEquals('test input', $result);
     }
 

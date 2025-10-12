@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CpfGen\Tests;
 
+use InvalidArgumentException;
 use Lacus\CpfGen\Tests\Utils\ExternalCpfValidator;
 
 trait CpfGeneratorTestCases
@@ -101,10 +102,10 @@ trait CpfGeneratorTestCases
 
     public function testPrefixedValueCannotAcceptStringWithMoreThan9Digits(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->generate(false, '1234567890');
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->generate(false, '123.456.789-0');
     }
 }
