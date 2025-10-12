@@ -13,8 +13,21 @@ class CnpjUtils
     private CnpjValidator $validator;
 
     /**
-     * @param array<mixed> $formatter
-     * @param array<mixed> $generator
+     * @param array{
+     *   escape?: bool,
+     *   hidden?: bool,
+     *   hiddenKey?: string,
+     *   hiddenStart?: int,
+     *   hiddenEnd?: int,
+     *   dotKey?: string,
+     *   slashKey?: string,
+     *   dashKey?: string,
+     *   onFail?: Closure,
+     * } $formatter
+     * @param array{
+     *   format?: bool,
+     *   prefix?: string,
+     * } $generator
      */
     public function __construct(
         array $formatter = [],
