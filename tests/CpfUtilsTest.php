@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Lacus\CpfUtils\Tests;
 
 use Closure;
-use Lacus\CpfUtils\CpfUtils;
 use Lacus\CpfFmt\Tests\CpfFormatterTestCases;
 use Lacus\CpfGen\Tests\CpfGeneratorTestCases;
+use Lacus\CpfUtils\CpfUtils;
 use Lacus\CpfVal\Tests\CpfValidatorTestCases;
 use PHPUnit\Framework\TestCase;
 
@@ -58,7 +58,8 @@ class CpfUtilsTest extends TestCase
         );
     }
 
-    protected function isValid(string $cpfString): bool {
+    protected function isValid(string $cpfString): bool
+    {
         return $this->utils->isValid($cpfString);
     }
 }

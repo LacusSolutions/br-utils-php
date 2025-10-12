@@ -6,9 +6,10 @@ namespace Lacus\CpfUtils\Tests;
 
 use Closure;
 use Lacus\CpfFmt\Tests\CpfFormatterTestCases;
-use PHPUnit\Framework\TestCase;
 
 use function Lacus\CpfUtils\cpf_fmt;
+
+use PHPUnit\Framework\TestCase;
 
 class CpfFormatterFunctionTest extends TestCase
 {
