@@ -13,10 +13,15 @@ trait ExternalCpfValidator
     protected function isValid(string $cpfString): bool
     {
         $apiUrl = $_ENV['API_URL'] ?? getenv('API_URL');
+
+        if (!$apiUrl) {
+            throw new Exception('API URL not defined.');
+        }
+
         $apiToken = $_ENV['API_TOKEN'] ?? getenv('API_TOKEN');
 
-        if (! $apiUrl || ! $apiToken) {
-            throw new Exception('API environment variables not defined.');
+        if (!$apiToken) {
+            throw new Exception('API secret not defined.');
         }
 
         $curl = curl_init();
