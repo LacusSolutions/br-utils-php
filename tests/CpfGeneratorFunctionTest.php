@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lacus\CpfGen\Tests;
 
-use PHPUnit\Framework\TestCase;
-
 use function Lacus\CpfGen\cpf_gen;
+
+use PHPUnit\Framework\TestCase;
 
 class CpfGeneratorFunctionTest extends TestCase
 {

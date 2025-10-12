@@ -15,7 +15,7 @@ trait ExternalCpfValidator
         $apiUrl = $_ENV['API_URL'] ?? getenv('API_URL');
         $apiToken = $_ENV['API_TOKEN'] ?? getenv('API_TOKEN');
 
-        if (!$apiUrl || !$apiToken) {
+        if (! $apiUrl || ! $apiToken) {
             throw new Exception('API environment variables not defined.');
         }
 
