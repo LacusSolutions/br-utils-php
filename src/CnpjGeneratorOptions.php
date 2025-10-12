@@ -42,7 +42,7 @@ class CnpjGeneratorOptions
     {
         $min = 0;
         $max = CNPJ_LENGTH - 2;
-        $digitsOnly = preg_replace('/[^0-9]/', '', $value);
+        $digitsOnly = preg_replace('/[^0-9]/', '', $value) ?? '';
         $prefixLength = strlen($digitsOnly);
 
         if ($prefixLength > CNPJ_LENGTH - 2) {
