@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Lacus\CnpjFmt;
 
 use Closure;
+use Exception;
+use InvalidArgumentException;
 
 class CnpjFormatterOptions
 {
@@ -102,18 +104,14 @@ class CnpjFormatterOptions
         $max = CNPJ_LENGTH - 1;
 
         if ($start < $min || $start > $max) {
-            throw new \TypeError(
-                'Option "hiddenStart" must be an integer between '
-                . $min . ' and '
-                . $max . '.'
+            throw new InvalidArgumentException(
+                "Option \"hiddenStart\" must be an integer between {$min} and {$max}."
             );
         }
 
         if ($end < $min || $end > $max) {
-            throw new \TypeError(
-                'Option "hiddenRange.end" must be an integer between '
-                . $min . ' and '
-                . $max . '.'
+            throw new InvalidArgumentException(
+                "Option \"hiddenRange.end\" must be an integer between {$min} and {$max}."
             );
         }
 
@@ -173,7 +171,7 @@ class CnpjFormatterOptions
     }
 
     /**
-     * @return Closure(string, \Error): string
+     * @return Closure(string, Exception): string
      */
     public function getOnFail(): Closure
     {

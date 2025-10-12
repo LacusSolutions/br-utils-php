@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CnpjFmt\Tests;
 
+use InvalidArgumentException;
+use TypeError;
 use Lacus\CnpjFmt\CnpjFormatterOptions;
 use PHPUnit\Framework\TestCase;
 
@@ -171,8 +173,9 @@ class CnpjFormatterOptionsTest extends TestCase
     {
         $options = new CnpjFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Option "hiddenStart" must be an integer between 0 and 13.');
+
         $options->setHiddenRange(-1, 5);
     }
 
@@ -180,8 +183,9 @@ class CnpjFormatterOptionsTest extends TestCase
     {
         $options = new CnpjFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Option "hiddenRange.end" must be an integer between 0 and 13.');
+
         $options->setHiddenRange(5, 14);
     }
 
@@ -189,8 +193,9 @@ class CnpjFormatterOptionsTest extends TestCase
     {
         $options = new CnpjFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Option "hiddenStart" must be an integer between 0 and 13.');
+
         $options->setHiddenRange(14, 5);
     }
 
@@ -243,8 +248,9 @@ class CnpjFormatterOptionsTest extends TestCase
     {
         $options = new CnpjFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(exception: TypeError::class);
         $this->expectExceptionMessage('must be of type Closure, string given');
+
         $options->setOnFail('not a callback');
     }
 
@@ -252,8 +258,9 @@ class CnpjFormatterOptionsTest extends TestCase
     {
         $options = new CnpjFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessage('must be of type Closure, array given');
+
         $options->setOnFail(['not', 'callable']);
     }
 
@@ -261,8 +268,9 @@ class CnpjFormatterOptionsTest extends TestCase
     {
         $options = new CnpjFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessage('must be of type Closure, null given');
+
         $options->setOnFail(null);
     }
 
@@ -270,8 +278,9 @@ class CnpjFormatterOptionsTest extends TestCase
     {
         $options = new CnpjFormatterOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessage('must be of type Closure, int given');
+
         $options->setOnFail(123);
     }
 
@@ -293,9 +302,10 @@ class CnpjFormatterOptionsTest extends TestCase
     public function testDefaultOnFailCallbackBehavior(): void
     {
         $options = new CnpjFormatterOptions();
-
         $callback = $options->getOnFail();
+
         $result = $callback('test input');
+
         $this->assertEquals('test input', $result);
     }
 

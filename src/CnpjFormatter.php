@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lacus\CnpjFmt;
 
 use Closure;
+use InvalidArgumentException;
 
 class CnpjFormatter
 {
@@ -62,7 +63,11 @@ class CnpjFormatter
         $cnpjNumbersArray = str_split($cnpjNumbersString);
 
         if (count($cnpjNumbersArray) !== CNPJ_LENGTH) {
-            $error = new \Error('Parameter "' . $cnpjString . '" does not contain ' . CNPJ_LENGTH . ' digits.');
+            $error = new InvalidArgumentException(
+                "Parameter \"{$cnpjString}\" does not contain "
+                . CNPJ_LENGTH
+                . " digits."
+            );
 
             return $actualOptions->getOnFail()($cnpjString, $error);
         }

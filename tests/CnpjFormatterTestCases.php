@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Lacus\CnpjFmt\Tests;
 
 use Closure;
+use InvalidArgumentException;
+use TypeError;
 
 trait CnpjFormatterTestCases
 {
@@ -279,9 +281,9 @@ trait CnpjFormatterTestCases
         $this->assertEquals('ABC', $cnpj);
     }
 
-    public function testOptionWithRangeStartMinusOneThrowsTypeError(): void
+    public function testOptionWithRangeStartMinusOneThrowsException(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->format(
             '03603568000195',
@@ -290,9 +292,9 @@ trait CnpjFormatterTestCases
         );
     }
 
-    public function testOptionWithRangeStartGreaterThan13ThrowsTypeError(): void
+    public function testOptionWithRangeStartGreaterThan13ThrowsException(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->format(
             '03603568000195',
@@ -301,9 +303,9 @@ trait CnpjFormatterTestCases
         );
     }
 
-    public function testOptionWithRangeEndMinusOneThrowsTypeError(): void
+    public function testOptionWithRangeEndMinusOneThrowsException(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->format(
             '03603568000195',
@@ -312,9 +314,9 @@ trait CnpjFormatterTestCases
         );
     }
 
-    public function testOptionWithRangeEndGreaterThan13ThrowsTypeError(): void
+    public function testOptionWithRangeEndGreaterThan13ThrowsException(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->format(
             '03603568000195',
@@ -373,9 +375,9 @@ trait CnpjFormatterTestCases
         $this->assertEquals('03.###.###/####-95', $cnpj);
     }
 
-    public function testOptionWithOnFailAsNotFunctionThrowsTypeError(): void
+    public function testOptionWithOnFailAsNotFunctionThrowsException(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
 
         $this->format(
             '03603568000195',
