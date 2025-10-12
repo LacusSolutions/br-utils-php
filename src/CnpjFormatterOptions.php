@@ -172,6 +172,9 @@ class CnpjFormatterOptions
         $this->onFail = $callback;
     }
 
+    /**
+     * @return Closure(string, \Error): string
+     */
     public function getOnFail(): Closure
     {
         return $this->onFail;
