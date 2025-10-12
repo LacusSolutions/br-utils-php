@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Lacus\CpfVal\Tests;
 
+use InvalidArgumentException;
+use TypeError;
+
 trait CpfValidatorTestCases
 {
     abstract protected function isValid(string $cpfString): bool;
@@ -116,23 +119,9 @@ trait CpfValidatorTestCases
 
     public function testValue123IsNotValid(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
 
         $this->isValid(123);
-    }
-
-    public function testValue123456IsNotValid(): void
-    {
-        $this->expectException(\TypeError::class);
-
-        $this->isValid(123456);
-    }
-
-    public function testValue123456789IsNotValid(): void
-    {
-        $this->expectException(\TypeError::class);
-
-        $this->isValid(123456789);
     }
 
     public function testValueAbcIsNotValid(): void
@@ -151,43 +140,43 @@ trait CpfValidatorTestCases
 
     public function testValueTrueIsNotValid(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->isValid(true);
     }
 
     public function testValueFalseIsNotValid(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->isValid(false);
     }
 
     public function testValueNullIsNotValid(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->isValid(null);
     }
 
     public function testValueInfinityIsNotValid(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->isValid(INF);
     }
 
     public function testArrayIsNotValid(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->isValid([1, 2, 3]);
     }
 
     public function testObjectIsNotValid(): void
     {
-        $this->expectException(\TypeError::class);
-        $this->isValid((object)['a' => 1, 'b' => 2, 'c' => 3]);
+        $this->expectException(TypeError::class);
+        $this->isValid((object) ['a' => 1, 'b' => 2, 'c' => 3]);
     }
 
     public function testFunctionIsNotValid(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->isValid(function() {});
     }
 }
