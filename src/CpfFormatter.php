@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lacus\CpfFmt;
 
 use Closure;
+use InvalidArgumentException;
 
 class CpfFormatter
 {
@@ -58,7 +59,11 @@ class CpfFormatter
         $cpfNumbersArray = str_split($cpfNumbersString);
 
         if (count($cpfNumbersArray) !== CPF_LENGTH) {
-            $error = new \Error('Parameter "' . $cpfString . '" does not contain ' . CPF_LENGTH . ' digits.');
+            $error = new InvalidArgumentException(
+                "Parameter \"{$cpfString}\" does not contain "
+                . CPF_LENGTH
+                . " digits."
+            );
 
             return $actualOptions->getOnFail()($cpfString, $error);
         }
