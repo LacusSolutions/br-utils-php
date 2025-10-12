@@ -58,7 +58,7 @@ class CnpjFormatter
             $onFail,
         );
 
-        $cnpjNumbersString = preg_replace('/[^0-9]/', '', $cnpjString);
+        $cnpjNumbersString = preg_replace('/[^0-9]/', '', $cnpjString) ?? '';
         $cnpjNumbersArray = str_split($cnpjNumbersString);
 
         if (count($cnpjNumbersArray) !== CNPJ_LENGTH) {
