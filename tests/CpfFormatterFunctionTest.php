@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Lacus\CpfFmt\Tests;
 
 use Closure;
-use PHPUnit\Framework\TestCase;
 
 use function Lacus\CpfFmt\cpf_fmt;
+
+use PHPUnit\Framework\TestCase;
 
 class CpfFormatterFunctionTest extends TestCase
 {

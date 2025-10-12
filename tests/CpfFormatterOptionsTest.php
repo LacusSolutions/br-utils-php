@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Lacus\CpfFmt\Tests;
 
 use InvalidArgumentException;
-use TypeError;
 use Lacus\CpfFmt\CpfFormatterOptions;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 
 class CpfFormatterOptionsTest extends TestCase
 {
