@@ -74,4 +74,4 @@ jobs:
 
       - run: |
           cd packages/${{ matrix.package }}
-          composer test
+          API_URL=${{ vars.BR_UTILS_API_URL }} API_TOKEN=${{ secrets.BR_UTILS_API_TOKEN }} composer test
