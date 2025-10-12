@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CpfGen\Tests;
 
+use InvalidArgumentException;
 use Lacus\CpfGen\CpfGeneratorVerifierDigit;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +21,7 @@ class CpfGeneratorVerifierDigitTest extends TestCase
     {
         $cpfSequence = [0, 1, 2, 3, 0, 1, 2, 3];
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('To calculate the verifier digit, the CPF sequence must be between 9 and 10 digits long, but got 8 digits ("01230123").');
         $this->verifierDigit->calculate($cpfSequence);
     }
@@ -29,7 +30,7 @@ class CpfGeneratorVerifierDigitTest extends TestCase
     {
         $cpfSequence = [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0];
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('To calculate the verifier digit, the CPF sequence must be between 9 and 10 digits long, but got 11 digits ("01234012340").');
         $this->verifierDigit->calculate($cpfSequence);
     }

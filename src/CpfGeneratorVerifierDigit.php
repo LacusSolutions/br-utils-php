@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lacus\CpfGen;
 
+use InvalidArgumentException;
+
 class CpfGeneratorVerifierDigit
 {
     /**
@@ -16,12 +18,10 @@ class CpfGeneratorVerifierDigit
         $sequenceLength = count($cpfSequence);
 
         if ($sequenceLength < $min || $sequenceLength > $max) {
-            throw new \TypeError(
-                'To calculate the verifier digit, the CPF sequence must be between '
-                . $min . ' and '
-                . $max . ' digits long, but got '
-                . $sequenceLength . ' digits ("'
-                . implode('', $cpfSequence) . '").',
+            throw new InvalidArgumentException(
+                "To calculate the verifier digit, the CPF sequence must be between {$min} and {$max} digits long, but got {$sequenceLength} digits (\""
+                . implode('', $cpfSequence)
+                . "\").",
             );
         }
 

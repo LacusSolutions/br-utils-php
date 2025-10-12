@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\CpfGen\Tests;
 
+use InvalidArgumentException;
 use Lacus\CpfGen\CpfGeneratorOptions;
 use PHPUnit\Framework\TestCase;
 
@@ -121,7 +122,7 @@ class CpfGeneratorOptionsTest extends TestCase
     {
         $options = new CpfGeneratorOptions();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Option "prefix" must be a string containing between 0 and 9 digits.');
         $options->setPrefix('1234567890');
     }
