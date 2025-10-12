@@ -6,7 +6,8 @@ namespace Lacus\CnpjGen;
 
 class CnpjGeneratorOptions
 {
-    private array $options;
+    private bool $format;
+    private string $prefix;
 
     public function __construct(
         ?bool $format = null,
@@ -29,12 +30,12 @@ class CnpjGeneratorOptions
 
     public function setFormat(bool $value): void
     {
-        $this->options['format'] = $value;
+        $this->format = $value;
     }
 
     public function isFormatting(): bool
     {
-        return $this->options['format'];
+        return $this->format;
     }
 
     public function setPrefix(string $value): void
@@ -56,11 +57,11 @@ class CnpjGeneratorOptions
             throw new \TypeError('The branch ID (characters 8 to 11) cannot be "0000".');
         }
 
-        $this->options['prefix'] = $digitsOnly;
+        $this->prefix = $digitsOnly;
     }
 
     public function getPrefix(): string
     {
-        return $this->options['prefix'];
+        return $this->prefix;
     }
 }

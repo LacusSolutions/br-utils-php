@@ -6,6 +6,9 @@ namespace Lacus\CnpjGen;
 
 class CnpjGeneratorVerifierDigit
 {
+    /**
+     * @param array<int> $cnpjSequence
+     */
     public function calculate(array $cnpjSequence): int
     {
         $min = CNPJ_LENGTH - 2;

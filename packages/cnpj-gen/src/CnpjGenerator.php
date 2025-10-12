@@ -51,7 +51,11 @@ class CnpjGenerator
         return $this->options;
     }
 
-    private function generateBusinessId(array $prefixNumbers): array
+    /**
+     * @param array<int> $prefixNumbers
+     * @return array<int>
+     */
+    private function generateBusinessId($prefixNumbers): array
     {
         $businessIdLength = 8;
 
@@ -64,6 +68,10 @@ class CnpjGenerator
         return array_merge($businessIdStart, $businessIdEnd);
     }
 
+    /**
+     * @param array<int> $prefixNumbers
+     * @return array<int>
+     */
     private function generateBranchId(array $prefixNumbers): array
     {
         $branchIdLength = 4;
