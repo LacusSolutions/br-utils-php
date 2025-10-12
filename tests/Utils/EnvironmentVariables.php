@@ -23,8 +23,6 @@ trait EnvironmentVariables
 
         if (!file_exists($envFile)) {
             copy($envExampleFile, $envFile);
-
-            return;
         }
 
         $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -37,6 +35,14 @@ trait EnvironmentVariables
             [$name, $value] = explode('=', $line, 2);
             $name = trim($name);
             $value = trim($value);
+
+            if (empty($value)) {
+                $systemValue = getenv($name);
+
+                if (!empty($systemValue)) {
+                    $value = $systemValue;
+                }
+            }
 
             putenv("{$name}={$value}");
         }
