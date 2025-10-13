@@ -53,12 +53,15 @@
       "Lacus\\CnpjUtils\\": "src/"
     },
     "files": [
-      "src/cnpj-utils.php"
+      "src/cnpj_utils.php"
     ]
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\CnpjUtils\\Tests\\": "tests/"
+      "Lacus\\CnpjUtils\\Tests\\": "tests/",
+      "Lacus\\CnpjFmt\\Tests\\": "vendor/lacus/cnpj-fmt/tests/",
+      "Lacus\\CnpjGen\\Tests\\": "vendor/lacus/cnpj-gen/tests/",
+      "Lacus\\CnpjVal\\Tests\\": "vendor/lacus/cnpj-val/tests/"
     }
   }
 }
