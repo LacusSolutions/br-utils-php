@@ -53,12 +53,15 @@
       "Lacus\\CpfUtils\\": "src/"
     },
     "files": [
-      "src/cpf-utils.php"
+      "src/cpf_utils.php"
     ]
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\CpfUtils\\Tests\\": "tests/"
+      "Lacus\\CpfUtils\\Tests\\": "tests/",
+      "Lacus\\CpfFmt\\Tests\\": "vendor/lacus/cpf-fmt/tests/",
+      "Lacus\\CpfGen\\Tests\\": "vendor/lacus/cpf-gen/tests/",
+      "Lacus\\CpfVal\\Tests\\": "vendor/lacus/cpf-val/tests/"
     }
   }
 }
