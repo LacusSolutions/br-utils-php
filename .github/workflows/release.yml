@@ -9,7 +9,7 @@ jobs:
   release-to-remote:
     name: Sync Release to Remote Repository
     runs-on: ubuntu-latest
-    if: endsWith(github.event.release.target_commitish, '/main')
+    if: github.event_name == 'workflow_dispatch' || endsWith(github.event.release.target_commitish, '/main')
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
@@ -21,11 +21,17 @@ jobs:
 
       - id: extract-package
         run: |
-          PACKAGE_NAME=$(echo "${{ github.event.release.target_commitish }}" | sed 's|/main$||')
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+          else
+            BRANCH_NAME="${{ github.event.release.target_commitish }}"
+          fi
+
+          PACKAGE_NAME=$(echo "$BRANCH_NAME" | sed 's|/main$||')
 
           echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
           echo "package_url=git@github.com:LacusSolutions/br-utils-php_$PACKAGE_NAME.git" >> $GITHUB_OUTPUT
-          echo "Extracted package name: $PACKAGE_NAME"
+          echo "Extracted package name: $PACKAGE_NAME from branch: $BRANCH_NAME"
 
       - id: check-remote-exists
         run: |
