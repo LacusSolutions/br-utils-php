@@ -1,0 +1,76 @@
+name: Sync Release Tags
+
+on:
+  schedule:
+    - cron: "0 10 * * *" # Runs every day at 10:00 UTC
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  check-releases:
+    name: Check and Sync Releases tags
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: webfactory/ssh-agent@a6f90b1f127823b31d4d4a8d96047790581349bd # v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - id: releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Fetching recent releases from GitHub API..."
+          curl -s -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases?per_page=50" > releases.json
+          jq '.[] | {tag_name: .tag_name, created_at: .created_at}' releases.json > simplified.json
+
+          # filter releases from the last 24 hours
+          jq -r --arg cutoff "$(date -u -d '1 day ago' +%Y-%m-%dT%H:%M:%SZ)" \
+            '.[] | select(.created_at > $cutoff) | .tag_name' simplified.json > new_tags.txt
+
+          if [ ! -s new_tags.txt ]; then
+            echo "✅ No new releases found in the last 24 hours."
+            exit 0
+          fi
+
+          echo "🚀 Found new tags to sync:"
+          cat new_tags.txt
+
+      - if: success()
+        run: |
+          while read TAG_NAME; do
+            if [[ "$TAG_NAME" != lacus/*@* ]]; then
+              echo "❌ Tag $TAG_NAME does not match the expected format: 'lacus/<package-name>@<version>'"
+              continue
+            fi
+
+            PACKAGE_NAME=${TAG_NAME#lacus/*}
+            PACKAGE_NAME=${PACKAGE_NAME%@*}
+            PACKAGE_VERSION=${TAG_NAME#*$PACKAGE_NAME@}
+            ORIGIN_BRANCH="${PACKAGE_NAME}/main"
+            REMOTE_URL="git@github.com:LacusSolutions/br-utils-php_${PACKAGE_NAME}.git"
+
+            echo "---------------------------------------------"
+            echo "📦 Syncing $TAG_NAME → $REMOTE_URL"
+            echo "---------------------------------------------"
+            echo "Tag name:      $TAG_NAME"
+            echo "Package name:  $PACKAGE_NAME"
+            echo "Version:       $PACKAGE_VERSION"
+            echo "Origin branch: $ORIGIN_BRANCH"
+            echo "Remote URL:    $REMOTE_URL"
+            echo ""
+
+            if ! git ls-remote "$REMOTE_URL" &> /dev/null; then
+              echo "     ❌ Remote repository not found: $REMOTE_URL\n\n"
+              continue
+            fi
+
+            git fetch --tags
+            git remote add remote-repo-$PACKAGE_NAME "$REMOTE_URL" || true
+            git tag "$PACKAGE_VERSION" "refs/tags/$TAG_NAME" -f
+            git push remote-repo-$PACKAGE_NAME "refs/tags/$VERSION_TAG" --force
+
+            echo "     ✅ Pushed tag $PACKAGE_VERSION to remote repository\n\n"
+          done < new_tags.txt
