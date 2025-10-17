@@ -24,11 +24,10 @@ jobs:
         run: |
           echo "Fetching recent releases from GitHub API..."
           curl -s -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases?per_page=50" > releases.json
-          jq '.[] | {tag_name: .tag_name, created_at: .created_at}' releases.json > simplified.json
 
           # filter releases from the last 24 hours
           jq -r --arg cutoff "$(date -u -d '1 day ago' +%Y-%m-%dT%H:%M:%SZ)" \
-            '.[] | select(.created_at > $cutoff) | .tag_name' simplified.json > new_tags.txt
+            '.[] | select(.created_at > $cutoff) | .tag_name' releases.json > new_tags.txt
 
           if [ ! -s new_tags.txt ]; then
             echo "✅ No new releases found in the last 24 hours."
@@ -49,17 +48,15 @@ jobs:
             PACKAGE_NAME=${TAG_NAME#lacus/*}
             PACKAGE_NAME=${PACKAGE_NAME%@*}
             PACKAGE_VERSION=${TAG_NAME#*$PACKAGE_NAME@}
-            ORIGIN_BRANCH="${PACKAGE_NAME}/main"
             REMOTE_URL="git@github.com:LacusSolutions/br-utils-php_${PACKAGE_NAME}.git"
 
             echo "---------------------------------------------"
             echo "📦 Syncing $TAG_NAME → $REMOTE_URL"
             echo "---------------------------------------------"
-            echo "Tag name:      $TAG_NAME"
-            echo "Package name:  $PACKAGE_NAME"
-            echo "Version:       $PACKAGE_VERSION"
-            echo "Origin branch: $ORIGIN_BRANCH"
-            echo "Remote URL:    $REMOTE_URL"
+            echo "Tag name:     $TAG_NAME"
+            echo "Package name: $PACKAGE_NAME"
+            echo "Version:      $PACKAGE_VERSION"
+            echo "Remote URL:   $REMOTE_URL"
             echo ""
 
             if ! git ls-remote "$REMOTE_URL" &> /dev/null; then
