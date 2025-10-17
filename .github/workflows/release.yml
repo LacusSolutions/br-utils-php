@@ -55,8 +55,7 @@ jobs:
 
           echo "✅ Remote repository exists."
 
-      - name: Create simplified tag and push it to remote (ex: 'lacus/some-pkg@1.2.3' will be '1.2.3')
-        run: |
+      - run: |
           REMOTE_URL="${{ steps.extract-package.outputs.package_url }}"
           PACKAGE_VERSION="${{ steps.extract-package.outputs.package_version }}"
           TAG_NAME="$PACKAGE_VERSION"
