@@ -26,8 +26,8 @@ jobs:
           curl -s -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases?per_page=50" > releases.json
 
           # filter releases from the last 24 hours
-          jq -r --arg cutoff "$(date -u -d '1 day ago' +%Y-%m-%dT%H:%M:%SZ)" \
-            '.[] | select(.created_at > $cutoff) | .tag_name' releases.json > new_tags.txt
+          jq -r --arg cutoff "$(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%SZ)" \
+            '.[] | select(.published_at and (.published_at > $cutoff)) | .tag_name' releases.json > new_tags.txt
 
           if [ ! -s new_tags.txt ]; then
             echo "✅ No new releases found in the last 24 hours."
