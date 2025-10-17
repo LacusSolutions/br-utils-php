@@ -60,14 +60,18 @@ jobs:
             echo ""
 
             if ! git ls-remote "$REMOTE_URL" &> /dev/null; then
-              echo "     ❌ Remote repository not found: $REMOTE_URL\n\n"
+              echo "     ❌ Remote repository not found: $REMOTE_URL"
+              echo ""
+              echo ""
               continue
             fi
 
             git fetch --tags
             git remote add remote-repo-$PACKAGE_NAME "$REMOTE_URL" || true
             git tag "$PACKAGE_VERSION" "refs/tags/$TAG_NAME" -f
-            git push remote-repo-$PACKAGE_NAME "refs/tags/$PACKAGE_VERSION" --force
+            git push remote-repo-$PACKAGE_NAME "refs/tags/$PACKAGE_VERSION" --force --quiet
 
-            echo "     ✅ Pushed tag $PACKAGE_VERSION to remote repository\n\n"
+            echo "     ✅ Pushed tag $PACKAGE_VERSION to remote repository"
+            echo ""
+            echo ""
           done < new_tags.txt
