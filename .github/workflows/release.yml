@@ -1,14 +1,15 @@
-name: Release
+name: Release (Tag Push)
 
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - '**'
+  workflow_dispatch: # Permite disparo manual também
 
 jobs:
   release-to-remote:
     name: Sync Release to Remote Repository
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || endsWith(github.event.release.target_commitish, '/main')
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
@@ -20,29 +21,46 @@ jobs:
 
       - id: extract-package
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+          TAG_REF="${GITHUB_REF}"
+          echo "Tag reference: $TAG_REF"
+
+          TAG_NAME="${TAG_REF#refs/tags/}"
+          echo "Tag name: $TAG_NAME"
+
+          # check if tag name meets the format 'lacus/<package-name>@<version>'
+          if [[ "$TAG_NAME" == lacus/*@* ]]; then
+            PACKAGE_NAME=${TAG_NAME#lacus/*}
+            PACKAGE_NAME=${PACKAGE_NAME%@*}
+            echo "Package name: $PACKAGE_NAME"
+
+            VERSION=${TAG_NAME#*$PACKAGE_NAME@}
+            echo "Version: $VERSION"
           else
-            BRANCH_NAME="${{ github.event.release.target_commitish }}"
+            echo "❌ Tag name does not match the expected format: 'lacus/<package-name>@<version>'"
+            exit 1
           fi
 
-          PACKAGE_NAME=$(echo "$BRANCH_NAME" | sed 's|/main$||')
-
           echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
-          echo "package_url=git@github.com:LacusSolutions/br-utils-php_$PACKAGE_NAME.git" >> $GITHUB_OUTPUT
-          echo "Extracted package name: $PACKAGE_NAME from branch: $BRANCH_NAME"
+          echo "package_version=v$VERSION" >> $GITHUB_OUTPUT
+          echo "package_url=git@github.com:LacusSolutions/br-utils-php_${PACKAGE_NAME}.git" >> $GITHUB_OUTPUT
 
       - id: check-remote-exists
         run: |
           REMOTE_URL="${{ steps.extract-package.outputs.package_url }}"
 
-          if ! git ls-remote $REMOTE_URL; then
-            echo "Remote repository does not exist"
+          if ! git ls-remote "$REMOTE_URL" &> /dev/null; then
+            echo "❌ Remote repository not found: $REMOTE_URL"
             exit 1
           fi
 
-      - run: |
-          REMOTE_URL="${{ steps.extract-package.outputs.package_url }}"
+          echo "✅ Remote repository exists."
 
-          git remote add remote-repo $REMOTE_URL
-          git push remote-repo --tags
+      - name: Create simplified tag and push it to remote (ex: 'lacus/some-pkg@1.2.3' will be '1.2.3')
+        run: |
+          REMOTE_URL="${{ steps.extract-package.outputs.package_url }}"
+          PACKAGE_VERSION="${{ steps.extract-package.outputs.package_version }}"
+          TAG_NAME="$PACKAGE_VERSION"
+
+          git tag -f $TAG_NAME
+          git push $REMOTE_URL $TAG_NAME
+          echo "✅ Tag pushed to remote repository."
