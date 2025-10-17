@@ -67,7 +67,7 @@ jobs:
             git fetch --tags
             git remote add remote-repo-$PACKAGE_NAME "$REMOTE_URL" || true
             git tag "$PACKAGE_VERSION" "refs/tags/$TAG_NAME" -f
-            git push remote-repo-$PACKAGE_NAME "refs/tags/$VERSION_TAG" --force
+            git push remote-repo-$PACKAGE_NAME "refs/tags/$PACKAGE_VERSION" --force
 
             echo "     ✅ Pushed tag $PACKAGE_VERSION to remote repository\n\n"
           done < new_tags.txt
