@@ -1,4 +1,4 @@
-# Lacus :: cnpj-fmt
+![cnpj-fmt for PHP](https://github.com/user-attachments/assets/a2c32327-060c-4ea5-9f35-03c11d1c37ab)
 
 [![Packagist Version](https://img.shields.io/packagist/v/lacus/cnpj-fmt)](https://packagist.org/packages/lacus/cnpj-fmt)
 [![Packagist Downloads](https://img.shields.io/packagist/dm/lacus/cnpj-fmt)](https://packagist.org/packages/lacus/cnpj-fmt)
