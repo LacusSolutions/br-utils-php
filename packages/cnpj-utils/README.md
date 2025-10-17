@@ -1,4 +1,4 @@
-# Lacus :: cnpj-utils
+![cnpj-utils for PHP](https://github.com/user-attachments/assets/daebe359-0c12-4af5-8582-fa7f3b5cb9c9)
 
 [![Packagist Version](https://img.shields.io/packagist/v/lacus/cnpj-utils)](https://packagist.org/packages/lacus/cnpj-utils)
 [![Packagist Downloads](https://img.shields.io/packagist/dm/lacus/cnpj-utils)](https://packagist.org/packages/lacus/cnpj-utils)
