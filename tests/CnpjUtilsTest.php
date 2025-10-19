@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Tests\Cnpj;
+namespace Lacus\BrUtils\Tests;
 
 use Closure;
-use Lacus\BrUtils\Cnpj\CnpjUtils;
+use Lacus\BrUtils\CnpjUtils;
 use Lacus\CnpjFmt\Tests\CnpjFormatterTestCases;
 use Lacus\CnpjGen\Tests\CnpjGeneratorTestCases;
 use Lacus\CnpjVal\Tests\CnpjValidatorTestCases;
