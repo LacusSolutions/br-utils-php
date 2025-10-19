@@ -34,7 +34,7 @@
     "issues": "https://github.com/LacusSolutions/br-utils-php/issues",
     "source": "https://github.com/LacusSolutions/br-utils-php"
   },
-  "homepage": "https://cpf-utils.vercel.app/",
+  "homepage": "https://br-utils.vercel.app/",
   "scripts": {
     "test": "phpunit",
     "test:watch": "phpunit-watcher watch",
@@ -44,7 +44,9 @@
     "sort-packages": true
   },
   "require": {
-    "php": ">=8.1"
+    "php": ">=8.1",
+    "lacus/cnpj-utils": "^1.0",
+    "lacus/cpf-utils": "^1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^10.5",
@@ -53,11 +55,23 @@
   "autoload": {
     "psr-4": {
       "Lacus\\BrUtils\\": "src/"
-    }
+    },
+    "files": [
+      "src/Cnpj/cnpj_utils.php",
+      "src/Cpf/cpf_utils.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\BrUtils\\Tests\\": "tests/"
+      "Lacus\\BrUtils\\Tests\\": "tests/",
+      "Lacus\\CnpjUtils\\Tests\\": "vendor/lacus/cnpj-utils/tests/",
+      "Lacus\\CpfUtils\\Tests\\": "vendor/lacus/cpf-utils/tests/",
+      "Lacus\\CnpjFmt\\Tests\\": "vendor/lacus/cnpj-fmt/tests/",
+      "Lacus\\CnpjGen\\Tests\\": "vendor/lacus/cnpj-gen/tests/",
+      "Lacus\\CnpjVal\\Tests\\": "vendor/lacus/cnpj-val/tests/",
+      "Lacus\\CpfFmt\\Tests\\": "vendor/lacus/cpf-fmt/tests/",
+      "Lacus\\CpfGen\\Tests\\": "vendor/lacus/cpf-gen/tests/",
+      "Lacus\\CpfVal\\Tests\\": "vendor/lacus/cpf-val/tests/"
     }
   }
 }

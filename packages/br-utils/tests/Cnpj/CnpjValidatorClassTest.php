@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Lacus\BrUtils\Tests\Cnpj;
+
+use Lacus\BrUtils\Cnpj\CnpjValidator;
+use Lacus\CnpjVal\Tests\CnpjValidatorTestCases;
+use PHPUnit\Framework\TestCase;
+
+class CnpjValidatorClassTest extends TestCase
+{
+    use CnpjValidatorTestCases;
+
+    private CnpjValidator $validator;
+
+    protected function setUp(): void
+    {
+        $this->validator = new CnpjValidator();
+    }
+
+    protected function isValid(string $cnpjString): bool
+    {
+        return $this->validator->isValid($cnpjString);
+    }
+}
