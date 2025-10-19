@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Tests\Cpf;
+namespace Lacus\BrUtils\Tests;
 
 use Closure;
-use Lacus\BrUtils\Cpf\CpfUtils;
+use Lacus\BrUtils\CpfUtils;
 use Lacus\CpfFmt\Tests\CpfFormatterTestCases;
 use Lacus\CpfGen\Tests\CpfGeneratorTestCases;
 use Lacus\CpfVal\Tests\CpfValidatorTestCases;
