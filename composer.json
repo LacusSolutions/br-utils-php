@@ -21,6 +21,8 @@
       "php-cs-fixer fix --dry-run --diff"
     ],
     "lint:fix": "php-cs-fixer fix",
+    "lint:staged": "php scripts/lint-staged.php",
+    "lint:staged:test": "php scripts/test-lint-staged.php",
     "infection": "infection --min-msi=80 --min-covered-msi=80",
     "test:sync-configs": "php scripts/phpunit-sync-configs.php",
     "test:cnpj-fmt": "cd packages/cnpj-fmt && composer test",
