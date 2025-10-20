@@ -61,8 +61,8 @@ class BrUtils
     public function __get(string $name): mixed
     {
         return match ($name) {
-            'cpf' => $this->cpfUtils,
-            'cnpj' => $this->cnpjUtils,
+            'cpf' => $this->getCpfUtils(),
+            'cnpj' => $this->getCnpjUtils(),
             default => throw new InvalidArgumentException("Property {$name} not found"),
         };
     }
