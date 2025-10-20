@@ -1,4 +1,4 @@
-![br-utils for PHP](https://github.com/user-attachments/assets/dc5f2131-9dbd-4acb-8340-33f68f39ec6e)
+![br-utils for PHP](https://github.com/user-attachments/assets/e245b11e-59d2-43b9-95a8-3d220b194acf)
 
 [![Packagist Version](https://img.shields.io/packagist/v/lacus/br-utils)](https://packagist.org/packages/lacus/br-utils)
 [![Packagist Downloads](https://img.shields.io/packagist/dm/lacus/br-utils)](https://packagist.org/packages/lacus/br-utils)
