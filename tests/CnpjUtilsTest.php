@@ -6,16 +6,12 @@ namespace Lacus\BrUtils\Tests;
 
 use Closure;
 use Lacus\BrUtils\CnpjUtils;
-use Lacus\CnpjFmt\Tests\CnpjFormatterTestCases;
-use Lacus\CnpjGen\Tests\CnpjGeneratorTestCases;
-use Lacus\CnpjVal\Tests\CnpjValidatorTestCases;
+use Lacus\CnpjUtils\Tests\CnpjUtilsTestCases;
 use PHPUnit\Framework\TestCase;
 
 class CnpjUtilsTest extends TestCase
 {
-    use CnpjFormatterTestCases;
-    use CnpjGeneratorTestCases;
-    use CnpjValidatorTestCases;
+    use CnpjUtilsTestCases;
 
     private CnpjUtils $utils;
 

@@ -45,8 +45,14 @@
   },
   "require": {
     "php": ">=8.1",
-    "lacus/cnpj-utils": "^1.0",
-    "lacus/cpf-utils": "^1.0"
+    "lacus/cnpj-fmt": "^1.0",
+    "lacus/cnpj-gen": "^1.0",
+    "lacus/cnpj-utils": "^1.1",
+    "lacus/cnpj-val": "^1.0",
+    "lacus/cpf-fmt": "^1.0",
+    "lacus/cpf-gen": "^1.0",
+    "lacus/cpf-utils": "^1.1",
+    "lacus/cpf-val": "^1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^10.5",

@@ -6,16 +6,12 @@ namespace Lacus\BrUtils\Tests;
 
 use Closure;
 use Lacus\BrUtils\CpfUtils;
-use Lacus\CpfFmt\Tests\CpfFormatterTestCases;
-use Lacus\CpfGen\Tests\CpfGeneratorTestCases;
-use Lacus\CpfVal\Tests\CpfValidatorTestCases;
+use Lacus\CpfUtils\Tests\CpfUtilsTestCases;
 use PHPUnit\Framework\TestCase;
 
 class CpfUtilsTest extends TestCase
 {
-    use CpfFormatterTestCases;
-    use CpfGeneratorTestCases;
-    use CpfValidatorTestCases;
+    use CpfUtilsTestCases;
 
     private CpfUtils $utils;
 
