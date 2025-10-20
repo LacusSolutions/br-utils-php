@@ -5,17 +5,12 @@ declare(strict_types=1);
 namespace Lacus\CpfUtils\Tests;
 
 use Closure;
-use Lacus\CpfFmt\Tests\CpfFormatterTestCases;
-use Lacus\CpfGen\Tests\CpfGeneratorTestCases;
 use Lacus\CpfUtils\CpfUtils;
-use Lacus\CpfVal\Tests\CpfValidatorTestCases;
 use PHPUnit\Framework\TestCase;
 
 class CpfUtilsTest extends TestCase
 {
-    use CpfFormatterTestCases;
-    use CpfGeneratorTestCases;
-    use CpfValidatorTestCases;
+    use CpfUtilsTestCases;
 
     private CpfUtils $utils;
 
