@@ -5,17 +5,12 @@ declare(strict_types=1);
 namespace Lacus\CnpjUtils\Tests;
 
 use Closure;
-use Lacus\CnpjFmt\Tests\CnpjFormatterTestCases;
-use Lacus\CnpjGen\Tests\CnpjGeneratorTestCases;
 use Lacus\CnpjUtils\CnpjUtils;
-use Lacus\CnpjVal\Tests\CnpjValidatorTestCases;
 use PHPUnit\Framework\TestCase;
 
 class CnpjUtilsTest extends TestCase
 {
-    use CnpjFormatterTestCases;
-    use CnpjGeneratorTestCases;
-    use CnpjValidatorTestCases;
+    use CnpjUtilsTestCases;
 
     private CnpjUtils $utils;
 
