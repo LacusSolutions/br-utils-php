@@ -9,12 +9,17 @@ on:
       - '**'
   workflow_dispatch: # Allow manual triggering
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   analyze:
     name: Lint & Check in PHP v${{ matrix.php-version }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      max-parallel: 2
       matrix:
         php-version: [8.1, 8.2, 8.3, 8.4]
     steps:
@@ -37,6 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         php-version:
           - 8.1
