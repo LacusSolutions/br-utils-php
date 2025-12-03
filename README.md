@@ -1,4 +1,4 @@
-![cpf-val for PHP](https://github.com/user-attachments/assets/eb1cdd2b-8e01-4771-8ade-899f1f18349b)
+![cpf-val for PHP](https://br-utils.vercel.app/img/cover_cpf-val.jpg)
 
 [![Packagist Version](https://img.shields.io/packagist/v/lacus/cpf-val)](https://packagist.org/packages/lacus/cpf-val)
 [![Packagist Downloads](https://img.shields.io/packagist/dm/lacus/cpf-val)](https://packagist.org/packages/lacus/cpf-val)
