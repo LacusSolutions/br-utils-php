@@ -1,4 +1,4 @@
-![cpf-gen for PHP](https://github.com/user-attachments/assets/a6d9ae1b-dd92-4d4b-be9f-5de5b462955e)
+![cpf-gen for PHP](https://br-utils.vercel.app/img/cover_cpf-gen.jpg)
 
 [![Packagist Version](https://img.shields.io/packagist/v/lacus/cpf-gen)](https://packagist.org/packages/lacus/cpf-gen)
 [![Packagist Downloads](https://img.shields.io/packagist/dm/lacus/cpf-gen)](https://packagist.org/packages/lacus/cpf-gen)
