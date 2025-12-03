@@ -1,4 +1,4 @@
-![cpf-utils for PHP](https://github.com/user-attachments/assets/fc20fe40-f4e0-42be-8d96-7294da3f9d20)
+![cpf-utils for PHP](https://br-utils.vercel.app/img/cover_cpf-utils.jpg)
 
 [![Packagist Version](https://img.shields.io/packagist/v/lacus/cpf-utils)](https://packagist.org/packages/lacus/cpf-utils)
 [![Packagist Downloads](https://img.shields.io/packagist/dm/lacus/cpf-utils)](https://packagist.org/packages/lacus/cpf-utils)
