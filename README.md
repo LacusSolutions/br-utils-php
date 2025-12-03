@@ -1,4 +1,4 @@
-![cnpj-gen for PHP](https://github.com/user-attachments/assets/80ba4abd-169b-456a-acc3-d10759856a1e)
+![cnpj-gen for PHP](https://br-utils.vercel.app/img/cover_cnpj-gen.jpg)
 
 [![Packagist Version](https://img.shields.io/packagist/v/lacus/cnpj-gen)](https://packagist.org/packages/lacus/cnpj-gen)
 [![Packagist Downloads](https://img.shields.io/packagist/dm/lacus/cnpj-gen)](https://packagist.org/packages/lacus/cnpj-gen)
