@@ -1,4 +1,4 @@
-![cpf-fmt for PHP](https://github.com/user-attachments/assets/7999ba4a-04f5-4506-84f4-91ed0d3ed5d2)
+![cpf-fmt for PHP](https://br-utils.vercel.app/img/cover_cpf-fmt.jpg)
 
 [![Packagist Version](https://img.shields.io/packagist/v/lacus/cpf-fmt)](https://packagist.org/packages/lacus/cpf-fmt)
 [![Packagist Downloads](https://img.shields.io/packagist/dm/lacus/cpf-fmt)](https://packagist.org/packages/lacus/cpf-fmt)
