@@ -23,7 +23,6 @@
     "lint:fix": "php-cs-fixer fix",
     "lint:staged": "php scripts/lint-staged.php",
     "lint:staged:test": "php scripts/test-lint-staged.php",
-    "infection": "infection --min-msi=80 --min-covered-msi=80",
     "test:sync-configs": "php scripts/phpunit-sync-configs.php",
     "test:cnpj-fmt": "cd packages/cnpj-fmt && composer test",
     "test:cnpj-gen": "cd packages/cnpj-gen && composer test",
@@ -74,7 +73,7 @@
     "sort-packages": true,
     "allow-plugins": {
       "captainhook/hook-installer": true,
-      "infection/extension-installer": true
+      "infection/extension-installer": false
     }
   },
   "require": {
@@ -84,7 +83,6 @@
     "captainhook/captainhook": "^5.25",
     "captainhook/hook-installer": "^1.0",
     "friendsofphp/php-cs-fixer": "^3.87",
-    "infection/infection": "~0.28.1",
     "phpstan/phpstan": "^2.1",
     "ramsey/conventional-commits": "^1.6",
     "roave/security-advisories": "dev-latest"

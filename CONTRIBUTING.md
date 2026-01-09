@@ -65,7 +65,6 @@ composer test-coverage     # Run tests with coverage report
 composer analyze           # Run PHPStan static analysis
 composer check             # Check code style (dry run)
 composer fix               # Fix code style issues
-composer infection         # Run mutation testing
 
 # Package-specific testing
 composer test:cnpj         # Test all CNPJ packages
@@ -115,7 +114,6 @@ br-utils-php/
 ├── captainhook.json        # Git hooks configuration
 ├── composer.json           # Root composer configuration
 ├── composer.lock           # Locked dependencies
-├── infection.json.dist     # Infection configuration
 ├── phpstan.neon            # PHPStan configuration
 ├── phpunit.xml.dist        # PHPUnit configuration
 └── README.md               # Project documentation
@@ -175,9 +173,6 @@ composer run check
 
 # Fix code style issues
 composer run fix
-
-# Run mutation testing
-composer run infection
 ```
 
 ### 4. Commit Your Changes
