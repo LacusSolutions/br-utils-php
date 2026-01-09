@@ -80,9 +80,9 @@
     "php": ">=8.1"
   },
   "require-dev": {
-    "captainhook/captainhook": "^5.25",
+    "captainhook/captainhook": "^5.27",
     "captainhook/hook-installer": "^1.0",
-    "friendsofphp/php-cs-fixer": "^3.87",
+    "friendsofphp/php-cs-fixer": "^3.92",
     "phpstan/phpstan": "^2.1",
     "ramsey/conventional-commits": "^1.6",
     "roave/security-advisories": "dev-latest"
