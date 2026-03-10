@@ -176,6 +176,7 @@ trait CpfValidatorTestCases
     public function testFunctionIsNotValid(): void
     {
         $this->expectException(TypeError::class);
-        $this->isValid(function () {});
+        $this->isValid(function () {
+        });
     }
 }
