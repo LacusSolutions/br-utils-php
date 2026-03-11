@@ -1,0 +1,51 @@
+{
+  "name": "lacus/utils",
+  "type": "library",
+  "description": "Reusable utilities library for Lacus Solutions' packages (type description, HTML escaping, random sequences)",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Julio L. Muller",
+      "email": "juliolmuller@outlook.com",
+      "homepage": "https://juliolmuller.github.io"
+    }
+  ],
+  "keywords": [
+    "utils",
+    "utilities",
+    "type",
+    "escape",
+    "html",
+    "random",
+    "sequence"
+  ],
+  "support": {
+    "issues": "https://github.com/LacusSolutions/br-utils-php/issues",
+    "source": "https://github.com/LacusSolutions/br-utils-php"
+  },
+  "scripts": {
+    "test": "phpunit",
+    "test:watch": "phpunit-watcher watch",
+    "test-coverage": "phpunit --coverage-html coverage"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "require": {
+    "php": ">=8.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.5",
+    "spatie/phpunit-watcher": "~1.24"
+  },
+  "autoload": {
+    "psr-4": {
+      "Lacus\\Utils\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Lacus\\Utils\\Tests\\": "tests/"
+    }
+  }
+}
