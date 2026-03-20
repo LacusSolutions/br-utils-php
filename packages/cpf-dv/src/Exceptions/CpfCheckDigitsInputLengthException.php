@@ -27,8 +27,8 @@ class CpfCheckDigitsInputLengthException extends CpfCheckDigitsException
         int $maxExpectedLength,
     ) {
         $fmtActual = is_string($actualInput)
-          ? "\"{$actualInput}\""
-          : json_encode($actualInput, JSON_THROW_ON_ERROR);
+            ? "\"{$actualInput}\""
+            : json_encode($actualInput, JSON_THROW_ON_ERROR);
         $fmtEvaluated = $actualInput === $evaluatedInput
             ? (string) strlen($evaluatedInput)
             : strlen($evaluatedInput) . ' in "' . $evaluatedInput . '"';
