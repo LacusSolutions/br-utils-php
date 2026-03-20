@@ -10,4 +10,4 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
-uses(TestCase::class)->in(__DIR__ . PATH_SEPARATOR . 'Specs');
+uses(TestCase::class)->in(__DIR__ . DIRECTORY_SEPARATOR . 'Specs');
