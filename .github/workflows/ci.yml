@@ -19,7 +19,6 @@ jobs:
       max-parallel: 2
       matrix:
         php-version:
-          - 8.1
           - 8.2
           - 8.3
           - 8.4
@@ -47,7 +46,6 @@ jobs:
       max-parallel: 1
       matrix:
         php-version:
-          - 8.1
           - 8.2
           - 8.3
           - 8.4
@@ -58,6 +56,7 @@ jobs:
           - cnpj-gen
           - cnpj-val
           - cnpj-utils
+          - cpf-dv
           - cpf-fmt
           - cpf-gen
           - cpf-val
