@@ -10,11 +10,6 @@ final class CpfCheckDigitsWithCalculateSpy extends CpfCheckDigits
 {
     public int $calculateCallCount = 0;
 
-    public function __construct(mixed $cpfInput)
-    {
-        parent::__construct($cpfInput);
-    }
-
     protected function calculate(array $cpfSequence): int
     {
         $this->calculateCallCount++;
