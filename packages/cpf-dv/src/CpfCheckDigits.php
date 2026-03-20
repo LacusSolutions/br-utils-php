@@ -162,7 +162,7 @@ class CpfCheckDigits
 
         foreach ($cpfArray as $item) {
             if (!is_string($item)) {
-                throw new CpfCheckDigitsInputTypeError($cpfArray, 'string');
+                throw new CpfCheckDigitsInputTypeError($cpfArray, 'string or string[]');
             }
         }
 
