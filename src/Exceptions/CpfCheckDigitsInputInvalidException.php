@@ -20,8 +20,8 @@ class CpfCheckDigitsInputInvalidException extends CpfCheckDigitsException
     public function __construct(string|array $actualInput, string $reason)
     {
         $fmtActual = is_string($actualInput)
-          ? "\"{$actualInput}\""
-          : json_encode($actualInput, JSON_THROW_ON_ERROR);
+            ? "\"{$actualInput}\""
+            : json_encode($actualInput, JSON_THROW_ON_ERROR);
 
         parent::__construct("CPF input {$fmtActual} is invalid. {$reason}");
         $this->actualInput = $actualInput;
