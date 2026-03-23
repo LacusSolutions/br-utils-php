@@ -21,10 +21,10 @@ use Lacus\BrUtils\Cpf\Exceptions\CpfCheckDigitsInputTypeError;
 class CpfCheckDigits
 {
     /** Minimum number of digits required for the CPF check digits calculation. */
-    public const CPF_MIN_LENGTH = 9;
+    public const CPF_MIN_LENGTH = CPF_MIN_LENGTH;
 
     /** Maximum number of digits accepted as input for the CPF check digits calculation. */
-    public const CPF_MAX_LENGTH = 11;
+    public const CPF_MAX_LENGTH = CPF_MAX_LENGTH;
 
     /** @var list<int> */
     private array $cpfDigits;
@@ -43,10 +43,6 @@ class CpfCheckDigits
      */
     public function __construct(mixed $cpfInput)
     {
-        if (!is_string($cpfInput) && !is_array($cpfInput)) {
-            throw new CpfCheckDigitsInputTypeError($cpfInput, 'string or string[]');
-        }
-
         $parsed = $this->parseInput($cpfInput);
 
         $this->validateLength($parsed, $cpfInput);
@@ -116,45 +112,48 @@ class CpfCheckDigits
     }
 
     /**
-     * Parses input (string or array of strings) into an array of digit integers.
+     * Parses a string or an array of strings into an array of integers.
      *
      * @param string|list<string> $cpfInput
      * @return list<int>
+     *
+     * @throws CpfCheckDigitsInputTypeError When input is not a string or string[].
      */
-    private function parseInput(string|array $cpfInput): array
+    private function parseInput(mixed $cpfInput): array
     {
         if (is_string($cpfInput)) {
-            return $this->handleStringInput($cpfInput);
+            return $this->parseStringInput($cpfInput);
         }
 
-        return $this->handleArrayInput($cpfInput);
+        if (is_array($cpfInput)) {
+            return $this->parseArrayInput($cpfInput);
+        }
+
+        throw new CpfCheckDigitsInputTypeError($cpfInput, 'string or string[]');
     }
 
     /**
-     * Parses a string into an array of numbers.
+     * Parses a string into an array of integers.
      *
      * @return list<int>
      */
-    private function handleStringInput(string $cpfString): array
+    private function parseStringInput(string $cpfString): array
     {
-        $digitsOnly = preg_replace('/\D/', '', $cpfString);
-
-        if ($digitsOnly === null) {
-            $digitsOnly = '';
-        }
-
+        $digitsOnly = preg_replace('/\D/', '', $cpfString) ?? '';
         $chars = str_split($digitsOnly, 1);
 
         return array_map('intval', $chars);
     }
 
     /**
-     * Normalizes array input to a string and delegates to number parsing.
+     * Parses an array into an array of integers.
      *
      * @param list<string> $cpfArray
      * @return list<int>
+     *
+     * @throws CpfCheckDigitsInputTypeError When input is not a string or string[].
      */
-    private function handleArrayInput(array $cpfArray): array
+    private function parseArrayInput(array $cpfArray): array
     {
         if ($cpfArray === []) {
             return [];
@@ -166,7 +165,7 @@ class CpfCheckDigits
             }
         }
 
-        return $this->handleStringInput(implode('', $cpfArray));
+        return $this->parseStringInput(implode('', $cpfArray));
     }
 
     /**
