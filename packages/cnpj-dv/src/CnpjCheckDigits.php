@@ -30,10 +30,10 @@ const DELTA_FACTOR = 48; // ord('0')
 class CnpjCheckDigits
 {
     /** Minimum number of characters required for the CNPJ check digits calculation. */
-    public const CNPJ_MIN_LENGTH = 12;
+    public const CNPJ_MIN_LENGTH = CNPJ_MIN_LENGTH;
 
     /** Maximum number of characters accepted as input for the CNPJ check digits calculation. */
-    public const CNPJ_MAX_LENGTH = 14;
+    public const CNPJ_MAX_LENGTH = CNPJ_MAX_LENGTH;
 
 
     /** @var list<string> */
@@ -250,7 +250,7 @@ class CnpjCheckDigits
      */
     private function validateNonRepeatedDigits(array $cnpjIntArray, string|array $originalInput): void
     {
-        $firstTwelve = array_slice($cnpjIntArray, 0, CNPJ_MIN_LENGTH);
+        $firstTwelve = array_slice($cnpjIntArray, 0, self::CNPJ_MIN_LENGTH);
         $unique = array_unique($firstTwelve);
 
         if (count($unique) === 1 && preg_match('/^\d$/', $firstTwelve[0] ?? '') === 1) {
