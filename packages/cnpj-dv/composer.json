@@ -1,0 +1,61 @@
+{
+  "name": "lacus/cnpj-dv",
+  "type": "library",
+  "description": "Utility to calculate check digits on CNPJ (Brazilian Business Tax ID)",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Julio L. Muller",
+      "email": "juliolmuller@outlook.com",
+      "homepage": "https://juliolmuller.github.io"
+    }
+  ],
+  "keywords": [
+    "cnpj",
+    "verificar",
+    "verificador",
+    "verify",
+    "verification",
+    "check",
+    "check-digit",
+    "check-digits",
+    "pt-br",
+    "br"
+  ],
+  "support": {
+    "issues": "https://github.com/LacusSolutions/br-utils-php/issues",
+    "source": "https://github.com/LacusSolutions/br-utils-php"
+  },
+  "homepage": "https://cnpj-utils.vercel.app/",
+  "scripts": {
+    "test": "pest",
+    "test:watch": "pest --watch",
+    "test-coverage": "pest --coverage-html coverage"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "require": {
+    "php": "^8.2",
+    "lacus/utils": "^1.0"
+  },
+  "require-dev": {
+    "pestphp/pest": "^3.8"
+  },
+  "autoload": {
+    "psr-4": {
+      "Lacus\\BrUtils\\Cnpj\\": "src/"
+    },
+    "files": [
+      "src/cnpj-dv.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Lacus\\BrUtils\\Cnpj\\Tests\\": "tests/"
+    }
+  }
+}

@@ -13,6 +13,7 @@ use Lacus\BrUtils\Cpf\Exceptions\CpfCheckDigitsInputInvalidException;
 use Lacus\BrUtils\Cpf\Exceptions\CpfCheckDigitsInputLengthException;
 use Lacus\BrUtils\Cpf\Exceptions\CpfCheckDigitsInputTypeError;
 use Lacus\BrUtils\Cpf\Exceptions\CpfCheckDigitsTypeError;
+use ReflectionClass;
 
 describe('the cpf-dv package surface', function () {
     describe('when inspecting constants', function () {
@@ -38,7 +39,7 @@ describe('the cpf-dv package surface', function () {
         });
 
         it('exposes CpfCheckDigitsTypeError as an abstract type', function () {
-            expect((new \ReflectionClass(CpfCheckDigitsTypeError::class))->isAbstract())->toBeTrue();
+            expect((new ReflectionClass(CpfCheckDigitsTypeError::class))->isAbstract())->toBeTrue();
         });
 
         it('exposes CpfCheckDigitsInputTypeError as instantiable', function () {
@@ -49,7 +50,7 @@ describe('the cpf-dv package surface', function () {
         });
 
         it('exposes CpfCheckDigitsException as an abstract type', function () {
-            expect((new \ReflectionClass(CpfCheckDigitsException::class))->isAbstract())->toBeTrue();
+            expect((new ReflectionClass(CpfCheckDigitsException::class))->isAbstract())->toBeTrue();
         });
 
         it('exposes CpfCheckDigitsInputInvalidException as instantiable', function () {
