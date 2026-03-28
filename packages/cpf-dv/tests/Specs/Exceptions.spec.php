@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\BrUtils\Cpf\Tests\Specs;
 
+use Exception;
 use Lacus\BrUtils\Cpf\Exceptions\CpfCheckDigitsException;
 use Lacus\BrUtils\Cpf\Exceptions\CpfCheckDigitsInputInvalidException;
 use Lacus\BrUtils\Cpf\Exceptions\CpfCheckDigitsInputLengthException;
@@ -11,60 +12,52 @@ use Lacus\BrUtils\Cpf\Exceptions\CpfCheckDigitsInputTypeError;
 use Lacus\BrUtils\Cpf\Exceptions\CpfCheckDigitsTypeError;
 use TypeError;
 
-final class TestCpfCheckDigitsTypeError extends CpfCheckDigitsTypeError
-{
-    public function __construct()
-    {
-        parent::__construct(123, 'number', 'string', 'some error');
-    }
-}
-
-final class TestCpfCheckDigitsException extends CpfCheckDigitsException
-{
-}
-
 describe('CpfCheckDigitsTypeError', function () {
+    final class TestTypeError extends CpfCheckDigitsTypeError
+    {
+    }
+
     describe('when instantiated through a subclass', function () {
         it('is an instance of TypeError', function () {
-            $error = new TestCpfCheckDigitsTypeError();
+            $error = new TestTypeError(123, 'number', 'string', 'some error');
 
             expect($error)->toBeInstanceOf(TypeError::class);
         });
 
         it('is an instance of CpfCheckDigitsTypeError', function () {
-            $error = new TestCpfCheckDigitsTypeError();
+            $error = new TestTypeError(123, 'number', 'string', 'some error');
 
             expect($error)->toBeInstanceOf(CpfCheckDigitsTypeError::class);
         });
 
-        it('has the correct class name', function () {
-            $error = new TestCpfCheckDigitsTypeError();
-
-            expect($error::class)->toBe(TestCpfCheckDigitsTypeError::class);
-        });
-
         it('sets the `actualInput` property', function () {
-            $error = new TestCpfCheckDigitsTypeError();
+            $error = new TestTypeError(123, 'number', 'string', 'some error');
 
             expect($error->actualInput)->toBe(123);
         });
 
         it('sets the `actualType` property', function () {
-            $error = new TestCpfCheckDigitsTypeError();
+            $error = new TestTypeError(123, 'number', 'string', 'some error');
 
             expect($error->actualType)->toBe('number');
         });
 
         it('sets the `expectedType` property', function () {
-            $error = new TestCpfCheckDigitsTypeError();
+            $error = new TestTypeError(123, 'number', 'string or string[]', 'some error');
 
-            expect($error->expectedType)->toBe('string');
+            expect($error->expectedType)->toBe('string or string[]');
         });
 
-        it('has a `message` property', function () {
-            $error = new TestCpfCheckDigitsTypeError();
+        it('has the correct message', function () {
+            $error = new TestTypeError(123, 'number', 'string', 'some error');
 
             expect($error->getMessage())->toBe('some error');
+        });
+
+        it('has the correct name', function () {
+            $error = new TestTypeError(123, 'number', 'string', 'some error');
+
+            expect($error->getName())->toBe('TestTypeError');
         });
     });
 });
@@ -83,17 +76,10 @@ describe('CpfCheckDigitsInputTypeError', function () {
             expect($error)->toBeInstanceOf(CpfCheckDigitsTypeError::class);
         });
 
-        it('has the correct class name', function () {
+        it('sets the `actualInput` property', function () {
             $error = new CpfCheckDigitsInputTypeError(123, 'string');
 
-            expect($error::class)->toBe(CpfCheckDigitsInputTypeError::class);
-        });
-
-        it('sets the `actualInput` property', function () {
-            $input = 123;
-            $error = new CpfCheckDigitsInputTypeError($input, 'string');
-
-            expect($error->actualInput)->toBe($input);
+            expect($error->actualInput)->toBe(123);
         });
 
         it('sets the `actualType` property', function () {
@@ -108,43 +94,56 @@ describe('CpfCheckDigitsInputTypeError', function () {
             expect($error->expectedType)->toBe('string or string[]');
         });
 
-        it('generates a message describing the error', function () {
+        it('has the correct message', function () {
             $actualInput = 123;
             $actualType = 'integer number';
             $expectedType = 'string[]';
             $actualMessage = "CPF input must be of type {$expectedType}. Got {$actualType}.";
 
-            $error = new CpfCheckDigitsInputTypeError($actualInput, $expectedType);
+            $error = new CpfCheckDigitsInputTypeError(
+                $actualInput,
+                $expectedType,
+            );
 
             expect($error->getMessage())->toBe($actualMessage);
+        });
+
+        it('has the correct name', function () {
+            $error = new CpfCheckDigitsInputTypeError(123, 'string');
+
+            expect($error->getName())->toBe('CpfCheckDigitsInputTypeError');
         });
     });
 });
 
 describe('CpfCheckDigitsException', function () {
+    final class TestException extends CpfCheckDigitsException
+    {
+    }
+
     describe('when instantiated through a subclass', function () {
         it('is an instance of Exception', function () {
-            $exception = new TestCpfCheckDigitsException('some error');
+            $exception = new TestException('some error');
 
-            expect($exception)->toBeInstanceOf(\Exception::class);
+            expect($exception)->toBeInstanceOf(Exception::class);
         });
 
         it('is an instance of CpfCheckDigitsException', function () {
-            $exception = new TestCpfCheckDigitsException('some error');
+            $exception = new TestException('some error');
 
             expect($exception)->toBeInstanceOf(CpfCheckDigitsException::class);
         });
 
-        it('has the correct class name', function () {
-            $exception = new TestCpfCheckDigitsException('some error');
-
-            expect($exception::class)->toBe(TestCpfCheckDigitsException::class);
-        });
-
-        it('has a `message` property', function () {
-            $exception = new TestCpfCheckDigitsException('some error');
+        it('has the correct message', function () {
+            $exception = new TestException('some error');
 
             expect($exception->getMessage())->toBe('some error');
+        });
+
+        it('has the correct name', function () {
+            $exception = new TestException('some error');
+
+            expect($exception->getName())->toBe('TestException');
         });
     });
 });
@@ -154,19 +153,13 @@ describe('CpfCheckDigitsInputLengthException', function () {
         it('is an instance of Exception', function () {
             $exception = new CpfCheckDigitsInputLengthException('1.2.3.4.5', '12345', 12, 14);
 
-            expect($exception)->toBeInstanceOf(\Exception::class);
+            expect($exception)->toBeInstanceOf(Exception::class);
         });
 
         it('is an instance of CpfCheckDigitsException', function () {
             $exception = new CpfCheckDigitsInputLengthException('1.2.3.4.5', '12345', 12, 14);
 
             expect($exception)->toBeInstanceOf(CpfCheckDigitsException::class);
-        });
-
-        it('has the correct class name', function () {
-            $exception = new CpfCheckDigitsInputLengthException('1.2.3.4.5', '12345', 12, 14);
-
-            expect($exception::class)->toBe(CpfCheckDigitsInputLengthException::class);
         });
 
         it('sets the `actualInput` property', function () {
@@ -193,7 +186,7 @@ describe('CpfCheckDigitsInputLengthException', function () {
             expect($exception->maxExpectedLength)->toBe(14);
         });
 
-        it('generates a message describing the exception', function () {
+        it('has the correct message', function () {
             $actualInput = '1.2.3.4.5';
             $evaluatedInput = '12345';
             $minExpectedLength = 12;
@@ -209,6 +202,12 @@ describe('CpfCheckDigitsInputLengthException', function () {
 
             expect($exception->getMessage())->toBe($actualMessage);
         });
+
+        it('has the correct name', function () {
+            $exception = new CpfCheckDigitsInputLengthException('1.2.3.4.5', '12345', 12, 14);
+
+            expect($exception->getName())->toBe('CpfCheckDigitsInputLengthException');
+        });
     });
 });
 
@@ -217,19 +216,13 @@ describe('CpfCheckDigitsInputInvalidException', function () {
         it('is an instance of Exception', function () {
             $exception = new CpfCheckDigitsInputInvalidException('1.2.3.4.5', 'repeated digits');
 
-            expect($exception)->toBeInstanceOf(\Exception::class);
+            expect($exception)->toBeInstanceOf(Exception::class);
         });
 
         it('is an instance of CpfCheckDigitsException', function () {
             $exception = new CpfCheckDigitsInputInvalidException('1.2.3.4.5', 'repeated digits');
 
             expect($exception)->toBeInstanceOf(CpfCheckDigitsException::class);
-        });
-
-        it('has the correct class name', function () {
-            $exception = new CpfCheckDigitsInputInvalidException('1.2.3.4.5', 'repeated digits');
-
-            expect($exception::class)->toBe(CpfCheckDigitsInputInvalidException::class);
         });
 
         it('sets the `actualInput` property', function () {
@@ -244,14 +237,23 @@ describe('CpfCheckDigitsInputInvalidException', function () {
             expect($exception->reason)->toBe('repeated digits');
         });
 
-        it('generates a message describing the exception', function () {
+        it('has the correct message', function () {
             $actualInput = '1.2.3.4.5';
             $reason = 'repeated digits';
             $actualMessage = 'CPF input "'.$actualInput.'" is invalid. '.$reason;
 
-            $exception = new CpfCheckDigitsInputInvalidException($actualInput, $reason);
+            $exception = new CpfCheckDigitsInputInvalidException(
+                $actualInput,
+                $reason,
+            );
 
             expect($exception->getMessage())->toBe($actualMessage);
+        });
+
+        it('has the correct name', function () {
+            $exception = new CpfCheckDigitsInputInvalidException('1.2.3.4.5', 'repeated digits');
+
+            expect($exception->getName())->toBe('CpfCheckDigitsInputInvalidException');
         });
     });
 });
