@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lacus\BrUtils\Cpf\Exceptions;
 
 use Exception;
-use ReflectionClass;
 
 /**
  * Base exception for all `cpf-dv` rules-related errors.
@@ -17,18 +16,4 @@ use ReflectionClass;
  */
 abstract class CpfCheckDigitsException extends Exception
 {
-    public function __construct(string $message)
-    {
-        parent::__construct($message);
-    }
-
-    /**
-     * Get the name of the class instance name.
-     */
-    public function getName(): string
-    {
-        $thisReflection = new ReflectionClass($this);
-
-        return $thisReflection->getShortName();
-    }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lacus\BrUtils\Cnpj\Tests\Specs;
 
-use Exception;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjCheckDigitsException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjCheckDigitsInputInvalidException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjCheckDigitsInputLengthException;
@@ -12,52 +11,60 @@ use Lacus\BrUtils\Cnpj\Exceptions\CnpjCheckDigitsInputTypeError;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjCheckDigitsTypeError;
 use TypeError;
 
-describe('CnpjCheckDigitsTypeError', function () {
-    final class TestTypeError extends CnpjCheckDigitsTypeError
+final class TestCnpjCheckDigitsTypeError extends CnpjCheckDigitsTypeError
+{
+    public function __construct()
     {
+        parent::__construct(123, 'number', 'string', 'some error');
     }
+}
 
+final class TestCnpjCheckDigitsException extends CnpjCheckDigitsException
+{
+}
+
+describe('CnpjCheckDigitsTypeError', function () {
     describe('when instantiated through a subclass', function () {
         it('is an instance of TypeError', function () {
-            $error = new TestTypeError(123, 'number', 'string', 'some error');
+            $error = new TestCnpjCheckDigitsTypeError();
 
             expect($error)->toBeInstanceOf(TypeError::class);
         });
 
         it('is an instance of CnpjCheckDigitsTypeError', function () {
-            $error = new TestTypeError(123, 'number', 'string', 'some error');
+            $error = new TestCnpjCheckDigitsTypeError();
 
             expect($error)->toBeInstanceOf(CnpjCheckDigitsTypeError::class);
         });
 
+        it('has the correct class name', function () {
+            $error = new TestCnpjCheckDigitsTypeError();
+
+            expect($error::class)->toBe(TestCnpjCheckDigitsTypeError::class);
+        });
+
         it('sets the `actualInput` property', function () {
-            $error = new TestTypeError(123, 'number', 'string', 'some error');
+            $error = new TestCnpjCheckDigitsTypeError();
 
             expect($error->actualInput)->toBe(123);
         });
 
         it('sets the `actualType` property', function () {
-            $error = new TestTypeError(123, 'number', 'string', 'some error');
+            $error = new TestCnpjCheckDigitsTypeError();
 
             expect($error->actualType)->toBe('number');
         });
 
         it('sets the `expectedType` property', function () {
-            $error = new TestTypeError(123, 'number', 'string', 'some error');
+            $error = new TestCnpjCheckDigitsTypeError();
 
             expect($error->expectedType)->toBe('string');
         });
 
-        it('has the correct message', function () {
-            $exception = new TestTypeError(123, 'number', 'string', 'some error');
+        it('has a `message` property', function () {
+            $error = new TestCnpjCheckDigitsTypeError();
 
-            expect($exception->getMessage())->toBe('some error');
-        });
-
-        it('has the correct name', function () {
-            $exception = new TestTypeError(123, 'number', 'string', 'some error');
-
-            expect($exception->getName())->toBe('TestTypeError');
+            expect($error->getMessage())->toBe('some error');
         });
     });
 });
@@ -76,10 +83,17 @@ describe('CnpjCheckDigitsInputTypeError', function () {
             expect($error)->toBeInstanceOf(CnpjCheckDigitsTypeError::class);
         });
 
-        it('sets the `actualInput` property', function () {
+        it('has the correct class name', function () {
             $error = new CnpjCheckDigitsInputTypeError(123, 'string');
 
-            expect($error->actualInput)->toBe(123);
+            expect($error::class)->toBe(CnpjCheckDigitsInputTypeError::class);
+        });
+
+        it('sets the `actualInput` property', function () {
+            $input = 123;
+            $error = new CnpjCheckDigitsInputTypeError($input, 'string');
+
+            expect($error->actualInput)->toBe($input);
         });
 
         it('sets the `actualType` property', function () {
@@ -94,56 +108,43 @@ describe('CnpjCheckDigitsInputTypeError', function () {
             expect($error->expectedType)->toBe('string or string[]');
         });
 
-        it('has the correct message', function () {
+        it('generates a message describing the error', function () {
             $actualInput = 123;
             $actualType = 'integer number';
             $expectedType = 'string[]';
             $actualMessage = "CNPJ input must be of type {$expectedType}. Got {$actualType}.";
 
-            $error = new CnpjCheckDigitsInputTypeError(
-                $actualInput,
-                $expectedType,
-            );
+            $error = new CnpjCheckDigitsInputTypeError($actualInput, $expectedType);
 
             expect($error->getMessage())->toBe($actualMessage);
-        });
-
-        it('has the correct name', function () {
-            $error = new CnpjCheckDigitsInputTypeError(123, 'string');
-
-            expect($error->getName())->toBe('CnpjCheckDigitsInputTypeError');
         });
     });
 });
 
 describe('CnpjCheckDigitsException', function () {
-    final class TestException extends CnpjCheckDigitsException
-    {
-    }
-
     describe('when instantiated through a subclass', function () {
         it('is an instance of Exception', function () {
-            $exception = new TestException('some error');
+            $exception = new TestCnpjCheckDigitsException('some error');
 
-            expect($exception)->toBeInstanceOf(Exception::class);
+            expect($exception)->toBeInstanceOf(\Exception::class);
         });
 
         it('is an instance of CnpjCheckDigitsException', function () {
-            $exception = new TestException('some error');
+            $exception = new TestCnpjCheckDigitsException('some error');
 
             expect($exception)->toBeInstanceOf(CnpjCheckDigitsException::class);
         });
 
-        it('has the correct message', function () {
-            $exception = new TestException('some exception');
+        it('has the correct class name', function () {
+            $exception = new TestCnpjCheckDigitsException('some error');
 
-            expect($exception->getMessage())->toBe('some exception');
+            expect($exception::class)->toBe(TestCnpjCheckDigitsException::class);
         });
 
-        it('has the correct name', function () {
-            $exception = new TestException('some error');
+        it('has a `message` property', function () {
+            $exception = new TestCnpjCheckDigitsException('some error');
 
-            expect($exception->getName())->toBe('TestException');
+            expect($exception->getMessage())->toBe('some error');
         });
     });
 });
@@ -153,13 +154,19 @@ describe('CnpjCheckDigitsInputLengthException', function () {
         it('is an instance of Exception', function () {
             $exception = new CnpjCheckDigitsInputLengthException('1.2.3.4.5', '12345', 12, 14);
 
-            expect($exception)->toBeInstanceOf(Exception::class);
+            expect($exception)->toBeInstanceOf(\Exception::class);
         });
 
         it('is an instance of CnpjCheckDigitsException', function () {
             $exception = new CnpjCheckDigitsInputLengthException('1.2.3.4.5', '12345', 12, 14);
 
             expect($exception)->toBeInstanceOf(CnpjCheckDigitsException::class);
+        });
+
+        it('has the correct class name', function () {
+            $exception = new CnpjCheckDigitsInputLengthException('1.2.3.4.5', '12345', 12, 14);
+
+            expect($exception::class)->toBe(CnpjCheckDigitsInputLengthException::class);
         });
 
         it('sets the `actualInput` property', function () {
@@ -186,7 +193,7 @@ describe('CnpjCheckDigitsInputLengthException', function () {
             expect($exception->maxExpectedLength)->toBe(14);
         });
 
-        it('has the correct message', function () {
+        it('generates a message describing the exception', function () {
             $actualInput = '1.2.3.4.5';
             $evaluatedInput = '12345';
             $minExpectedLength = 12;
@@ -202,12 +209,6 @@ describe('CnpjCheckDigitsInputLengthException', function () {
 
             expect($exception->getMessage())->toBe($actualMessage);
         });
-
-        it('has the correct name', function () {
-            $exception = new CnpjCheckDigitsInputLengthException('1.2.3.4.5', '12345', 12, 14);
-
-            expect($exception->getName())->toBe('CnpjCheckDigitsInputLengthException');
-        });
     });
 });
 
@@ -216,13 +217,19 @@ describe('CnpjCheckDigitsInputInvalidException', function () {
         it('is an instance of Exception', function () {
             $exception = new CnpjCheckDigitsInputInvalidException('1.2.3.4.5', 'repeated digits');
 
-            expect($exception)->toBeInstanceOf(Exception::class);
+            expect($exception)->toBeInstanceOf(\Exception::class);
         });
 
         it('is an instance of CnpjCheckDigitsException', function () {
             $exception = new CnpjCheckDigitsInputInvalidException('1.2.3.4.5', 'repeated digits');
 
             expect($exception)->toBeInstanceOf(CnpjCheckDigitsException::class);
+        });
+
+        it('has the correct class name', function () {
+            $exception = new CnpjCheckDigitsInputInvalidException('1.2.3.4.5', 'repeated digits');
+
+            expect($exception::class)->toBe(CnpjCheckDigitsInputInvalidException::class);
         });
 
         it('sets the `actualInput` property', function () {
@@ -237,23 +244,14 @@ describe('CnpjCheckDigitsInputInvalidException', function () {
             expect($exception->reason)->toBe('repeated digits');
         });
 
-        it('has the correct message', function () {
+        it('generates a message describing the exception', function () {
             $actualInput = '1.2.3.4.5';
             $reason = 'repeated digits';
             $actualMessage = 'CNPJ input "'.$actualInput.'" is invalid. '.$reason;
 
-            $exception = new CnpjCheckDigitsInputInvalidException(
-                $actualInput,
-                $reason,
-            );
+            $exception = new CnpjCheckDigitsInputInvalidException($actualInput, $reason);
 
             expect($exception->getMessage())->toBe($actualMessage);
-        });
-
-        it('has the correct name', function () {
-            $exception = new CnpjCheckDigitsInputInvalidException('1.2.3.4.5', 'repeated digits');
-
-            expect($exception->getName())->toBe('CnpjCheckDigitsInputInvalidException');
         });
     });
 });
