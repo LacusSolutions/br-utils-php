@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\BrUtils\Cpf\Exceptions;
 
-use Throwable;
+use ReflectionClass;
 use TypeError;
 
 /**
@@ -24,12 +24,20 @@ abstract class CpfCheckDigitsTypeError extends TypeError
         string $actualType,
         string $expectedType,
         string $message,
-        int $code = 0,
-        ?Throwable $previous = null,
     ) {
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message);
         $this->actualInput = $actualInput;
         $this->actualType = $actualType;
         $this->expectedType = $expectedType;
+    }
+
+    /**
+     * Get the name of the class instance name.
+     */
+    public function getName(): string
+    {
+        $thisReflection = new ReflectionClass($this);
+
+        return $thisReflection->getShortName();
     }
 }
