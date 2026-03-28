@@ -1,11 +1,17 @@
 # lacus/cpf-dv
 
+## 1.2.0
+
+### New Features
+
+- 4866d4089da3b8b79d7fd3b0b9fe56ad607e4dbd Created **`getName()`** to all package-specific errors and exceptions. Now `CnpjCheckDigitsException`, `CnpjCheckDigitsTypeError` and all their subclasses can return its class names without namespaces. This change is an API alignment across all **BR Utils** initiatives.
+
 ## 1.1.0
 
-### Minor Changes
+### Refactorings
 
-- d746c9dbf2f9ece8622d009d2e07d4923c2d875a: (refactoring) Dropped duplicate constant declarations.
-- 2ee783e2b670819ff751fd1ae76d24026b1486c6: (refactoring) Moved some input parsing logic to dedicate private method inside class `CpfCheckDigits`.
+- d746c9dbf2f9ece8622d009d2e07d4923c2d875a: Dropped duplicate constant declarations.
+- 2ee783e2b670819ff751fd1ae76d24026b1486c6: Moved some input parsing logic to dedicate private method inside class `CpfCheckDigits`.
 
 ## 1.0.0
 
