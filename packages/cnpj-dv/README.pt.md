@@ -57,7 +57,7 @@ A classe `CnpjCheckDigits` aceita múltiplos formatos de entrada:
 
 **String:** dígitos e/ou letras crus, ou CNPJ formatado (ex.: `91.415.732/0007-93`, `MG.KGM.J9X/0001-68`). Caracteres não alfanuméricos são removidos; letras minúsculas viram maiúsculas.
 
-**Array de strings:** cada elemento deve ser string; os valores são concatenados e interpretados como uma única string (ex.: `['9','1','4',…]`, `['9141','5732','0007']`, `['MG','KGM','J9X','0001']`). Elementos que não são string não são permitidos.
+**Array de strings:** cada elemento deve ser string; os valores são concatenados e interpretados como uma única string (ex.: `['9','1','4',…]`, `['9141','5732','0007']`, `['MG','KGM','J9X','0001']`). Elementos que não são strings não são permitidos.
 
 ### Erros e exceções
 
