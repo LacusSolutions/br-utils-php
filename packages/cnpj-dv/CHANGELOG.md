@@ -4,7 +4,7 @@
 
 ### New Features
 
-- a90dd0a89b18a19bbb8ad72200d65df01c465fdb Created **`getName()`** to all package-specific errors and exceptions. Now `CnpjCheckDigitsException`, `CnpjCheckDigitsTypeError` and all their subclasses can return its class names without namespaces. This change is an API alignment across all **BR Utils** initiatives.
+- a90dd0a89b18a19bbb8ad72200d65df01c465fdb Created **`getName()`** to all package-specific errors and exceptions. Now `CnpjCheckDigitsException`, `CnpjCheckDigitsTypeError` and all their subclasses can return their class names without namespaces. This change is an API alignment across all **BR Utils** initiatives.
 
 ## 1.0.0
 
