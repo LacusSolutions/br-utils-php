@@ -23,7 +23,7 @@ abstract class CpfCheckDigitsException extends Exception
     }
 
     /**
-     * Get the name of the class instance name.
+     * Get the short class name of the exception instance.
      */
     public function getName(): string
     {

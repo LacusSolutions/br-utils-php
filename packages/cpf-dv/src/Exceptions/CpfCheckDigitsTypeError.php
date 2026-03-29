@@ -32,7 +32,7 @@ abstract class CpfCheckDigitsTypeError extends TypeError
     }
 
     /**
-     * Get the name of the class instance name.
+     * Get the short class name of the error instance.
      */
     public function getName(): string
     {
