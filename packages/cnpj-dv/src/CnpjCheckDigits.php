@@ -35,7 +35,6 @@ class CnpjCheckDigits
     /** Maximum number of characters accepted as input for the CNPJ check digits calculation. */
     public const CNPJ_MAX_LENGTH = CNPJ_MAX_LENGTH;
 
-
     /** @var list<string> */
     private array $cnpjChars;
     private ?int $cachedFirstDigit = null;
