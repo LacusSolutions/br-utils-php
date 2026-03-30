@@ -4,64 +4,82 @@ on:
   push:
     branches:
       - '**'
-  workflow_dispatch: # Allow manual triggering
+  workflow_dispatch: # Allow manual dispatch
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  analyze:
-    name: Lint & Check in PHP v${{ matrix.php-version }}
+  discover:
+    name: Discover Packages
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      max-parallel: 2
-      matrix:
-        php-version:
-          - 8.2
-          - 8.3
-          - 8.4
-          - 8.5
+    outputs:
+      has-lint: ${{ steps.discover.outputs.has-lint }}
+      lint-packages: ${{ steps.discover.outputs.lint-packages }}
+      has-test: ${{ steps.discover.outputs.has-test }}
+      test-packages: ${{ steps.discover.outputs.test-packages }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
-        with:
-          php-version: ${{ matrix.php-version }}
-          extensions: curl, intl, libxml, mbstring
-          coverage: xdebug
-      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
-        with:
-          path: vendor/
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-      - run: composer validate --strict
-      - run: composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
-      - run: composer lint
+      - id: discover
+        run: |
+          set -euo pipefail
 
-  test:
-    name: Tests `${{ matrix.package }}` in PHP v${{ matrix.php-version }}
+          LINT_PACKAGES=()
+          TEST_PACKAGES=()
+
+          for dir in packages/*/; do
+            [ -d "$dir" ] || continue
+            cj="${dir%/}/composer.json"
+            [ -f "$cj" ] || continue
+
+            pkg=$(basename "${dir%/}")
+
+            if jq -e '(.scripts // {}) | has("lint:ci")' "$cj" >/dev/null 2>&1; then
+              LINT_PACKAGES+=("$pkg")
+            fi
+
+            if jq -e '(.scripts // {}) | has("test")' "$cj" >/dev/null 2>&1; then
+              TEST_PACKAGES+=("$pkg")
+            fi
+          done
+
+          lint_json=$(jq -n -c --args '$ARGS.positional | sort' -- "${LINT_PACKAGES[@]}")
+          test_json=$(jq -n -c --args '$ARGS.positional | sort' -- "${TEST_PACKAGES[@]}")
+
+          if [ "${#LINT_PACKAGES[@]}" -gt 0 ]; then
+            echo "has-lint=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has-lint=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if [ "${#TEST_PACKAGES[@]}" -gt 0 ]; then
+            echo "has-test=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has-test=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "lint-packages=$lint_json" >> "$GITHUB_OUTPUT"
+          echo "test-packages=$test_json" >> "$GITHUB_OUTPUT"
+
+          echo "Packages with lint:ci: $lint_json"
+          echo "Packages with test: $test_json"
+
+  lint:
+    name: Lint `lacus/${{ matrix.package }}` in PHP v${{ matrix.php-version }}
+    needs: discover
+    if: needs.discover.outputs.has-lint == 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      max-parallel: 1
+      max-parallel: 4
       matrix:
         php-version:
           - 8.2
           - 8.3
           - 8.4
           - 8.5
-        package:
-          - utils
-          - cnpj-fmt
-          - cnpj-gen
-          - cnpj-val
-          - cnpj-utils
-          - cpf-dv
-          - cpf-fmt
-          - cpf-gen
-          - cpf-val
-          - cpf-utils
-          - br-utils
+        package: ${{ fromJSON(needs.discover.outputs.lint-packages) }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
@@ -72,7 +90,42 @@ jobs:
       - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
         with:
           path: packages/${{ matrix.package }}/vendor/
-          key: ${{ runner.os }}-php-${{ matrix.package }}-${{ hashFiles('composer.lock') }}
+          key: ${{ runner.os }}-php-lint-${{ matrix.package }}-${{ hashFiles(format('packages/{0}/composer.lock', matrix.package)) }}
+
+      - run: composer validate --strict
+        working-directory: packages/${{ matrix.package }}
+      - run: composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
+        working-directory: packages/${{ matrix.package }}
+
+      - run: composer run lint:ci
+        working-directory: packages/${{ matrix.package }}
+
+  test:
+    name: Tests `lacus/${{ matrix.package }}` in PHP v${{ matrix.php-version }}
+    needs: discover
+    if: needs.discover.outputs.has-test == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        php-version:
+          - 8.2
+          - 8.3
+          - 8.4
+          - 8.5
+        package: ${{ fromJSON(needs.discover.outputs.test-packages) }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: curl, intl, libxml, mbstring
+          coverage: xdebug
+      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        with:
+          path: packages/${{ matrix.package }}/vendor/
+          key: ${{ runner.os }}-php-${{ matrix.package }}-${{ hashFiles(format('packages/{0}/composer.lock', matrix.package)) }}
 
       - run: composer validate --strict
         working-directory: packages/${{ matrix.package }}
