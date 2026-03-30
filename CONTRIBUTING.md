@@ -50,9 +50,12 @@ cd br-utils-php
 # Install dependencies
 composer install
 
+# PHPStan runs per package using each package's Composer autoload; install those too
+for pkg in packages/*/; do composer install --working-dir="$pkg"; done
+
 # Verify setup
 composer test
-composer analyze
+composer lint
 ```
 
 ### Available Scripts
@@ -62,9 +65,15 @@ composer analyze
 composer test              # Run all tests
 composer test:watch        # Run tests in watch mode
 composer test-coverage     # Run tests with coverage report
-composer analyze           # Run PHPStan static analysis
-composer check             # Check code style (dry run)
-composer fix               # Fix code style issues
+composer lint              # @lint:cs + @lint:phpstan (all packages)
+composer lint:cs           # php-cs-fixer dry-run + diff (all packages)
+composer lint:phpstan      # PHPStan (all packages)
+composer lint:fix          # Apply php-cs-fixer (all packages; mutates files)
+
+# From `packages/<name>/` after `composer install` there:
+composer cs-fix:check      # Style check (dry-run)
+composer cs-fix            # Apply style fixes
+composer lint              # cs-fix:check + phpstan
 
 # Package-specific testing
 composer test:cnpj         # Test all CNPJ packages
@@ -85,22 +94,29 @@ br-utils-php/
 │   │   ├── tests/          # Test files
 │   │   ├── vendor/         # Composer dependencies
 │   │   ├── composer.json   # Package configuration
-│   │   └── composer.lock   # Locked dependencies
+│   │   ├── phpstan.neon    # PHPStan configuration
+│   │   └── phpunit.xml     # Pest/PHPUnit configuration
+│   ├── cnpj-dv/            # CNPJ check digits calculation package
+│   │   ├── src/            # Source code
+│   │   ├── tests/          # Test files
+│   │   ├── vendor/         # Composer dependencies
+│   │   ├── composer.json   # Package configuration
+│   │   ├── phpstan.neon    # PHPStan configuration
+│   │   └── phpunit.xml     # Pest/PHPUnit configuration
 │   ├── cnpj-fmt/           # CNPJ formatter package
 │   │   ├── src/            # Source code
 │   │   ├── tests/          # Test files
 │   │   ├── vendor/         # Composer dependencies
 │   │   ├── composer.json   # Package configuration
-│   │   └── composer.lock   # Locked dependencies
+│   │   ├── phpstan.neon    # PHPStan configuration
+│   │   └── phpunit.xml     # Pest/PHPUnit configuration
 │   ├── cnpj-gen/           # CNPJ generator package
-│   │   ├── src/            # Source code
-│   │   ├── tests/          # Test files
-│   │   ├── vendor/         # Composer dependencies
-│   │   ├── composer.json   # Package configuration
-│   │   └── composer.lock   # Locked dependencies
+│   │   └── ...
 │   ├── cnpj-utils/         # CNPJ utilities package
 │   │   └── ...
 │   ├── cnpj-val/           # CNPJ validator package
+│   │   └── ...
+│   ├── cpf-dv/             # CPF check digits calculation package
 │   │   └── ...
 │   ├── cpf-fmt/            # CPF formatter package
 │   │   └── ...
@@ -108,14 +124,16 @@ br-utils-php/
 │   │   └── ...
 │   ├── cpf-utils/          # CPF utilities package
 │   │   └── ...
-│   └── cpf-val/            # CPF validator package
+│   ├── cpf-val/            # CPF validator package
+│   │   └── ...
+│   └── utils/              # Lacus's utilities package
 │       └── ...
 ├── vendor/                 # Composer dependencies
+├── .phpstan.neon           # Shared PHPStan defaults (packages extend via phpstan.neon)
+├── .php-cs-fixer.php       # Shared PHP CS Fixer rules (root + packages include this)
 ├── captainhook.json        # Git hooks configuration
 ├── composer.json           # Root composer configuration
 ├── composer.lock           # Locked dependencies
-├── phpstan.neon            # PHPStan configuration
-├── phpunit.xml.dist        # PHPUnit configuration
 └── README.md               # Project documentation
 ```
 
