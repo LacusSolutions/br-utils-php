@@ -5,18 +5,13 @@ declare(strict_types=1);
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
-$finder = Finder::create()
-    ->in([
-        __DIR__ . '/packages/**/src/',
-        __DIR__ . '/packages/**/tests/',
-    ])
-    ->exclude([
-        'vendor/',
-        'tests/',
-    ]);
-
-return (new Config())
-    ->setRules([
+return function (string $dir): Config {
+    $config = new Config();
+    $cacheFile = $dir . '/vendor/.php-cs-fixer.cache';
+    $finder = Finder::create()
+        ->in([$dir . '/src/', $dir . '/tests/'])
+        ->exclude(['vendor/']);
+    $rules = [
         '@PSR12' => true,
         'array_syntax' => [
             'syntax' => 'short',
@@ -49,5 +44,11 @@ return (new Config())
         'phpdoc_single_line_var_spacing' => true,
         'phpdoc_var_without_name' => true,
         'trailing_comma_in_multiline' => true,
-    ])
-    ->setFinder($finder);
+    ];
+
+    $config->setCacheFile($cacheFile);
+    $config->setFinder($finder);
+    $config->setRules($rules);
+
+    return $config;
+};
