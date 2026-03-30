@@ -1,7 +1,7 @@
 {
   "name": "lacus/cnpj-fmt",
   "type": "library",
-  "description": "Utility function to format CNPJ (Brazilian employer ID)",
+  "description": "Utility to format CNPJ (Brazilian Business Tax ID)",
   "license": "MIT",
   "authors": [
     {
@@ -26,23 +26,26 @@
   },
   "homepage": "https://cnpj-utils.vercel.app/",
   "scripts": {
-    "test": "phpunit",
-    "test:watch": "phpunit-watcher watch",
-    "test-coverage": "phpunit --coverage-html coverage"
+    "test": "pest",
+    "test:watch": "pest --watch",
+    "test-coverage": "pest --coverage-html coverage"
   },
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
   },
   "require": {
-    "php": ">=8.1"
+    "php": "^8.2",
+    "lacus/utils": "^1.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^10.5",
-    "spatie/phpunit-watcher": "~1.24"
+    "pestphp/pest": "^3.8"
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\CnpjFmt\\": "src/"
+      "Lacus\\BrUtils\\Cnpj\\": "src/"
     },
     "files": [
       "src/cnpj-fmt.php"
@@ -50,7 +53,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\CnpjFmt\\Tests\\": "tests/"
+      "Lacus\\BrUtils\\Cnpj\\Tests\\": "tests/"
     }
   }
 }

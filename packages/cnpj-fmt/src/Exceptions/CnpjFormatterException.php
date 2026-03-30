@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Cpf\Exceptions;
+namespace Lacus\BrUtils\Cnpj\Exceptions;
 
 use Exception;
 use ReflectionClass;
 
 /**
- * Base exception for all `cpf-dv` rules-related errors.
+ * Base exception for all `cnpj-fmt` rules-related errors.
  *
  * This abstract class extends the native `Exception` and serves as the base for
- * all non-type-related errors in the `CpfCheckDigits`. It is suitable for
- * validation errors, range errors, and other business logic exceptions that are
- * not strictly type-related.
+ * all non-type-related errors in the `CnpjFormatter` and its dependencies. It is
+ * suitable for validation errors, range errors, and other business logic
+ * exceptions that are not strictly type-related.
  */
-abstract class CpfCheckDigitsException extends Exception
+abstract class CnpjFormatterException extends Exception
 {
     public function __construct(string $message)
     {

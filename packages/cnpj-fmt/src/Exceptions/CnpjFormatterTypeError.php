@@ -8,16 +8,16 @@ use ReflectionClass;
 use TypeError;
 
 /**
- * Base error for all `cnpj-dv` type-related errors.
+ * Base error for all `cnpj-fmt` type-related errors.
  *
  * This abstract class extends the native `TypeError` and serves as the base for
- * all type validation errors in the `CnpjCheckDigits`.
+ * all type validation errors in the CNPJ formatter.
  */
-abstract class CnpjCheckDigitsTypeError extends TypeError
+abstract class CnpjFormatterTypeError extends TypeError
 {
-    public mixed $actualInput;
-    public string $actualType;
-    public string $expectedType;
+    public readonly mixed $actualInput;
+    public readonly string $actualType;
+    public readonly string $expectedType;
 
     public function __construct(
         mixed $actualInput,
