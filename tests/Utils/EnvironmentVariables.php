@@ -25,6 +25,7 @@ trait EnvironmentVariables
             copy($envExampleFile, $envFile);
         }
 
+        /** @var list<string> */
         $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
         foreach ($lines as $line) {
