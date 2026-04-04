@@ -12,12 +12,14 @@ trait ExternalCpfValidator
 
     protected function isValid(string $cpfString): bool
     {
+        /** @var string */
         $apiUrl = $_ENV['API_URL'] ?? getenv('API_URL');
 
         if (!$apiUrl) {
             throw new Exception('API URL not defined.');
         }
 
+        /** @var string */
         $apiToken = $_ENV['API_TOKEN'] ?? getenv('API_TOKEN');
 
         if (!$apiToken) {
@@ -27,6 +29,7 @@ trait ExternalCpfValidator
         $curl = curl_init();
         $cpfEscaped = urlencode($cpfString);
         $requestUrl = "{$apiUrl}/cpf/val/{$cpfEscaped}";
+
         curl_setopt_array($curl, [
             CURLOPT_URL => $requestUrl,
             CURLOPT_RETURNTRANSFER => true,
@@ -35,6 +38,7 @@ trait ExternalCpfValidator
                 "Authorization: Bearer {$apiToken}",
             ],
         ]);
+
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
@@ -44,6 +48,12 @@ trait ExternalCpfValidator
             throw new Exception("HTTP error ({$httpCode}) with CPF \"{$cpfString}\"");
         }
 
-        return json_decode($response, true)['result'] ?? false;
+        $parsedResponse = json_decode($response, true);
+
+        if (!is_array($parsedResponse) || !isset($parsedResponse['result'])) {
+            throw new Exception('Invalid JSON response for CPF "{$cpfString}"');
+        }
+
+        return (bool) $parsedResponse['result'];
     }
 }
