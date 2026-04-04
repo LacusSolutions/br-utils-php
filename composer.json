@@ -1,7 +1,7 @@
 {
   "name": "lacus/cnpj-gen",
   "type": "library",
-  "description": "Utility function to generate valid CNPJ (Brazilian employer ID)",
+  "description": "Utility to generate CNPJ (Brazilian Business Tax ID)",
   "license": "MIT",
   "authors": [
     {
@@ -37,25 +37,29 @@
     ],
     "lint:format": "php-cs-fixer fix --config=.php-cs-fixer.config.php",
     "lint:check": "phpstan analyse --configuration=.php-stan.config.neon",
-    "test": "phpunit",
-    "test:watch": "phpunit-watcher watch",
-    "test-coverage": "phpunit --coverage-html coverage"
+    "test": "pest --configuration=.pest.config.xml",
+    "test:watch": "@test --watch",
+    "test:cov": "@test --coverage-html coverage"
   },
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
   },
   "require": {
-    "php": ">=8.1"
+    "php": "^8.2",
+    "lacus/cnpj-dv": "^1.0",
+    "lacus/utils": "^1.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.94",
-    "phpstan/phpstan": "^2.1",
-    "phpunit/phpunit": "^10.5",
-    "spatie/phpunit-watcher": "~1.24"
+    "pestphp/pest": "^3.8",
+    "phpstan/phpstan": "^2.1"
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\CnpjGen\\": "src/"
+      "Lacus\\BrUtils\\Cnpj\\": "src/"
     },
     "files": [
       "src/cnpj-gen.php"
@@ -63,7 +67,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\CnpjGen\\Tests\\": "tests/"
+      "Lacus\\BrUtils\\Cnpj\\Tests\\": "tests/"
     }
   }
 }
