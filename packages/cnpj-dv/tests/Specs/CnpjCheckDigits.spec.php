@@ -386,10 +386,13 @@ describe('CnpjCheckDigits', function () {
             it('returns cached values on subsequent calls', function () {
                 $cnpjCheckDigits = new CnpjCheckDigitsWithCalculateSpy('914157320007');
 
-                $cnpjCheckDigits->first;
-                $cnpjCheckDigits->first;
-                $cnpjCheckDigits->first;
+                $results = [];
+                $results[] = $cnpjCheckDigits->first;
+                $results[] = $cnpjCheckDigits->first;
+                $results[] = $cnpjCheckDigits->first;
+                $uniqueResults = array_unique($results);
 
+                expect($uniqueResults)->toHaveLength(1);
                 expect($cnpjCheckDigits->calculateCallCount)->toBe(1);
             });
         });
@@ -422,10 +425,13 @@ describe('CnpjCheckDigits', function () {
             it('returns cached values on subsequent calls', function () {
                 $cnpjCheckDigits = new CnpjCheckDigitsWithCalculateSpy('914157320007');
 
-                $cnpjCheckDigits->second;
-                $cnpjCheckDigits->second;
-                $cnpjCheckDigits->second;
+                $results = [];
+                $results[] = $cnpjCheckDigits->second;
+                $results[] = $cnpjCheckDigits->second;
+                $results[] = $cnpjCheckDigits->second;
+                $uniqueResults = array_unique($results);
 
+                expect($uniqueResults)->toHaveLength(1);
                 expect($cnpjCheckDigits->calculateCallCount)->toBe(2);
             });
         });
