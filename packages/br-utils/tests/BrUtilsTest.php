@@ -56,10 +56,10 @@ class BrUtilsTest extends TestCase
         $this->utils = new BrUtils();
     }
 
-    protected function format(...$args): string
+    protected function format(...$args): string // @phpstan-ignore-line missingType.parameter
     {
         $stackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
-        $callerFile = $stackTrace[0]['file'];
+        $callerFile = $stackTrace[0]['file'] ?? '';
 
         if (preg_match(CNPJ_FILE_REGEX, $callerFile)) {
             return $this->formatCnpj(...$args);
@@ -72,10 +72,10 @@ class BrUtilsTest extends TestCase
         throw new Error("Caller not found.");
     }
 
-    protected function generate(...$args): string
+    protected function generate(...$args): string // @phpstan-ignore-line missingType.parameter
     {
         $stackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
-        $callerFile = $stackTrace[0]['file'];
+        $callerFile = $stackTrace[0]['file'] ?? '';
 
         if (preg_match(CNPJ_FILE_REGEX, $callerFile)) {
             return $this->generateCnpj(...$args);
@@ -88,10 +88,10 @@ class BrUtilsTest extends TestCase
         throw new Error("Caller not found.");
     }
 
-    protected function isValid(...$args): bool
+    protected function isValid(...$args): bool // @phpstan-ignore-line missingType.parameter
     {
         $stackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
-        $callerFile = $stackTrace[0]['file'];
+        $callerFile = $stackTrace[0]['file'] ?? '';
 
         if (preg_match(CNPJ_FILE_REGEX, $callerFile)) {
             return $this->isValidCnpj(...$args);
