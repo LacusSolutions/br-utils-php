@@ -1,4 +1,0 @@
-# Shared PHPStan defaults for all packages. Each package adds `parameters.paths` via its own phpstan.neon.
-parameters:
-  level: 10
-  treatPhpDocTypesAsCertain: false

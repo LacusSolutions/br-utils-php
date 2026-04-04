@@ -1,0 +1,16 @@
+# Shared PHPStan defaults for all packages. Each package adds `parameters.paths` via its own phpstan.neon.
+parameters:
+  level: 10
+  reportUnmatchedIgnoredErrors: false
+  treatPhpDocTypesAsCertain: false
+  ignoreErrors:
+    - paths:
+        - **/tests/**/*.spec.php
+        - **/tests/*Test.php
+      identifiers:
+        - argument.type
+        - assign.propertyType
+        - booleanNot.alwaysTrue
+        - callable.nonCallable
+        - method.alreadyNarrowedType
+        - varTag.nativeType

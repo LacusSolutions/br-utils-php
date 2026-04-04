@@ -3,9 +3,6 @@
   "type": "project",
   "description": "Monorepo for Lacus BR Utils for PHP",
   "license": "MIT",
-  "extra": {
-    "monorepo": true
-  },
   "authors": [
     {
       "name": "Julio L. Muller",
@@ -14,7 +11,7 @@
     }
   ],
   "scripts": {
-    "prepare": "captainhook",
+    "prepare": "captainhook install --no-interaction --configuration=.captainhook.config.json",
     "commit": "conventional-commits prepare",
     "lint": [
       "phpstan analyse",
@@ -76,41 +73,21 @@
       "infection/extension-installer": false
     }
   },
+  "extra": {
+    "captainhook": {
+      "config": ".captainhook.config.json"
+    }
+  },
   "require": {
-    "php": ">=8.1"
+    "php": ">=8.2"
   },
   "require-dev": {
-    "captainhook/captainhook": "^5.27",
+    "captainhook/captainhook": "^5.29",
     "captainhook/hook-installer": "^1.0",
-    "friendsofphp/php-cs-fixer": "^3.92",
-    "phpstan/phpstan": "^2.1",
-    "ramsey/conventional-commits": "^1.6",
-    "roave/security-advisories": "dev-latest"
-  },
-  "autoload": {
-    "psr-4": {
-      "Lacus\\BrUtils\\": "packages/br-utils/src/",
-      "Lacus\\CnpjFnt\\": "packages/cnpj-fmt/src/",
-      "Lacus\\CnpjGen\\": "packages/cnpj-gen/src/",
-      "Lacus\\CnpjVal\\": "packages/cnpj-val/src/",
-      "Lacus\\CnpjUtils\\": "packages/cnpj-utils/src/",
-      "Lacus\\CpfFnt\\": "packages/cpf-fmt/src/",
-      "Lacus\\CpfGen\\": "packages/cpf-gen/src/",
-      "Lacus\\CpfVal\\": "packages/cpf-val/src/",
-      "Lacus\\CpfUtils\\": "packages/cpf-utils/src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Lacus\\BrUtils\\Tests\\": "packages/br-utils/tests/",
-      "Lacus\\CnpjFnt\\Tests\\": "packages/cnpj-fmt/src/",
-      "Lacus\\CnpjGen\\Tests\\": "packages/cnpj-gen/tests/",
-      "Lacus\\CnpjVal\\Tests\\": "packages/cnpj-val/tests/",
-      "Lacus\\CnpjUtils\\Tests\\": "packages/cnpj-utils/tests/",
-      "Lacus\\CpfFnt\\Tests\\": "packages/cpf-fmt/tests/",
-      "Lacus\\CpfGen\\Tests\\": "packages/cpf-gen/tests/",
-      "Lacus\\CpfVal\\Tests\\": "packages/cpf-val/tests/",
-      "Lacus\\CpfUtils\\Tests\\": "packages/cpf-utils/tests/"
-    }
+    "ramsey/conventional-commits": "^1.7",
+    "roave/security-advisories": "dev-latest",
+    "symfony/console": "^7.4",
+    "symfony/filesystem": "^7.4",
+    "symfony/process": "^7.4"
   }
 }
