@@ -218,10 +218,13 @@ describe('CpfCheckDigits', function () {
             it('returns cached values on subsequent calls', function () {
                 $cpfCheckDigits = new CpfCheckDigitsWithCalculateSpy('123456789');
 
-                $cpfCheckDigits->first;
-                $cpfCheckDigits->first;
-                $cpfCheckDigits->first;
+                $results = [];
+                $results[] = $cpfCheckDigits->first;
+                $results[] = $cpfCheckDigits->first;
+                $results[] = $cpfCheckDigits->first;
+                $uniqueResults = array_unique($results);
 
+                expect($uniqueResults)->toHaveLength(1);
                 expect($cpfCheckDigits->calculateCallCount)->toBe(1);
             });
         });
@@ -254,10 +257,13 @@ describe('CpfCheckDigits', function () {
             it('returns cached values on subsequent calls', function () {
                 $cpfCheckDigits = new CpfCheckDigitsWithCalculateSpy('123456789');
 
-                $cpfCheckDigits->second;
-                $cpfCheckDigits->second;
-                $cpfCheckDigits->second;
+                $results = [];
+                $results[] = $cpfCheckDigits->second;
+                $results[] = $cpfCheckDigits->second;
+                $results[] = $cpfCheckDigits->second;
+                $uniqueResults = array_unique($results);
 
+                expect($uniqueResults)->toHaveLength(1);
                 expect($cpfCheckDigits->calculateCallCount)->toBe(2);
             });
         });
