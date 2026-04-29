@@ -54,6 +54,8 @@
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.94",
+    "mockery/mockery": "^1.6",
+    "nunomaduro/mock-final-classes": "^1.2",
     "pestphp/pest": "^3.8",
     "phpstan/phpstan": "^2.1"
   },
