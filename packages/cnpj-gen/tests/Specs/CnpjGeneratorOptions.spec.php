@@ -25,7 +25,7 @@ describe('CnpjGeneratorOptions', function () {
             });
         });
 
-        describe('when called with all parameters with null values', function () use ($defaultParameters) {
+        describe('when called with all parameters with `null` values', function () use ($defaultParameters) {
             it('sets all options to default values', function () use ($defaultParameters) {
                 $options = new CnpjGeneratorOptions(
                     format: null,
@@ -198,33 +198,33 @@ describe('CnpjGeneratorOptions', function () {
         });
 
         describe('when setting to a non-string value', function () {
-            it('throws CnpjGeneratorOptionsTypeError with an object', function () {
+            it('throws `CnpjGeneratorOptionsTypeError` with an object', function () {
                 $options = new CnpjGeneratorOptions();
 
                 expect(function () use ($options) {
                     $options->prefix = (object) ['not' => 'a string'];
-                })->toThrow(CnpjGeneratorOptionsTypeError::class, 'CNPJ generating option "prefix" must be of type string. Got object.');
+                })->toThrow(CnpjGeneratorOptionsTypeError::class, 'CNPJ generator option "prefix" must be of type string. Got object.');
             });
 
-            it('throws CnpjGeneratorOptionsTypeError with a number', function () {
+            it('throws `CnpjGeneratorOptionsTypeError` with a number', function () {
                 $options = new CnpjGeneratorOptions();
 
                 expect(function () use ($options) {
                     $options->prefix = 123;
-                })->toThrow(CnpjGeneratorOptionsTypeError::class, 'CNPJ generating option "prefix" must be of type string. Got integer number.');
+                })->toThrow(CnpjGeneratorOptionsTypeError::class, 'CNPJ generator option "prefix" must be of type string. Got integer number.');
             });
 
-            it('throws CnpjGeneratorOptionsTypeError with a boolean', function () {
+            it('throws `CnpjGeneratorOptionsTypeError` with a boolean', function () {
                 $options = new CnpjGeneratorOptions();
 
                 expect(function () use ($options) {
                     $options->prefix = true;
-                })->toThrow(CnpjGeneratorOptionsTypeError::class, 'CNPJ generating option "prefix" must be of type string. Got boolean.');
+                })->toThrow(CnpjGeneratorOptionsTypeError::class, 'CNPJ generator option "prefix" must be of type string. Got boolean.');
             });
         });
 
         describe('when setting to an invalid string', function () {
-            it("throws CnpjGeneratorOptionPrefixInvalidException with base ID all zeros", function () {
+            it("throws `CnpjGeneratorOptionPrefixInvalidException` with base ID all zeros", function () {
                 $options = new CnpjGeneratorOptions();
 
                 expect(function () use ($options) {
@@ -232,7 +232,7 @@ describe('CnpjGeneratorOptions', function () {
                 })->toThrow(CnpjGeneratorOptionPrefixInvalidException::class, 'CNPJ generator option "prefix" with value "00000000" is invalid. Zeroed base ID is not eligible.');
             });
 
-            it("throws CnpjGeneratorOptionPrefixInvalidException with branch ID all zeros", function () {
+            it("throws `CnpjGeneratorOptionPrefixInvalidException` with branch ID all zeros", function () {
                 $options = new CnpjGeneratorOptions();
 
                 expect(function () use ($options) {
@@ -240,7 +240,7 @@ describe('CnpjGeneratorOptions', function () {
                 })->toThrow(CnpjGeneratorOptionPrefixInvalidException::class, 'CNPJ generator option "prefix" with value "123456780000" is invalid. Zeroed branch ID is not eligible.');
             });
 
-            it("throws CnpjGeneratorOptionPrefixInvalidException with repeated digits", function (string $prefix) {
+            it("throws `CnpjGeneratorOptionPrefixInvalidException` with repeated digits", function (string $prefix) {
                 $options = new CnpjGeneratorOptions();
 
                 expect(function () use ($options, $prefix) {
@@ -296,7 +296,7 @@ describe('CnpjGeneratorOptions', function () {
     });
 
     describe('`type` property', function () use ($defaultParameters) {
-        describe('when setting to a CnpjType enum', function () {
+        describe('when setting to a `CnpjType` enum', function () {
             it("sets `type` to the `CnpjType::Alphanumeric` value", function () {
                 $options = new CnpjGeneratorOptions(type: CnpjType::Alphabetic);
 
@@ -323,7 +323,7 @@ describe('CnpjGeneratorOptions', function () {
         });
 
         describe('when setting to a string value', function () {
-            it("sets `type` to the `'alphanumeric'` value", function () {
+            it('sets `type` to the "alphanumeric" value', function () {
                 $options = new CnpjGeneratorOptions(type: 'alphabetic');
 
                 $options->type = 'alphanumeric';
@@ -331,7 +331,7 @@ describe('CnpjGeneratorOptions', function () {
                 expect($options->type)->toBe(CnpjType::Alphanumeric);
             });
 
-            it("sets `type` to the ''alphabetic'' value", function () {
+            it('sets `type` to the "alphabetic" value', function () {
                 $options = new CnpjGeneratorOptions(type: 'numeric');
 
                 $options->type = 'alphabetic';
@@ -339,7 +339,7 @@ describe('CnpjGeneratorOptions', function () {
                 expect($options->type)->toBe(CnpjType::Alphabetic);
             });
 
-            it("sets `type` to the ''numeric'' value", function () {
+            it('sets `type` to the "numeric" value', function () {
                 $options = new CnpjGeneratorOptions(type: 'alphanumeric');
 
                 $options->type = 'numeric';
@@ -359,38 +359,38 @@ describe('CnpjGeneratorOptions', function () {
         });
 
         describe('when setting to an invalid string value', function () {
-            it('throws CnpjGeneratorOptionTypeInvalidException with an invalid string value', function () {
+            it('throws `CnpjGeneratorOptionTypeInvalidException` with an invalid string value', function () {
                 $options = new CnpjGeneratorOptions();
 
                 expect(function () use ($options) {
                     $options->type = 'invalid';
-                })->toThrow(CnpjGeneratorOptionTypeInvalidException::class, "CNPJ generator option \"type\" accepts only the following values: \"alphanumeric\", \"alphabetic\", \"numeric\". Got \"invalid\".");
+                })->toThrow(CnpjGeneratorOptionTypeInvalidException::class, 'CNPJ generator option "type" accepts only the following values: "alphanumeric", "alphabetic", "numeric". Got "invalid".');
             });
         });
 
         describe('when setting to an invalid value type', function () {
-            it('throws CnpjGeneratorOptionsTypeError with an object', function () {
+            it('throws `CnpjGeneratorOptionsTypeError` with an object', function () {
                 $options = new CnpjGeneratorOptions();
 
                 expect(function () use ($options) {
                     $options->type = (object) ['not' => 'a string'];
-                })->toThrow(CnpjGeneratorOptionsTypeError::class, 'CNPJ generating option "type" must be of type CnpjType or string. Got object.');
+                })->toThrow(CnpjGeneratorOptionsTypeError::class, 'CNPJ generator option "type" must be of type CnpjType or string. Got object.');
             });
 
-            it('throws CnpjGeneratorOptionsTypeError with a number', function () {
+            it('throws `CnpjGeneratorOptionsTypeError` with a number', function () {
                 $options = new CnpjGeneratorOptions();
 
                 expect(function () use ($options) {
                     $options->type = 123;
-                })->toThrow(CnpjGeneratorOptionsTypeError::class, 'CNPJ generating option "type" must be of type CnpjType or string. Got integer number.');
+                })->toThrow(CnpjGeneratorOptionsTypeError::class, 'CNPJ generator option "type" must be of type CnpjType or string. Got integer number.');
             });
 
-            it('throws CnpjGeneratorOptionsTypeError with a boolean', function () {
+            it('throws `CnpjGeneratorOptionsTypeError` with a boolean', function () {
                 $options = new CnpjGeneratorOptions();
 
                 expect(function () use ($options) {
                     $options->type = true;
-                })->toThrow(CnpjGeneratorOptionsTypeError::class, 'CNPJ generating option "type" must be of type CnpjType or string. Got boolean.');
+                })->toThrow(CnpjGeneratorOptionsTypeError::class, 'CNPJ generator option "type" must be of type CnpjType or string. Got boolean.');
             });
         });
     });
