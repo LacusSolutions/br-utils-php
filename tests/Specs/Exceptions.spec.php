@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionPrefixInvalidException;
-use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionTypeInvalidException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionsTypeError;
+use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionTypeInvalidException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorTypeError;
 
 describe('CnpjGeneratorTypeError', function () {
@@ -14,13 +14,13 @@ describe('CnpjGeneratorTypeError', function () {
         {
         }
 
-        it('is an instance of TypeError', function () {
+        it('is an instance of `TypeError`', function () {
             $error = new TestTypeError(123, 'number', 'string', 'some error');
 
             expect($error)->toBeInstanceOf(TypeError::class);
         });
 
-        it('is an instance of CnpjGeneratorTypeError', function () {
+        it('is an instance of `CnpjGeneratorTypeError`', function () {
             $error = new TestTypeError(123, 'number', 'string', 'some error');
 
             expect($error)->toBeInstanceOf(CnpjGeneratorTypeError::class);
@@ -60,13 +60,13 @@ describe('CnpjGeneratorTypeError', function () {
 
 describe('CnpjGeneratorOptionsTypeError', function () {
     describe('when instantiated', function () {
-        it('is an instance of TypeError', function () {
+        it('is an instance of `TypeError`', function () {
             $error = new CnpjGeneratorOptionsTypeError('format', 123, 'boolean');
 
             expect($error)->toBeInstanceOf(TypeError::class);
         });
 
-        it('is an instance of CnpjGeneratorTypeError', function () {
+        it('is an instance of `CnpjGeneratorTypeError`', function () {
             $error = new CnpjGeneratorOptionsTypeError('format', 123, 'boolean');
 
             expect($error)->toBeInstanceOf(CnpjGeneratorTypeError::class);
@@ -101,7 +101,7 @@ describe('CnpjGeneratorOptionsTypeError', function () {
             $actualInput = 123;
             $actualInputType = 'integer number';
             $expectedType = 'boolean';
-            $message = "CNPJ generating option \"{$optionName}\" must be of type {$expectedType}. Got {$actualInputType}.";
+            $message = "CNPJ generator option \"{$optionName}\" must be of type {$expectedType}. Got {$actualInputType}.";
 
             $error = new CnpjGeneratorOptionsTypeError($optionName, $actualInput, $expectedType);
 
@@ -122,13 +122,13 @@ describe('CnpjGeneratorException', function () {
         {
         }
 
-        it('is an instance of Exception', function () {
+        it('is an instance of `Exception`', function () {
             $exception = new TestException('some error');
 
             expect($exception)->toBeInstanceOf(Exception::class);
         });
 
-        it('is an instance of CnpjGeneratorException', function () {
+        it('is an instance of `CnpjGeneratorException`', function () {
             $exception = new TestException('some error');
 
             expect($exception)->toBeInstanceOf(CnpjGeneratorException::class);
@@ -150,13 +150,13 @@ describe('CnpjGeneratorException', function () {
 
 describe('CnpjGeneratorOptionPrefixInvalidException', function () {
     describe('when instantiated', function () {
-        it('is an instance of Exception', function () {
+        it('is an instance of `Exception`', function () {
             $exception = new CnpjGeneratorOptionPrefixInvalidException('1.2.3.4.5', 'some reason');
 
             expect($exception)->toBeInstanceOf(Exception::class);
         });
 
-        it('is an instance of CnpjGeneratorException', function () {
+        it('is an instance of `CnpjGeneratorException`', function () {
             $exception = new CnpjGeneratorOptionPrefixInvalidException('1.2.3.4.5', 'some reason');
 
             expect($exception)->toBeInstanceOf(CnpjGeneratorException::class);
@@ -194,13 +194,13 @@ describe('CnpjGeneratorOptionPrefixInvalidException', function () {
 
 describe('CnpjGeneratorOptionTypeInvalidException', function () {
     describe('when instantiated', function () {
-        it('is an instance of Exception', function () {
+        it('is an instance of `Exception`', function () {
             $exception = new CnpjGeneratorOptionTypeInvalidException('test', ['foo', 'bar', 'baz']);
 
             expect($exception)->toBeInstanceOf(Exception::class);
         });
 
-        it('is an instance of CnpjGeneratorException', function () {
+        it('is an instance of `CnpjGeneratorException`', function () {
             $exception = new CnpjGeneratorOptionTypeInvalidException('test', ['foo', 'bar', 'baz']);
 
             expect($exception)->toBeInstanceOf(CnpjGeneratorException::class);
