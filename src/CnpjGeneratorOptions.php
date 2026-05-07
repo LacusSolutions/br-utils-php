@@ -126,10 +126,10 @@ class CnpjGeneratorOptions
     public function __get(string $name): mixed
     {
         return match ($name) {
-            'format'      => $this->getFormat(),
-            'prefix'      => $this->getPrefix(),
-            'type'        => $this->getType(),
-            default       => throw new InvalidArgumentException("Unknown property: {$name}"),
+            'format' => $this->getFormat(),
+            'prefix' => $this->getPrefix(),
+            'type'   => $this->getType(),
+            default  => throw new InvalidArgumentException("Unknown property: {$name}"),
         };
     }
 
@@ -139,10 +139,10 @@ class CnpjGeneratorOptions
     public function __set(string $name, mixed $value): void
     {
         match ($name) {
-            'format'      => $this->setFormat($value),
-            'prefix'      => $this->setPrefix($value),
-            'type'        => $this->setType($value),
-            default       => throw new InvalidArgumentException("Unknown property: {$name}"),
+            'format' => $this->setFormat($value),   // @phpstan-ignore-line argument.type
+            'prefix' => $this->setPrefix($value),   // @phpstan-ignore-line argument.type
+            'type'   => $this->setType($value),     // @phpstan-ignore-line argument.type
+            default  => throw new InvalidArgumentException("Unknown property: {$name}"),
         };
     }
 
@@ -220,6 +220,7 @@ class CnpjGeneratorOptions
 
         $this->assertIsString('prefix', $actualPrefix);
 
+        /** @var string */
         $actualPrefix = preg_replace('/[^0-9A-Z]/', '', $actualPrefix);
         $actualPrefix = strtoupper($actualPrefix);
         $actualPrefix = substr($actualPrefix, 0, self::CNPJ_PREFIX_MAX_LENGTH);
@@ -270,7 +271,7 @@ class CnpjGeneratorOptions
      *
      * @param ?bool $format
      * @param ?string $prefix
-     * @param ?CnpjType $type
+     * @param ?(CnpjType|'alphanumeric'|'alphabetic'|'numeric') $type
      *
      * @throws CnpjGeneratorOptionPrefixInvalidException If the `prefix` option
      *   contains invalid combination of characters.
@@ -310,6 +311,7 @@ class CnpjGeneratorOptions
      * @param 'type' $optionName
      * @param CnpjType|string $value
      *
+     * @throws CnpjGeneratorOptionsTypeError If the value is not a string.
      * @throws CnpjGeneratorOptionTypeInvalidException If the value is not a
      *   valid type.
      */
