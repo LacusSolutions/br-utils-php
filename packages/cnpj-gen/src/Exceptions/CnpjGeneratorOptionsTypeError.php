@@ -26,7 +26,7 @@ class CnpjGeneratorOptionsTypeError extends CnpjGeneratorTypeError
             $actualInput,
             $actualInputType,
             $expectedType,
-            "CNPJ generating option \"{$optionName}\" must be of type {$expectedType}. Got {$actualInputType}.",
+            "CNPJ generator option \"{$optionName}\" must be of type {$expectedType}. Got {$actualInputType}.",
         );
         $this->optionName = $optionName;
     }
