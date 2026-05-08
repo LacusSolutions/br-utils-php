@@ -184,6 +184,22 @@ describe('CnpjGeneratorOptions', function () {
 
                 expect($options->prefix)->toBe('11222333');
             });
+
+            it('strips non-alphanumeric characters and uppercases ASCII letters', function () {
+                $options = new CnpjGeneratorOptions();
+
+                $options->prefix = '12.ABC.def/0001';
+
+                expect($options->prefix)->toBe('12ABCDEF0001');
+            });
+
+            it('uppercases a lowercase-only prefix', function () {
+                $options = new CnpjGeneratorOptions();
+
+                $options->prefix = 'abc123';
+
+                expect($options->prefix)->toBe('ABC123');
+            });
         });
 
         describe('when setting to a nullish value', function () use ($defaultParameters) {
