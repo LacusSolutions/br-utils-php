@@ -221,7 +221,7 @@ class CnpjGeneratorOptions
         $this->assertIsString('prefix', $actualPrefix);
 
         /** @var string */
-        $actualPrefix = preg_replace('/[^0-9A-Z]/', '', $actualPrefix);
+        $actualPrefix = preg_replace('/[^0-9A-Z]/i', '', $actualPrefix);
         $actualPrefix = strtoupper($actualPrefix);
         $actualPrefix = substr($actualPrefix, 0, self::CNPJ_PREFIX_MAX_LENGTH);
 
