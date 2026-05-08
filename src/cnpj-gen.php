@@ -12,10 +12,10 @@ use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionTypeInvalidException;
 /**
  * Helper function to simplify the usage of the {@see CnpjGenerator} class.
  *
- * Formats a CNPJ string according to the given options. With no options,
- * returns the traditional CNPJ format (e.g. `12.345.678/0009-10`). Invalid
- * input length is handled by the configured `onFail` callback instead of
- * throwing.
+ * Generates a valid 14-character CNPJ (prefix, random body for the chosen
+ * {@see CnpjType}, and computed check digits). With default options the result
+ * is unformatted alphanumeric; pass `format: true` for `00.000.000/0000-00`
+ * style output.
  *
  * @param ?CnpjGeneratorOptions $options
  * @param ?bool $format
