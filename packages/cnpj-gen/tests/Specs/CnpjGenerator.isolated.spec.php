@@ -13,11 +13,13 @@ use Mockery\CompositeExpectation;
 | Process-isolation specs
 |--------------------------------------------------------------------------
 |
-| These tests rely on Mockery's `alias:` mock to intercept static calls on
-| `SequenceGenerator`. That mechanism only works while the target class has
-| not been autoloaded yet, so this file is kept apart from the rest of the
-| `CnpjGenerator` specs to ensure it is the first (and only) place that
-| touches `SequenceGenerator` in its parallel worker.
+| These tests use Mockery `alias:` on `SequenceGenerator`, which replaces the
+| class for the entire PHP process; `composer test` runs this file in a
+| second Pest invocation (group `isolated-process-tests`).
+|
+| The alias only works before `SequenceGenerator` is autoloaded, so this file
+| is kept apart from other `CnpjGenerator` specs and must load first within
+| its worker/process.
 |
 | Mocking `CnpjCheckDigits` with `overload:` is intentionally avoided: the
 | generated overload class does not expose magic methods such as `__get`,

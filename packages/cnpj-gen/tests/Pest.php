@@ -10,6 +10,10 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
-uses(TestCase::class)->in(__DIR__ . DIRECTORY_SEPARATOR . 'Specs');
+$specsDirectory = __DIR__ . DIRECTORY_SEPARATOR . 'Specs' . DIRECTORY_SEPARATOR;
+
+uses(TestCase::class)->in($specsDirectory);
+
+uses()->group('isolated-process-tests')->in("{$specsDirectory}*.isolated.spec.php");
 
 uses()->afterEach(fn () => Mockery::close());
