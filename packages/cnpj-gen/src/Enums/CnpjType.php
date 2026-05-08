@@ -34,8 +34,8 @@ enum CnpjType: string
     {
         return match ($this) {
             self::Alphanumeric => SequenceType::Alphanumeric,
-            self::Alphabetic => SequenceType::Alphabetic,
-            self::Numeric => SequenceType::Numeric,
+            self::Alphabetic   => SequenceType::Alphabetic,
+            self::Numeric      => SequenceType::Numeric,
         };
     }
 }
