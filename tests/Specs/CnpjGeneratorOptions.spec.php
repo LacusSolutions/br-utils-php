@@ -7,7 +7,6 @@ use Lacus\BrUtils\Cnpj\Enums\CnpjType;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionPrefixInvalidException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionsTypeError;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionTypeInvalidException;
-use Throwable;
 
 describe('CnpjGeneratorOptions', function () {
     $defaultParameters = [
