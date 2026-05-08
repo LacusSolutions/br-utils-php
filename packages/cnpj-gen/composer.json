@@ -37,7 +37,7 @@
     ],
     "lint:format": "php-cs-fixer fix --config=.php-cs-fixer.config.php",
     "lint:check": "phpstan analyse --configuration=.php-stan.config.neon",
-    "test": "pest --configuration=.pest.config.xml",
+    "test": "pest --parallel --configuration=.pest.config.xml",
     "test:watch": "@test --watch",
     "test:cov": "@test --coverage-html coverage"
   },
