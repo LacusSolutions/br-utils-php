@@ -72,11 +72,11 @@ class CnpjCheckDigits
     public function __get(string $name): string
     {
         return match ($name) {
-            'first' => $this->getFirst(),
+            'first'  => $this->getFirst(),
             'second' => $this->getSecond(),
-            'both' => $this->getBoth(),
-            'cnpj' => $this->getCnpj(),
-            default => throw new InvalidArgumentException("Unknown property: {$name}"),
+            'both'   => $this->getBoth(),
+            'cnpj'   => $this->getCnpj(),
+            default  => throw new InvalidArgumentException("Unknown property: {$name}"),
         };
     }
 
