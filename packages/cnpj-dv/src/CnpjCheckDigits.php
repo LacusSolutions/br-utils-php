@@ -48,6 +48,8 @@ class CnpjCheckDigits
     private string $cnpjBase;
     private ?int $cachedFirstDigit = null;
     private ?int $cachedSecondDigit = null;
+    private ?string $cachedBothDigits = null;
+    private ?string $cachedWholeCnpj = null;
 
     /**
      * Creates a calculator for the given CNPJ base (12 to 14 characters).
@@ -124,7 +126,11 @@ class CnpjCheckDigits
      */
     private function getBoth(): string
     {
-        return $this->getFirst() . $this->getSecond();
+        if ($this->cachedBothDigits === null) {
+            $this->cachedBothDigits = $this->getFirst() . $this->getSecond();
+        }
+
+        return $this->cachedBothDigits;
     }
 
     /**
@@ -132,7 +138,11 @@ class CnpjCheckDigits
      */
     private function getCnpj(): string
     {
-        return implode('', $this->cnpjChars) . $this->getBoth();
+        if ($this->cachedWholeCnpj === null) {
+            $this->cachedWholeCnpj = $this->cnpjBase . $this->getBoth();
+        }
+
+        return $this->cachedWholeCnpj;
     }
 
     /**
