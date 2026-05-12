@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lacus\BrUtils\Cnpj\Exceptions;
 
 use Exception;
-use ReflectionClass;
 
 /**
  * Base exception for all `cnpj-dv` rules-related errors.
@@ -27,8 +26,13 @@ abstract class CnpjCheckDigitsException extends Exception
      */
     public function getName(): string
     {
-        $thisReflection = new ReflectionClass($this);
+        $className = static::class;
+        $lastBackslashIndex = strrpos($className, '\\');
 
-        return $thisReflection->getShortName();
+        if ($lastBackslashIndex === false) {
+            return $className;
+        }
+
+        return substr($className, $lastBackslashIndex + 1);
     }
 }
