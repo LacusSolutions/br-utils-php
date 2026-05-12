@@ -206,82 +206,100 @@ describe('CnpjCheckDigits', function () {
 
     describe('constructor', function () use ($repeatedDigitInputs, $repeatedLetterInputs) {
         describe('when given invalid input type', function () {
-            it('throws CnpjCheckDigitsInputTypeError for integer input', function () {
+            it('throws `CnpjCheckDigitsInputTypeError` for integer input', function () {
                 /** @var mixed $invalid */
                 $invalid = 12345678901;
 
-                expect(fn () => new CnpjCheckDigits($invalid))->toThrow(CnpjCheckDigitsInputTypeError::class);
+                expect(function () use ($invalid) {
+                    new CnpjCheckDigits($invalid);
+                })->toThrow(CnpjCheckDigitsInputTypeError::class);
             });
 
-            it('throws CnpjCheckDigitsInputTypeError for null input', function () {
+            it('throws `CnpjCheckDigitsInputTypeError` for null input', function () {
                 /** @var mixed $invalid */
                 $invalid = null;
 
-                expect(fn () => new CnpjCheckDigits($invalid))->toThrow(CnpjCheckDigitsInputTypeError::class);
+                expect(function () use ($invalid) {
+                    new CnpjCheckDigits($invalid);
+                })->toThrow(CnpjCheckDigitsInputTypeError::class);
             });
 
-            it('throws CnpjCheckDigitsInputTypeError for object input', function () {
+            it('throws `CnpjCheckDigitsInputTypeError` for object input', function () {
                 /** @var mixed $invalid */
                 $invalid = (object) ['cnpj' => '12345678901'];
 
-                expect(fn () => new CnpjCheckDigits($invalid))->toThrow(CnpjCheckDigitsInputTypeError::class);
+                expect(function () use ($invalid) {
+                    new CnpjCheckDigits($invalid);
+                })->toThrow(CnpjCheckDigitsInputTypeError::class);
             });
 
-            it('throws CnpjCheckDigitsInputTypeError for array of numbers', function () {
+            it('throws `CnpjCheckDigitsInputTypeError` for array of numbers', function () {
                 /** @var mixed $invalid */
                 $invalid = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-                expect(fn () => new CnpjCheckDigits($invalid))->toThrow(CnpjCheckDigitsInputTypeError::class);
+                expect(function () use ($invalid) {
+                    new CnpjCheckDigits($invalid);
+                })->toThrow(CnpjCheckDigitsInputTypeError::class);
             });
 
-            it('throws CnpjCheckDigitsInputTypeError for mixed array types', function () {
+            it('throws `CnpjCheckDigitsInputTypeError` for mixed array types', function () {
                 /** @var mixed $invalid */
                 $invalid = [1, '2', 3, '4', 5];
 
-                expect(fn () => new CnpjCheckDigits($invalid))->toThrow(CnpjCheckDigitsInputTypeError::class);
+                expect(function () use ($invalid) {
+                    new CnpjCheckDigits($invalid);
+                })->toThrow(CnpjCheckDigitsInputTypeError::class);
             });
         });
 
         describe('when given invalid input length', function () {
-            it('throws CnpjCheckDigitsInputLengthException for empty string', function () {
+            it('throws `CnpjCheckDigitsInputLengthException` for empty string', function () {
                 /** @var mixed $invalid */
                 $invalid = '';
 
-                expect(fn () => new CnpjCheckDigits($invalid))->toThrow(CnpjCheckDigitsInputLengthException::class);
+                expect(function () use ($invalid) {
+                    new CnpjCheckDigits($invalid);
+                })->toThrow(CnpjCheckDigitsInputLengthException::class);
             });
 
-            it('throws CnpjCheckDigitsInputLengthException for empty array', function () {
+            it('throws `CnpjCheckDigitsInputLengthException` for empty array', function () {
                 expect(fn () => new CnpjCheckDigits([]))->toThrow(CnpjCheckDigitsInputLengthException::class);
             });
 
-            it('throws CnpjCheckDigitsInputLengthException for string with 11 alphanumeric characters', function () {
+            it('throws `CnpjCheckDigitsInputLengthException` for string with 11 alphanumeric characters', function () {
                 /** @var mixed $invalid */
                 $invalid = '12345678910';
 
-                expect(fn () => new CnpjCheckDigits($invalid))->toThrow(CnpjCheckDigitsInputLengthException::class);
+                expect(function () use ($invalid) {
+                    new CnpjCheckDigits($invalid);
+                })->toThrow(CnpjCheckDigitsInputLengthException::class);
             });
 
-            it('throws CnpjCheckDigitsInputLengthException for string with 15 alphanumeric characters', function () {
+            it('throws `CnpjCheckDigitsInputLengthException` for string with 15 alphanumeric characters', function () {
                 /** @var mixed $invalid */
                 $invalid = '123456789101112';
 
-                expect(fn () => new CnpjCheckDigits($invalid))->toThrow(CnpjCheckDigitsInputLengthException::class);
+                expect(function () use ($invalid) {
+                    new CnpjCheckDigits($invalid);
+                })->toThrow(CnpjCheckDigitsInputLengthException::class);
             });
 
-            it('throws CnpjCheckDigitsInputLengthException for string array with 11 characters', function () {
+            it('throws `CnpjCheckDigitsInputLengthException` for string array with 11 characters', function () {
                 /** @var mixed $invalid */
                 $invalid = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
-                expect(fn () => new CnpjCheckDigits($invalid))->toThrow(CnpjCheckDigitsInputLengthException::class);
+                expect(function () use ($invalid) {
+                    new CnpjCheckDigits($invalid);
+                })->toThrow(CnpjCheckDigitsInputLengthException::class);
             });
 
-            it('throws CnpjCheckDigitsInputLengthException for string array with 15 characters', function () {
+            it('throws `CnpjCheckDigitsInputLengthException` for string array with 15 characters', function () {
                 /** @var mixed $invalid */
-                $invalid = [
-                    '0', '0', '1', '1', '1', '2', '2', '2', '0', '0', '0', '4', '5', '6', '7',
-                ];
+                $invalid = ['0', '0', '1', '1', '1', '2', '2', '2', '0', '0', '0', '4', '5', '6', '7'];
 
-                expect(fn () => new CnpjCheckDigits($invalid))->toThrow(CnpjCheckDigitsInputLengthException::class);
+                expect(function () use ($invalid) {
+                    new CnpjCheckDigits($invalid);
+                })->toThrow(CnpjCheckDigitsInputLengthException::class);
             });
         });
 
@@ -294,20 +312,21 @@ describe('CnpjCheckDigits', function () {
                 ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'],
             ];
 
-            it('throws CnpjCheckDigitsInputInvalidException for base ID', function (string|array $input) {
-                expect(fn () => new CnpjCheckDigits($input))->toThrow(CnpjCheckDigitsInputInvalidException::class);
+            foreach ($invalidBaseIdInputs as $input) {
+                $inputDescription = is_array($input) ? '['.implode(', ', $input).']' : $input;
 
-                try {
-                    new CnpjCheckDigits($input);
-                } catch (CnpjCheckDigitsInputInvalidException $e) {
-                    expect($e->getMessage())->toMatch('/base id/i');
-                }
-            })->with(
-                array_map(
-                    static fn (string|array $item): array => [$item],
-                    $invalidBaseIdInputs,
-                )
-            );
+                it("throws `CnpjCheckDigitsInputInvalidException` for base ID `{$inputDescription}`", function () use ($input) {
+                    expect(function () use ($input) {
+                        new CnpjCheckDigits($input);
+                    })->toThrow(CnpjCheckDigitsInputInvalidException::class);
+
+                    try {
+                        new CnpjCheckDigits($input);
+                    } catch (CnpjCheckDigitsInputInvalidException $e) {
+                        expect($e->getMessage())->toMatch('/base id/i');
+                    }
+                });
+            }
         });
 
         describe('when given invalid CNPJ branch ID', function () {
@@ -319,43 +338,54 @@ describe('CnpjCheckDigits', function () {
                 ['1', '2', '3', '4', '5', '6', '7', '8', '0', '0', '0', '0'],
             ];
 
-            it('throws CnpjCheckDigitsInputInvalidException for branch ID', function (string|array $input) {
-                expect(fn () => new CnpjCheckDigits($input))->toThrow(CnpjCheckDigitsInputInvalidException::class);
+            foreach ($invalidBranchIdInputs as $input) {
+                $inputDescription = is_array($input) ? '['.implode(', ', $input).']' : $input;
 
-                try {
-                    new CnpjCheckDigits($input);
-                } catch (CnpjCheckDigitsInputInvalidException $e) {
-                    expect($e->getMessage())->toMatch('/branch id/i');
-                }
-            })->with(
-                array_map(
-                    static fn (string|array $item): array => [$item],
-                    $invalidBranchIdInputs,
-                )
-            );
+                it("throws `CnpjCheckDigitsInputInvalidException` for branch ID `{$inputDescription}`", function () use ($input) {
+                    expect(function () use ($input) {
+                        new CnpjCheckDigits($input);
+                    })->toThrow(CnpjCheckDigitsInputInvalidException::class);
+
+                    try {
+                        new CnpjCheckDigits($input);
+                    } catch (CnpjCheckDigitsInputInvalidException $e) {
+                        expect($e->getMessage())->toMatch('/branch id/i');
+                    }
+                });
+            }
         });
 
         describe('when given repeated numeric characters', function () use ($repeatedDigitInputs) {
-            it('throws CnpjCheckDigitsInputInvalidException for repeated-digit input', function (string|array $input) {
-                expect(fn () => new CnpjCheckDigits($input))->toThrow(CnpjCheckDigitsInputInvalidException::class);
+            foreach ($repeatedDigitInputs as $input) {
+                $inputDescription = is_array($input) ? '['.implode(', ', $input).']' : $input;
 
-                try {
-                    new CnpjCheckDigits($input);
-                } catch (CnpjCheckDigitsInputInvalidException $e) {
-                    expect($e->getMessage())->toMatch('/repeated digits/i');
-                }
-            })->with(array_map(static fn (string|array $item): array => [$item], $repeatedDigitInputs));
+                it("throws `CnpjCheckDigitsInputInvalidException` for repeated-digit input `{$inputDescription}`", function () use ($input) {
+                    expect(function () use ($input) {
+                        new CnpjCheckDigits($input);
+                    })->toThrow(CnpjCheckDigitsInputInvalidException::class);
+
+                    try {
+                        new CnpjCheckDigits($input);
+                    } catch (CnpjCheckDigitsInputInvalidException $e) {
+                        expect($e->getMessage())->toMatch('/repeated digits/i');
+                    }
+                });
+            }
         });
 
         describe('when given repeated non-numeric characters', function () use ($repeatedLetterInputs) {
-            it('does not throw error for repeated-letter input', function (string|array $input) {
-                $cnpjCheckDigits = new CnpjCheckDigits($input);
-                $stringifiedInput = is_array($input) ? implode('', $input) : $input;
+            foreach ($repeatedLetterInputs as $input) {
+                $inputDescription = is_array($input) ? '['.implode(', ', $input).']' : $input;
 
-                expect($cnpjCheckDigits)->toBeInstanceOf(CnpjCheckDigits::class)
-                    ->and(strlen($cnpjCheckDigits->cnpj))->toBe(14)
-                    ->and(str_starts_with($cnpjCheckDigits->cnpj, $stringifiedInput))->toBeTrue();
-            })->with(array_map(static fn (string|array $item): array => [$item], $repeatedLetterInputs));
+                it("does not throw error for repeated-letter input `{$inputDescription}`", function () use ($input) {
+                    $cnpjCheckDigits = new CnpjCheckDigits($input);
+                    $stringifiedInput = is_array($input) ? implode('', $input) : $input;
+
+                    expect($cnpjCheckDigits)->toBeInstanceOf(CnpjCheckDigits::class);
+                    expect(strlen($cnpjCheckDigits->cnpj))->toBe(14);
+                    expect(str_starts_with($cnpjCheckDigits->cnpj, $stringifiedInput))->toBeTrue();
+                });
+            }
         });
     });
 
@@ -367,19 +397,23 @@ describe('CnpjCheckDigits', function () {
         }
 
         describe('when input is a string', function () use ($firstDigitTestCases) {
-            it('returns `$expected` as first digit for `$input`', function (string $input, string $expected) {
-                $cnpjCheckDigits = new CnpjCheckDigits($input);
+            foreach ($firstDigitTestCases as [$input, $expected]) {
+                it("returns `{$expected}` as first digit for `{$input}`", function () use ($input, $expected) {
+                    $cnpjCheckDigits = new CnpjCheckDigits($input);
 
-                expect($cnpjCheckDigits->first)->toBe($expected);
-            })->with($firstDigitTestCases);
+                    expect($cnpjCheckDigits->first)->toBe($expected);
+                });
+            }
         });
 
         describe('when input is an array of strings', function () use ($firstDigitTestCases) {
-            it('returns `$expected` as first digit for `$input`', function (string $input, string $expected) {
-                $cnpjCheckDigits = new CnpjCheckDigits(str_split($input, 1));
+            foreach ($firstDigitTestCases as [$input, $expected]) {
+                it("returns `{$expected}` as first digit for `{$input}`", function () use ($input, $expected) {
+                    $cnpjCheckDigits = new CnpjCheckDigits(str_split($input, 1));
 
-                expect($cnpjCheckDigits->first)->toBe($expected);
-            })->with($firstDigitTestCases);
+                    expect($cnpjCheckDigits->first)->toBe($expected);
+                });
+            }
         });
 
         describe('when accessing digits multiple times', function () {
@@ -406,19 +440,23 @@ describe('CnpjCheckDigits', function () {
         }
 
         describe('when input is a string', function () use ($secondDigitTestCases) {
-            it('returns `$expected` as second digit for `$input`', function (string $input, string $expected) {
-                $cnpjCheckDigits = new CnpjCheckDigits($input);
+            foreach ($secondDigitTestCases as [$input, $expected]) {
+                it("returns `{$expected}` as second digit for `{$input}`", function () use ($input, $expected) {
+                    $cnpjCheckDigits = new CnpjCheckDigits($input);
 
-                expect($cnpjCheckDigits->second)->toBe($expected);
-            })->with($secondDigitTestCases);
+                    expect($cnpjCheckDigits->second)->toBe($expected);
+                });
+            }
         });
 
         describe('when input is an array of strings', function () use ($secondDigitTestCases) {
-            it('returns `$expected` as second digit for `$input`', function (string $input, string $expected) {
-                $cnpjCheckDigits = new CnpjCheckDigits(str_split($input, 1));
+            foreach ($secondDigitTestCases as [$input, $expected]) {
+                it("returns `{$expected}` as second digit for `{$input}`", function () use ($input, $expected) {
+                    $cnpjCheckDigits = new CnpjCheckDigits(str_split($input, 1));
 
-                expect($cnpjCheckDigits->second)->toBe($expected);
-            })->with($secondDigitTestCases);
+                    expect($cnpjCheckDigits->second)->toBe($expected);
+                });
+            }
         });
 
         describe('when accessing digits multiple times', function () {
@@ -445,19 +483,23 @@ describe('CnpjCheckDigits', function () {
         }
 
         describe('when input is a string', function () use ($bothDigitsTestCases) {
-            it('returns `$expected` as check digits for `$input`', function (string $input, string $expected) {
-                $cnpjCheckDigits = new CnpjCheckDigits($input);
+            foreach ($bothDigitsTestCases as [$input, $expected]) {
+                it("returns `{$expected}` as check digits for `{$input}`", function () use ($input, $expected) {
+                    $cnpjCheckDigits = new CnpjCheckDigits($input);
 
-                expect($cnpjCheckDigits->both)->toBe($expected);
-            })->with($bothDigitsTestCases);
+                    expect($cnpjCheckDigits->both)->toBe($expected);
+                });
+            }
         });
 
         describe('when input is an array of strings', function () use ($bothDigitsTestCases) {
-            it('returns `$expected` as check digits for `$input`', function (string $input, string $expected) {
-                $cnpjCheckDigits = new CnpjCheckDigits(str_split($input, 1));
+            foreach ($bothDigitsTestCases as [$input, $expected]) {
+                it("returns `{$expected}` as check digits for `{$input}`", function () use ($input, $expected) {
+                    $cnpjCheckDigits = new CnpjCheckDigits(str_split($input, 1));
 
-                expect($cnpjCheckDigits->both)->toBe($expected);
-            })->with($bothDigitsTestCases);
+                    expect($cnpjCheckDigits->both)->toBe($expected);
+                });
+            }
         });
     });
 
@@ -487,11 +529,13 @@ describe('CnpjCheckDigits', function () {
         });
 
         describe('when validating all test cases', function () use ($testCases) {
-            it('returns `$expected` for `$input`', function (string $input, string $expected) {
-                $cnpjCheckDigits = new CnpjCheckDigits($input);
+            foreach ($testCases as [$input, $expected]) {
+                it("returns `{$expected}` for `{$input}`", function () use ($input, $expected) {
+                    $cnpjCheckDigits = new CnpjCheckDigits($input);
 
-                expect($cnpjCheckDigits->cnpj)->toBe($expected);
-            })->with($testCases);
+                    expect($cnpjCheckDigits->cnpj)->toBe($expected);
+                });
+            }
         });
     });
 

@@ -18,13 +18,13 @@ describe('CnpjCheckDigitsTypeError', function () {
     }
 
     describe('when instantiated through a subclass', function () {
-        it('is an instance of TypeError', function () {
+        it('is an instance of `TypeError`', function () {
             $error = new TestTypeError(123, 'number', 'string', 'some error');
 
             expect($error)->toBeInstanceOf(TypeError::class);
         });
 
-        it('is an instance of CnpjCheckDigitsTypeError', function () {
+        it('is an instance of `CnpjCheckDigitsTypeError`', function () {
             $error = new TestTypeError(123, 'number', 'string', 'some error');
 
             expect($error)->toBeInstanceOf(CnpjCheckDigitsTypeError::class);
@@ -64,13 +64,13 @@ describe('CnpjCheckDigitsTypeError', function () {
 
 describe('CnpjCheckDigitsInputTypeError', function () {
     describe('when instantiated', function () {
-        it('is an instance of TypeError', function () {
+        it('is an instance of `TypeError`', function () {
             $error = new CnpjCheckDigitsInputTypeError(123, 'string');
 
             expect($error)->toBeInstanceOf(TypeError::class);
         });
 
-        it('is an instance of CnpjCheckDigitsTypeError', function () {
+        it('is an instance of `CnpjCheckDigitsTypeError`', function () {
             $error = new CnpjCheckDigitsInputTypeError(123, 'string');
 
             expect($error)->toBeInstanceOf(CnpjCheckDigitsTypeError::class);
@@ -122,13 +122,13 @@ describe('CnpjCheckDigitsException', function () {
     }
 
     describe('when instantiated through a subclass', function () {
-        it('is an instance of Exception', function () {
+        it('is an instance of `Exception`', function () {
             $exception = new TestException('some error');
 
             expect($exception)->toBeInstanceOf(Exception::class);
         });
 
-        it('is an instance of CnpjCheckDigitsException', function () {
+        it('is an instance of `CnpjCheckDigitsException`', function () {
             $exception = new TestException('some error');
 
             expect($exception)->toBeInstanceOf(CnpjCheckDigitsException::class);
@@ -150,13 +150,13 @@ describe('CnpjCheckDigitsException', function () {
 
 describe('CnpjCheckDigitsInputLengthException', function () {
     describe('when instantiated', function () {
-        it('is an instance of Exception', function () {
+        it('is an instance of `Exception`', function () {
             $exception = new CnpjCheckDigitsInputLengthException('1.2.3.4.5', '12345', 12, 14);
 
             expect($exception)->toBeInstanceOf(Exception::class);
         });
 
-        it('is an instance of CnpjCheckDigitsException', function () {
+        it('is an instance of `CnpjCheckDigitsException`', function () {
             $exception = new CnpjCheckDigitsInputLengthException('1.2.3.4.5', '12345', 12, 14);
 
             expect($exception)->toBeInstanceOf(CnpjCheckDigitsException::class);
@@ -213,13 +213,13 @@ describe('CnpjCheckDigitsInputLengthException', function () {
 
 describe('CnpjCheckDigitsInputInvalidException', function () {
     describe('when instantiated', function () {
-        it('is an instance of Exception', function () {
+        it('is an instance of `Exception`', function () {
             $exception = new CnpjCheckDigitsInputInvalidException('1.2.3.4.5', 'repeated digits');
 
             expect($exception)->toBeInstanceOf(Exception::class);
         });
 
-        it('is an instance of CnpjCheckDigitsException', function () {
+        it('is an instance of `CnpjCheckDigitsException`', function () {
             $exception = new CnpjCheckDigitsInputInvalidException('1.2.3.4.5', 'repeated digits');
 
             expect($exception)->toBeInstanceOf(CnpjCheckDigitsException::class);
