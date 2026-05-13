@@ -23,32 +23,47 @@ const DELTA_FACTOR = 48; // ord('0')
  * length, base ID, branch ID and rejects repeated-character sequences.
  *
  * @property-read string $first  First check digit (13th character of the full CNPJ).
- * @property-read string $second Second check digit (14th character of the full CNPJ).
- * @property-read string $both   Both check digits concatenated (13th and 14th characters).
- * @property-read string $cnpj   Full 14-character CNPJ (base 12 characters concatenated with the 2 check digits).
+ * @property-read string $second Second check digit (14th character of the full
+ *     CNPJ).
+ * @property-read string $both   Both check digits concatenated (13th and 14th
+ *     characters).
+ * @property-read string $cnpj   Full 14-character CNPJ (base 12 characters
+ *     concatenated with the 2 check digits).
  */
 class CnpjCheckDigits
 {
-    /** Minimum number of characters required for the CNPJ check digits calculation. */
+    /**
+     * Minimum number of characters required for the CNPJ check digits
+     * calculation.
+     */
     public const CNPJ_MIN_LENGTH = CNPJ_MIN_LENGTH;
 
-    /** Maximum number of characters accepted as input for the CNPJ check digits calculation. */
+    /**
+     * Maximum number of characters accepted as input for the CNPJ check digits
+     * calculation.
+     */
     public const CNPJ_MAX_LENGTH = CNPJ_MAX_LENGTH;
 
-    /** @var list<string> */
-    private array $cnpjChars;
+    /** Normalized 12-character base (uppercase alphanumeric). */
+    private string $cnpjBase;
     private ?int $cachedFirstDigit = null;
     private ?int $cachedSecondDigit = null;
+    private ?string $cachedBothDigits = null;
+    private ?string $cachedWholeCnpj = null;
 
     /**
      * Creates a calculator for the given CNPJ base (12 to 14 characters).
      *
-     * @param string|list<string> $cnpjInput Alphanumeric CNPJ with or without formatting, or array of strings
+     * @param string|list<string> $cnpjInput Alphanumeric CNPJ with or without
+     *     formatting, or array of strings
      *
-     * @throws CnpjCheckDigitsInputTypeError When input is not a string or string[].
-     * @throws CnpjCheckDigitsInputLengthException When character count is not between 12 and 14.
-     * @throws CnpjCheckDigitsInputInvalidException When base ID is all zero (`00.000.000`), branch ID is all zero
-     *   (`0000`) or all digits are the same (repeated digits, e.g. `77.777.777/7777-...`).
+     * @throws CnpjCheckDigitsInputTypeError When input is not a string or
+     *     string[].
+     * @throws CnpjCheckDigitsInputLengthException When character count is not
+     *     between 12 and 14.
+     * @throws CnpjCheckDigitsInputInvalidException When base ID is all zero
+     *     (`00.000.000`), branch ID is all zero (`0000`) or all digits are the
+     *     same (repeated digits, e.g. `77.777.777/7777-...`).
      */
     public function __construct(mixed $cnpjInput)
     {
@@ -59,7 +74,7 @@ class CnpjCheckDigits
         $this->validateBranchId($parsed, $cnpjInput);
         $this->validateNonRepeatedDigits($parsed, $cnpjInput);
 
-        $this->cnpjChars = array_slice($parsed, 0, self::CNPJ_MIN_LENGTH);
+        $this->cnpjBase = substr($parsed, 0, self::CNPJ_MIN_LENGTH);
     }
 
     /**
@@ -72,11 +87,11 @@ class CnpjCheckDigits
     public function __get(string $name): string
     {
         return match ($name) {
-            'first' => $this->getFirst(),
+            'first'  => $this->getFirst(),
             'second' => $this->getSecond(),
-            'both' => $this->getBoth(),
-            'cnpj' => $this->getCnpj(),
-            default => throw new InvalidArgumentException("Unknown property: {$name}"),
+            'both'   => $this->getBoth(),
+            'cnpj'   => $this->getCnpj(),
+            default  => throw new InvalidArgumentException("Unknown property: {$name}"),
         };
     }
 
@@ -86,8 +101,8 @@ class CnpjCheckDigits
     private function getFirst(): string
     {
         if ($this->cachedFirstDigit === null) {
-            $baseCharsSequence = [...$this->cnpjChars];
-            $this->cachedFirstDigit = $this->calculate($baseCharsSequence);
+            $sequence = str_split($this->cnpjBase, 1);
+            $this->cachedFirstDigit = $this->calculate($sequence);
         }
 
         return (string) $this->cachedFirstDigit;
@@ -99,7 +114,7 @@ class CnpjCheckDigits
     private function getSecond(): string
     {
         if ($this->cachedSecondDigit === null) {
-            $sequence = [...$this->cnpjChars, $this->getFirst()];
+            $sequence = [...str_split($this->cnpjBase, 1), $this->getFirst()];
             $this->cachedSecondDigit = $this->calculate($sequence);
         }
 
@@ -111,7 +126,11 @@ class CnpjCheckDigits
      */
     private function getBoth(): string
     {
-        return $this->getFirst() . $this->getSecond();
+        if ($this->cachedBothDigits === null) {
+            $this->cachedBothDigits = $this->getFirst() . $this->getSecond();
+        }
+
+        return $this->cachedBothDigits;
     }
 
     /**
@@ -119,18 +138,23 @@ class CnpjCheckDigits
      */
     private function getCnpj(): string
     {
-        return implode('', $this->cnpjChars) . $this->getBoth();
+        if ($this->cachedWholeCnpj === null) {
+            $this->cachedWholeCnpj = $this->cnpjBase . $this->getBoth();
+        }
+
+        return $this->cachedWholeCnpj;
     }
 
     /**
-     * Parses a string or an array of strings into an array of alphanumeric characters.
+     * Parses a string or an array of strings into a normalized uppercase
+     * alphanumeric string.
      *
      * @param string|list<string> $cnpjInput
-     * @return list<string>
      *
-     * @throws CnpjCheckDigitsInputTypeError When input is not a string or string[].
+     * @throws CnpjCheckDigitsInputTypeError When input is not a string or
+     *     string[].
      */
-    private function parseInput(mixed $cnpjInput): array
+    private function parseInput(mixed $cnpjInput): string
     {
         if (is_string($cnpjInput)) {
             return $this->parseStringInput($cnpjInput);
@@ -144,56 +168,56 @@ class CnpjCheckDigits
     }
 
     /**
-     * Parses a string into an array of alphanumeric characters.
-     *
-     * @return list<string>
+     * Strips non-alphanumeric characters and uppercases the remaining ones.
      */
-    private function parseStringInput(string $cnpjString): array
+    private function parseStringInput(string $cnpjString): string
     {
-        $alphanumericOnly = preg_replace('/[^0-9A-Z]/i', '', $cnpjString) ?? '';
-        $alphanumericUpper = strtoupper($alphanumericOnly);
-        $alphanumericArray = str_split($alphanumericUpper, 1);
+        $alphanumericUpper = strtoupper($cnpjString);
+        $alphanumericOnly = preg_replace('/[^0-9A-Z]/i', '', $alphanumericUpper);
 
-        return $alphanumericArray;
+        return $alphanumericOnly ?? '';
     }
 
     /**
-     * Parses an array into an array of alphanumeric characters.
+     * Concatenates an array of strings (validating element types) and
+     * normalizes the result via {@see parseStringInput()}.
      *
      * @param list<string> $cnpjArray
-     * @return list<string>
      *
      * @throws CnpjCheckDigitsInputTypeError When input is not a string or string[].
      */
-    private function parseArrayInput(array $cnpjArray): array
+    private function parseArrayInput(array $cnpjArray): string
     {
+        $buffer = '';
+
         if ($cnpjArray === []) {
-            return [];
+            return $buffer;
         }
 
         foreach ($cnpjArray as $item) {
             if (!is_string($item)) {
                 throw new CnpjCheckDigitsInputTypeError($cnpjArray, 'string or string[]');
             }
+
+            $buffer .= $item;
         }
 
-        return $this->parseStringInput(implode('', $cnpjArray));
+        return $this->parseStringInput($buffer);
     }
 
     /**
      * Ensures character count is between 12 and 14.
      *
-     * @param list<string> $cnpjChars
      * @param string|list<string> $originalInput
      */
-    private function validateLength(array $cnpjChars, string|array $originalInput): void
+    private function validateLength(string $parsed, string|array $originalInput): void
     {
-        $count = count($cnpjChars);
+        $length = strlen($parsed);
 
-        if ($count < self::CNPJ_MIN_LENGTH || $count > self::CNPJ_MAX_LENGTH) {
+        if ($length < self::CNPJ_MIN_LENGTH || $length > self::CNPJ_MAX_LENGTH) {
             throw new CnpjCheckDigitsInputLengthException(
                 $originalInput,
-                implode('', $cnpjChars),
+                $parsed,
                 self::CNPJ_MIN_LENGTH,
                 self::CNPJ_MAX_LENGTH,
             );
@@ -201,18 +225,16 @@ class CnpjCheckDigits
     }
 
     /**
-     * @param list<string> $cnpjIntArray
+     * Ensures the base ID is not all zeros (`00.000.000`).
+     *
      * @param string|list<string> $originalInput
      *
      * @throws CnpjCheckDigitsInputInvalidException When base ID is all zeros.
-     *   (`00.000.000`).
+     *     (`00.000.000`).
      */
-    private function validateBaseId(array $cnpjIntArray, string|array $originalInput): void
+    private function validateBaseId(string $parsed, string|array $originalInput): void
     {
-        $cnpjBaseIdArray = array_slice($cnpjIntArray, 0, CNPJ_BASE_ID_LAST_INDEX + 1);
-        $cnpjBaseIdString = implode('', $cnpjBaseIdArray);
-
-        if ($cnpjBaseIdString === CNPJ_INVALID_BASE_ID) {
+        if (str_starts_with($parsed, CNPJ_INVALID_BASE_ID)) {
             throw new CnpjCheckDigitsInputInvalidException(
                 $originalInput,
                 'Base ID "'.CNPJ_INVALID_BASE_ID.'" is not eligible.',
@@ -221,18 +243,18 @@ class CnpjCheckDigits
     }
 
     /**
-     * @param list<string> $cnpjIntArray
+     * Ensures the branch ID is not all zeros (`0000`).
+     *
      * @param string|list<string> $originalInput
      *
-     * @throws CnpjCheckDigitsInputInvalidException When branch ID is all zeros.
-     *   (`0000`).
+     * @throws CnpjCheckDigitsInputInvalidException When branch ID is all
+     *     zeros (`0000`).
      */
-    private function validateBranchId(array $cnpjIntArray, string|array $originalInput): void
+    private function validateBranchId(string $parsed, string|array $originalInput): void
     {
-        $cnpjBranchIdArray = array_slice($cnpjIntArray, CNPJ_BASE_ID_LENGTH, CNPJ_BRANCH_ID_LENGTH);
-        $cnpjBranchIdString = implode('', $cnpjBranchIdArray);
+        $cnpjBranchId = substr($parsed, CNPJ_BASE_ID_LENGTH, CNPJ_BRANCH_ID_LENGTH);
 
-        if ($cnpjBranchIdString === CNPJ_INVALID_BRANCH_ID) {
+        if ($cnpjBranchId === CNPJ_INVALID_BRANCH_ID) {
             throw new CnpjCheckDigitsInputInvalidException(
                 $originalInput,
                 'Branch ID "'.CNPJ_INVALID_BRANCH_ID.'" is not eligible.',
@@ -241,18 +263,19 @@ class CnpjCheckDigits
     }
 
     /**
-     * @param list<string> $cnpjIntArray
+     * Ensures the first 12 characters are not all the same digit.
+     *
      * @param string|list<string> $originalInput
      *
      * @throws CnpjCheckDigitsInputInvalidException When all digits are numeric
-     *   and the same (repeated digits, e.g. `77.777.777/7777-...`).
+     *     and the same (repeated digits, e.g. `77.777.777/7777-...`).
      */
-    private function validateNonRepeatedDigits(array $cnpjIntArray, string|array $originalInput): void
+    private function validateNonRepeatedDigits(string $parsed, string|array $originalInput): void
     {
-        $firstTwelve = array_slice($cnpjIntArray, 0, self::CNPJ_MIN_LENGTH);
-        $unique = array_unique($firstTwelve);
+        $cnpjBase = substr($parsed, 0, self::CNPJ_MIN_LENGTH);
+        $cnpjFirstDigit = $cnpjBase[0];
 
-        if (count($unique) === 1 && preg_match('/^\d$/', $firstTwelve[0] ?? '') === 1) {
+        if ($cnpjFirstDigit >= '0' && $cnpjFirstDigit <= '9' && $cnpjBase === str_repeat($cnpjFirstDigit, self::CNPJ_MIN_LENGTH)) {
             throw new CnpjCheckDigitsInputInvalidException(
                 $originalInput,
                 'Repeated digits are not considered valid.',
@@ -261,7 +284,8 @@ class CnpjCheckDigits
     }
 
     /**
-     * Computes a single check digit using the standard CNPJ modulo-11 algorithm.
+     * Computes a single check digit using the standard CNPJ modulo-11
+     * algorithm.
      *
      * @param list<string> $cnpjSequence
      */
