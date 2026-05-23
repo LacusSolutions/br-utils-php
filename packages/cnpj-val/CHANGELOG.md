@@ -30,6 +30,7 @@
 
 ### Improvements
 
+- **`cnpj_val()` reuse** — The instance of `CnpjValidator` is kept alive and reused across multiple calls.
 - **Dependency alignment**: now depends on `lacus/cnpj-dv` and `lacus/utils`.
 - **Autoload alignment**: package autoload namespace updated to the BR Utils standard.
 - **Docs refresh**: English and pt-BR READMEs updated with v2 API and usage guidance.

@@ -127,7 +127,7 @@ Os literais `'alphanumeric'` e `'numeric'` também são aceitos onde `type` é d
 
 ### Helper funcional
 
-`cnpj_val()` cria um novo `CnpjValidator` com os mesmos argumentos do construtor e chama `isValid($cnpjInput)` uma vez. Use argumentos nomeados para opções:
+`cnpj_val()` executa a validação em uma instância de `CnpjValidator` com os mesmos argumentos passados à função. Use argumentos nomeados para opções:
 
 ```php
 cnpj_val('98765432000198');                              // true
