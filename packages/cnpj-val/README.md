@@ -7,13 +7,27 @@
 [![Last Update Date](https://img.shields.io/github/last-commit/LacusSolutions/br-utils-php)](https://github.com/LacusSolutions/br-utils-php)
 [![Project License](https://img.shields.io/github/license/LacusSolutions/br-utils-php)](https://github.com/LacusSolutions/br-utils-php/blob/main/LICENSE)
 
-Utility function/class to validate CNPJ (Brazilian employer ID).
+> 🚀 **Full support for the [new alphanumeric CNPJ format](https://github.com/user-attachments/files/23937961/calculodvcnpjalfanaumerico.pdf).**
+
+> 🌎 [Acessar documentação em português](https://github.com/LacusSolutions/br-utils-php/blob/main/packages/cnpj-val/README.pt.md)
+
+A PHP utility to validate CNPJ (Brazilian Business Tax ID) values.
 
 ## PHP Support
 
-| ![PHP 8.1](https://img.shields.io/badge/PHP-8.1-777BB4?logo=php&logoColor=white) | ![PHP 8.2](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white) | ![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white) | ![PHP 8.4](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white) |
-|--- | --- | --- | --- |
+| ![PHP 8.2](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white) | ![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white) | ![PHP 8.4](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white) | ![PHP 8.5](https://img.shields.io/badge/PHP-8.5-777BB4?logo=php&logoColor=white) |
+| --- | --- | --- | --- |
 | Passing ✔ | Passing ✔ | Passing ✔ | Passing ✔ |
+
+## Features
+
+- ✅ **Alphanumeric CNPJ**: Validates 14-character CNPJ in numeric or alphanumeric format
+- ✅ **Flexible input**: Accepts `string` or `list<string>`; array elements are concatenated in order
+- ✅ **Format agnostic**: Strips non-alphanumeric characters (or non-digits when `type` is `numeric`) and optionally uppercases letters
+- ✅ **Optional case sensitivity**: When `caseSensitive` is `false`, lowercase letters are accepted for alphanumeric CNPJ
+- ✅ **Per-call override model**: Instance defaults can be overridden for one `isValid()` call only
+- ✅ **Typed option validation**: Dedicated `TypeError` / `Exception` subclasses for invalid option or input usage
+- ✅ **Dual API style**: Object-oriented (`CnpjValidator`) and functional (`cnpj_val()`)
 
 ## Installation
 
@@ -26,121 +40,166 @@ $ composer require lacus/cnpj-val
 
 ```php
 <?php
-// Using class-based resource
-use Lacus\CnpjVal\CnpjValidator;
 
-// Or using function-based one
-use function Lacus\CnpjVal\cnpj_val;
+use Lacus\BrUtils\Cnpj\CnpjValidator;
+use Lacus\BrUtils\Cnpj\CnpjValidatorOptions;
+use Lacus\BrUtils\Cnpj\Enums\CnpjValidationType;
+
+use function Lacus\BrUtils\Cnpj\cnpj_val;
+```
+
+## Quick start
+
+```php
+<?php
+
+use Lacus\BrUtils\Cnpj\CnpjValidator;
+
+$validator = new CnpjValidator();
+
+$validator->isValid('98765432000198');       // true
+$validator->isValid('98.765.432/0001-98');   // true
+$validator->isValid('98765432000199');       // false
+
+$validator->isValid('1QB5UKALPYFP59');                         // true (alphanumeric)
+$validator->isValid('1QB5UKALpyfp59');                         // false (default is case-sensitive)
+$validator->isValid('1QB5UKALpyfp59', caseSensitive: false);   // true
+
+$validator->isValid('96206256120884');                                      // true (numeric)
+$validator->isValid('1QB5UKALPYFP59', type: CnpjValidationType::Numeric);   // false
+```
+
+Functional helper:
+
+```php
+cnpj_val('98765432000198');      // true
+cnpj_val('98.765.432/0001-98');  // true
+cnpj_val('98765432000199');      // false
 ```
 
 ## Usage
 
-### Object-Oriented Usage
+The main entry points are the class `CnpjValidator`, the options value object `CnpjValidatorOptions`, the enum `CnpjValidationType`, and the helper `cnpj_val()`.
+
+### `CnpjValidator`
+
+- **`__construct`**: `new CnpjValidator(?CnpjValidatorOptions $options = null, $type = null, $caseSensitive = null)`
+
+  If `$options` is a `CnpjValidatorOptions` instance, that same instance is stored internally (mutations later affect future `isValid()` calls with no per-call override). Otherwise, a new options object is built from named values.
+
+- **`getOptions()`**: Returns the internal `CnpjValidatorOptions` instance.
+- **`isValid`**: `isValid(string|list<string> $cnpjInput, ?CnpjValidatorOptions $options = null, $type = null, $caseSensitive = null): bool`
+
+  Per-call options are merged over instance defaults only for that call. Returns `true` when the sanitized input has exactly **14** characters, the last two are digits, and check digits match (`CnpjCheckDigits` from **`lacus/cnpj-dv`**). Otherwise returns `false` (invalid CNPJ, wrong length, ineligible base/branch, etc.) without throwing.
+
+  If the input is not a `string` or a `list` of strings, **`CnpjValidatorInputTypeError`** is thrown.
 
 ```php
-$validator = new CnpjValidator();
-$cnpj = '98765432000198';
+<?php
 
-echo $validator->isValid($cnpj) ? 'Valid' : 'Invalid';  // returns 'Valid'
+use Lacus\BrUtils\Cnpj\CnpjValidator;
+use Lacus\BrUtils\Cnpj\Enums\CnpjValidationType;
 
-$cnpj = '98.765.432/0001-98';
-echo $validator->isValid($cnpj) ? 'Valid' : 'Invalid';  // returns 'Valid'
+$validator = new CnpjValidator(type: CnpjValidationType::Numeric);
 
-$cnpj = '98765432000199';
-echo $validator->isValid($cnpj) ? 'Valid' : 'Invalid';  // returns 'Invalid'
+$validator->isValid('98.765.432/0001-98');   // true
+$validator->isValid('1QB5UKALPYFP59');       // false (letters stripped → length ≠ 14)
+$validator->isValid('1QB5UKALpyfp59', type: CnpjValidationType::Alphanumeric, caseSensitive: false);  // true
 ```
 
-### Imperative programming
-
-The helper function `cnpj_val()` is just a functional abstraction. Internally it creates an instance of `CnpjValidator` and calls the `isValid()` method right away.
+Default options on the instance; per-call overrides:
 
 ```php
-$cnpj = '98765432000198';
+$validator = new CnpjValidator(caseSensitive: false);
 
-echo cnpj_val($cnpj) ? 'Valid' : 'Invalid';      // returns 'Valid'
-
-echo cnpj_val('98.765.432/0001-98') ? 'Valid' : 'Invalid';  // returns 'Valid'
-
-echo cnpj_val('98765432000199') ? 'Valid' : 'Invalid';      // returns 'Invalid'
+$validator->isValid('1qb5ukalpyfp59');                  // true (instance defaults)
+$validator->isValid('1qb5ukalpyfp59', caseSensitive: true);  // this call only: false
+$validator->isValid('1qb5ukalpyfp59');                  // true again
 ```
 
-### Validation Examples
+### `CnpjValidatorOptions`
+
+Holds validator settings (`type`, `caseSensitive`). Construct with named parameters and optional `overrides` (list of arrays and/or other `CnpjValidatorOptions` instances, merged in order). Exposes properties via magic `__get` / `__set`.
+
+- **`getAll()`**: Returns a shallow array snapshot of all options.
+- **`set(...)`**: Updates multiple fields at once; returns `$this`.
+
+### `CnpjValidationType`
+
+Backed enum for the `type` option:
+
+- `CnpjValidationType::Alphanumeric` (`"alphanumeric"`) — default; keeps `0`–`9` and `A`–`Z` after sanitization.
+- `CnpjValidationType::Numeric` (`"numeric"`) — legacy numeric-only CNPJ; strips everything except `0`–`9`.
+
+Helper methods:
+
+- `CnpjValidationType::values(): list<string>`
+- `toSequenceType(): SequenceType` (from **`lacus/utils`**)
+
+String literals `'alphanumeric'` and `'numeric'` are also accepted wherever `type` is documented.
+
+### Functional helper
+
+`cnpj_val()` runs the validation on a `CnpjValidator` instance with the same arguments passed to the function. Use named arguments for options:
 
 ```php
-// Valid CNPJ numbers
-cnpj_val('98765432000198')      // returns true
-cnpj_val('98.765.432/0001-98')  // returns true
-cnpj_val('03603568000195')      // returns true
-
-// Invalid CNPJ numbers
-cnpj_val('98765432000199')      // returns false
-cnpj_val('12345678901234')      // returns false
-cnpj_val('00000000000000')      // returns false
-cnpj_val('11111111111111')      // returns false
-cnpj_val('123')                 // returns false (too short)
-cnpj_val('')                    // returns false (empty)
+cnpj_val('98765432000198');                              // true
+cnpj_val('1QB5UKALpyfp59', caseSensitive: false);        // true
+cnpj_val('1QB5UKALPYFP59', type: CnpjValidationType::Numeric);  // false
 ```
 
-## Features
+To pass a full options object as the second argument: `cnpj_val($cnpj, new CnpjValidatorOptions(type: CnpjValidationType::Numeric))`.
 
-- ✅ **Format Agnostic**: Accepts CNPJ with or without formatting (dots, slashes, dashes)
-- ✅ **Strict Validation**: Validates both check digits according to Brazilian CNPJ algorithm
-- ✅ **Type Safety**: Built with PHP 8.1+ strict types
-- ✅ **Lightweight**: Minimal dependencies, only requires `lacus/cnpj-gen` for check digit calculation
-- ✅ **Dual API**: Both object-oriented and functional programming styles supported
+### Input formats
 
-## API Reference
+**String:** Raw digits and/or letters, or formatted CNPJ (e.g. `98.765.432/0001-98`, `1Q.B5U.KAL/PYFP-59`). Characters are stripped according to `type`; when `caseSensitive` is `false`, letters are uppercased before alphanumeric validation.
 
-### CnpjValidator Class
+**Array of strings:** Each element must be a string; values are concatenated (e.g. per digit, grouped segments, or mixed with punctuation). Non-string elements throw **`CnpjValidatorInputTypeError`**.
 
-#### `isValid(string $cnpjString): bool`
+### Validation options
 
-Validates a CNPJ string and returns `true` if valid, `false` otherwise.
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `type` | `CnpjValidationType\|'alphanumeric'\|'numeric'\|null` | `CnpjValidationType::Alphanumeric` | Character set after sanitization: alphanumeric (`0`–`9`, `A`–`Z`) or numeric-only (`0`–`9`) |
+| `caseSensitive` | `?bool` | `true` | When `false`, lowercase letters are uppercased before alphanumeric validation |
 
-**Parameters:**
-- `$cnpjString` (string): The CNPJ to validate (with or without formatting)
+Invalid CNPJ (wrong length after sanitization, invalid check digits, ineligible base/branch `00000000` / `0000`, repeated digits, non-numeric verifier digits) returns **`false`** — no exception is thrown for validation failure.
 
-**Returns:**
-- `bool`: `true` if the CNPJ is valid, `false` otherwise
+### Errors & exceptions
 
-### cnpj_val() Function
+This package uses **TypeError** for invalid option/input types and **Exception** for invalid option values. Validation failures return `false`.
 
-#### `cnpj_val(string $cnpjString): bool`
+- **Wrong input type** (not `string` or `list<string>`): **`CnpjValidatorInputTypeError`** — extends **`CnpjValidatorTypeError`** (extends PHP `TypeError`).
+- **Invalid option types when constructing or merging options**: **`CnpjValidatorOptionsTypeError`**.
+- **Invalid `type` value** (not `alphanumeric` / `numeric`): **`CnpjValidatorOptionTypeInvalidException`** — extends **`CnpjValidatorException`**.
 
-Functional wrapper around `CnpjValidator::isValid()`.
+```php
+<?php
 
-**Parameters:**
-- `$cnpjString` (string): The CNPJ to validate (with or without formatting)
+use Lacus\BrUtils\Cnpj\CnpjValidator;
+use Lacus\BrUtils\Cnpj\Exceptions\CnpjValidatorInputTypeError;
+use Lacus\BrUtils\Cnpj\Exceptions\CnpjValidatorOptionTypeInvalidException;
 
-**Returns:**
-- `bool`: `true` if the CNPJ is valid, `false` otherwise
+try {
+    (new CnpjValidator())->isValid(12345678000198);
+} catch (CnpjValidatorInputTypeError $e) {
+    echo $e->getMessage();
+}
 
-## Validation Algorithm
+try {
+    new CnpjValidator(type: 'invalid');
+} catch (CnpjValidatorOptionTypeInvalidException $e) {
+    echo $e->getMessage();
+}
+```
 
-The package validates CNPJ using the official Brazilian algorithm:
+### Other available resources
 
-1. **Length Check**: Ensures the CNPJ has exactly 14 digits
-2. **First Check Digit**: Calculates and validates the 13th digit
-3. **Second Check Digit**: Calculates and validates the 14th digit
-4. **Format Tolerance**: Automatically strips non-numeric characters before validation
-
-## Error Handling
-
-The validator is designed to be forgiving with input format but strict with validation:
-
-- Invalid formats (too short, too long) return `false`
-- Invalid check digits return `false`
-- Empty strings return `false`
-- Non-numeric strings (after stripping formatting) return `false`
-
-## Dependencies
-
-- **PHP**: >= 8.1
-- **lacus/cnpj-gen**: ^1.0 (for check digit calculation)
+- **`CnpjValidatorOptions::CNPJ_LENGTH`**: `14` — standard CNPJ length after sanitization.
 
 ## Contribution & Support
 
-We welcome contributions! Please see our [Contributing Guidelines](https://github.com/LacusSolutions/br-utils-php/blob/main/CONTRIBUTING.md) for details. But if you find this project helpful, please consider:
+We welcome contributions! Please see our [Contributing Guidelines](https://github.com/LacusSolutions/br-utils-php/blob/main/CONTRIBUTING.md) for details. If you find this project helpful, please consider:
 
 - ⭐ Starring the repository
 - 🤝 Contributing to the codebase
@@ -149,7 +208,7 @@ We welcome contributions! Please see our [Contributing Guidelines](https://githu
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/LacusSolutions/br-utils-php/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License — see the [LICENSE](https://github.com/LacusSolutions/br-utils-php/blob/main/LICENSE) file for details.
 
 ## Changelog
 
