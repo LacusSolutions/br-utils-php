@@ -1,7 +1,7 @@
 {
   "name": "lacus/cnpj-val",
   "type": "library",
-  "description": "Utility function to validate CNPJ (Brazilian employer ID)",
+  "description": "Utility to validate CNPJ (Brazilian Business Tax ID)",
   "license": "MIT",
   "authors": [
     {
