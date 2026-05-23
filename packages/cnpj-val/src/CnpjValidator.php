@@ -111,7 +111,12 @@ class CnpjValidator
             return false;
         }
 
-        if (preg_match('/\\D{2}$/', $sanitizedCnpj)) {
+        if (
+            $sanitizedCnpj[12] < '0'
+            || $sanitizedCnpj[12] > '9'
+            || $sanitizedCnpj[13] < '0'
+            || $sanitizedCnpj[13] > '9'
+        ) {
             return false;
         }
 
