@@ -107,7 +107,7 @@ class CnpjValidator
             $sanitizedCnpj = preg_replace('/[^0-9A-Z]/i', '', $sanitizedCnpj) ?? '';
         }
 
-        if (mb_strlen($sanitizedCnpj, 'UTF-8') !== CnpjValidatorOptions::CNPJ_LENGTH) {
+        if (strlen($sanitizedCnpj) !== CnpjValidatorOptions::CNPJ_LENGTH) {
             return false;
         }
 
