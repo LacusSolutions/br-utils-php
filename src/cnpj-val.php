@@ -32,11 +32,11 @@ function cnpj_val(
     $type = null,
     $caseSensitive = null,
 ): bool {
-    $validator = new CnpjValidator(
-        $options,
-        $type,
-        $caseSensitive,
-    );
+    static $defaultValidator = null;
 
-    return $validator->isValid($cnpjInput);
+    if (!$defaultValidator instanceof CnpjValidator) {
+        $defaultValidator = new CnpjValidator();
+    }
+
+    return $defaultValidator->isValid($cnpjInput, $options, $type, $caseSensitive);
 }
