@@ -54,7 +54,6 @@
   "require": {
     "php": "^8.2",
     "lacus/cnpj-dv": "^1.1",
-    "lacus/cnpj-gen": "^1.0",
     "lacus/utils": "^1.0"
   },
   "require-dev": {
