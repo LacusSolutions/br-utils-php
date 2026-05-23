@@ -36,12 +36,20 @@
     ],
     "lint:format": "php-cs-fixer fix --config=.php-cs-fixer.config.php",
     "lint:check": "phpstan analyse --configuration=.php-stan.config.neon",
-    "test": "phpunit",
-    "test:watch": "phpunit-watcher watch",
-    "test-coverage": "phpunit --coverage-html coverage"
+    "test": [
+      "pest --configuration=.pest.config.xml --group isolated-process-tests",
+      "pest --configuration=.pest.config.xml --exclude-group isolated-process-tests"
+    ],
+    "test:cov": [
+      "pest --configuration=.pest.config.xml --group isolated-process-tests",
+      "pest --configuration=.pest.config.xml --exclude-group isolated-process-tests --coverage-html coverage"
+    ]
   },
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
   },
   "require": {
     "php": ">=8.1",
@@ -49,9 +57,8 @@
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.94",
-    "phpstan/phpstan": "^2.1",
-    "phpunit/phpunit": "^10.5",
-    "spatie/phpunit-watcher": "~1.24"
+    "pestphp/pest": "^3.8",
+    "phpstan/phpstan": "^2.1"
   },
   "autoload": {
     "psr-4": {
