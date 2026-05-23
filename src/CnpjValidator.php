@@ -142,17 +142,17 @@ class CnpjValidator
         }
 
         if (is_array($cnpjInput)) {
-            $joined = '';
+            $parts = [];
 
             foreach ($cnpjInput as $item) {
                 if (!is_string($item)) {
                     throw new CnpjValidatorInputTypeError($cnpjInput, 'string or string[]');
                 }
 
-                $joined .= $item;
+                $parts[] = $item;
             }
 
-            return $joined;
+            return implode('', $parts);
         }
 
         throw new CnpjValidatorInputTypeError($cnpjInput, 'string or string[]');
