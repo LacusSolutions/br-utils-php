@@ -10,6 +10,7 @@ parameters:
       identifiers:
         - argument.type
         - assign.propertyType
+        - booleanNot.alwaysFalse
         - booleanNot.alwaysTrue
         - callable.nonCallable
         - method.alreadyNarrowedType
