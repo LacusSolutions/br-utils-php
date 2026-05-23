@@ -93,16 +93,7 @@ class CnpjValidator
         $caseSensitive = null,
     ): bool {
         $actualInput = $this->toStringInput($cnpjInput);
-        $actualOptions = new CnpjValidatorOptions(
-            ...$this->options->getAll(),
-            overrides: [
-                [
-                    'type' => $type,
-                    'caseSensitive' => $caseSensitive,
-                ],
-                $options ?? [],
-            ],
-        );
+        $actualOptions = $this->resolveOptions($options, $type, $caseSensitive);
 
         $sanitizedCnpj = $actualInput;
 
@@ -160,5 +151,36 @@ class CnpjValidator
         }
 
         throw new CnpjValidatorInputTypeError($cnpjInput, 'string or string[]');
+    }
+
+    /**
+     * Merges per-call options over instance defaults when any override is present.
+     *
+     * @param ?CnpjValidatorOptions $options
+     * @param ?(CnpjValidationType|'alphanumeric'|'numeric') $type
+     * @param ?bool $caseSensitive
+     *
+     * @throws CnpjValidatorOptionsTypeError If any option has an invalid type.
+     * @throws CnpjValidatorOptionTypeInvalidException If the `type` option is not one of the allowed values.
+     */
+    private function resolveOptions(
+        $options = null,
+        $type = null,
+        $caseSensitive = null,
+    ): CnpjValidatorOptions {
+        if ($options === null && $type === null && $caseSensitive === null) {
+            return $this->options;
+        }
+
+        return new CnpjValidatorOptions(
+            ...$this->options->getAll(),
+            overrides: [
+                [
+                    'type' => $type,
+                    'caseSensitive' => $caseSensitive,
+                ],
+                $options ?? [],
+            ],
+        );
     }
 }
