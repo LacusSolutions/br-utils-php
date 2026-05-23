@@ -140,7 +140,7 @@ String literals `'alphanumeric'` and `'numeric'` are also accepted wherever `typ
 
 ### Functional helper
 
-`cnpj_val()` run the validation on a `CnpjValidator` instance with the same arguments passed to the function. Use named arguments for options:
+`cnpj_val()` runs the validation on a `CnpjValidator` instance with the same arguments passed to the function. Use named arguments for options:
 
 ```php
 cnpj_val('98765432000198');                              // true
