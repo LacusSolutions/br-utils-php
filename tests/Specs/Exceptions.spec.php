@@ -112,13 +112,13 @@ describe('CnpjValidatorInputTypeError', function () {
 describe('CnpjValidatorOptionsTypeError', function () {
     describe('when instantiated', function () {
         it('is an instance of `TypeError`', function () {
-            $error = new CnpjValidatorOptionsTypeError('hidden', 123, 'boolean');
+            $error = new CnpjValidatorOptionsTypeError('type', 123, 'boolean');
 
             expect($error)->toBeInstanceOf(TypeError::class);
         });
 
         it('is an instance of `CnpjValidatorTypeError`', function () {
-            $error = new CnpjValidatorOptionsTypeError('hidden', 123, 'boolean');
+            $error = new CnpjValidatorOptionsTypeError('type', 123, 'boolean');
 
             expect($error)->toBeInstanceOf(CnpjValidatorTypeError::class);
         });
