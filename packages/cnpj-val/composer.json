@@ -62,7 +62,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\CnpjVal\\": "src/"
+      "Lacus\\BrUtils\\Cnpj\\": "src/"
     },
     "files": [
       "src/cnpj-val.php"
@@ -70,7 +70,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\CnpjVal\\Tests\\": "tests/"
+      "Lacus\\BrUtils\\Cnpj\\Tests\\": "tests/"
     }
   }
 }
