@@ -1,7 +1,7 @@
 {
   "name": "lacus/cnpj-utils",
   "type": "library",
-  "description": "Utility functions to deal with CNPJ (Brazilian employer ID)",
+  "description": "Utilities to deal with CNPJ (Brazilian Business Tax ID)",
   "license": "MIT",
   "authors": [
     {
@@ -29,7 +29,7 @@
     "issues": "https://github.com/LacusSolutions/br-utils-php/issues",
     "source": "https://github.com/LacusSolutions/br-utils-php"
   },
-  "homepage": "https://cpf-utils.vercel.app/",
+  "homepage": "https://cnpj-utils.vercel.app/",
   "scripts": {
     "lint": [
       "@lint:format",
