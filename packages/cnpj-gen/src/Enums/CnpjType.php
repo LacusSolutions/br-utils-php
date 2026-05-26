@@ -6,6 +6,11 @@ namespace Lacus\BrUtils\Cnpj\Enums;
 
 use Lacus\Utils\SequenceType;
 
+/**
+ * @deprecated (v2.1.0+) This enum will be renamed to `CnpjGenerationType` in
+ * the next major version. For forward compatibility, use an import alias like
+ * `use Lacus\BrUtils\Cnpj\Enums\CnpjType as CnpjGenerationType;`
+ */
 enum CnpjType: string
 {
     case Alphanumeric = SequenceType::Alphanumeric->value;
