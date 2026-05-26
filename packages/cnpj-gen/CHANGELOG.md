@@ -1,5 +1,15 @@
 # lacus/cnpj-gen
 
+## 2.1.0
+
+### Improvements
+
+- Runtime dependency `lacus/cnpj-dv` updated to v1.1, with a slight performance improvement.
+
+### Deprecations
+
+- **`CnpjType` rename planned** — `CnpjType` was deprecated and will be renamed to `CnpjGenerationType` in the next major version of the package. Use an import alias (`use Lacus\BrUtils\Cnpj\Enums\CnpjType as CnpjGenerationType`) to prepare for the change in near future.
+
 ## 2.0.0
 
 ### 🎉 v2 at a glance 🎊
