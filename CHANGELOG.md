@@ -8,7 +8,7 @@
 
 ### Deprecations
 
-- **`CnpjType` rename planned** — `CnpjType` was deprecated in and will be renamed to `CnpjGenerationType` in the next major version of the package. Use an import alias (`use Lacus\BrUtils\Cnpj\Enums\CnpjType as CnpjGenerationType`) to prepare for the change in near future.
+- **`CnpjType` rename planned** — `CnpjType` was deprecated and will be renamed to `CnpjGenerationType` in the next major version of the package. Use an import alias (`use Lacus\BrUtils\Cnpj\Enums\CnpjType as CnpjGenerationType`) to prepare for the change in near future.
 
 ## 2.0.0
 
