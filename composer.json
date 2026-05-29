@@ -59,7 +59,7 @@
   "require": {
     "php": "^8.2",
     "lacus/cnpj-fmt": "^2.0",
-    "lacus/cnpj-gen": "^2.0",
+    "lacus/cnpj-gen": "^2.1",
     "lacus/cnpj-val": "^2.0"
   },
   "require-dev": {
@@ -71,14 +71,11 @@
   "autoload": {
     "psr-4": {
       "Lacus\\BrUtils\\Cnpj\\": "src/"
-    },
-    "files": [
-      "src/cnpj_utils.php"
-    ]
+    }
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\BrUtils\\Cnpj\\Tests\\": "tests/"
+      "Lacus\\BrUtils\\Tests\\Cnpj\\": "tests/specs/"
     }
   }
 }
