@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Lacus\BrUtils\Tests\Cnpj;
+
 use Closure;
 use Lacus\BrUtils\Cnpj\CnpjFormatter;
 use Lacus\BrUtils\Cnpj\CnpjFormatterOptions;

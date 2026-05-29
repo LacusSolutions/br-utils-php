@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Lacus\BrUtils\Tests\Cnpj;
+
 use Lacus\BrUtils\Cnpj\CnpjFormatterOptions;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjFormatterException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjFormatterInputLengthException;
