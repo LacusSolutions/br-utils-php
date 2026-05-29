@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
+namespace Lacus\BrUtils\Tests\Cnpj;
+
+use Exception;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjValidatorException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjValidatorInputTypeError;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjValidatorOptionsTypeError;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjValidatorOptionTypeInvalidException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjValidatorTypeError;
+use TypeError;
 
 describe('CnpjValidatorTypeError', function () {
     describe('when instantiated through a subclass', function () {

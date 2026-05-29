@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Lacus\BrUtils\Tests\Cnpj;
+
 use Lacus\BrUtils\Cnpj\CnpjValidatorOptions;
 use Lacus\BrUtils\Cnpj\Enums\CnpjValidationType;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjValidatorOptionsTypeError;
