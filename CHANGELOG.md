@@ -28,8 +28,7 @@
 
 ### Improvements
 
-- **New PT-BR documentation**: New [README in Brazilian Portuguese](./README.pt.
-md).
+- **New PT-BR documentation**: New [README in Brazilian Portuguese](./README.pt.md).
 - **Dependency alignment** — Runtime dependencies updated to:
   - `lacus/cnpj-fmt`: `^2.0`
   - `lacus/cnpj-gen`: `^2.1`
