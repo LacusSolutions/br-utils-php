@@ -224,8 +224,6 @@ class CnpjUtils
 
     /**
      * Returns the formatter instance used by the utils instance.
-     *
-     * @return CnpjFormatter
      */
     public function getFormatter(): CnpjFormatter
     {
@@ -234,8 +232,6 @@ class CnpjUtils
 
     /**
      * Returns the generator instance used by the utils instance.
-     *
-     * @return CnpjGenerator
      */
     public function getGenerator(): CnpjGenerator
     {
@@ -244,8 +240,6 @@ class CnpjUtils
 
     /**
      * Returns the validator instance used by the utils instance.
-     *
-     * @return CnpjValidator
      */
     public function getValidator(): CnpjValidator
     {
