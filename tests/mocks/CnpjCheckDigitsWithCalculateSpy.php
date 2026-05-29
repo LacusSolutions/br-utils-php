@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Cnpj\Tests\Mocks;
+namespace Lacus\BrUtils\Tests\Mocks\Cnpj;
 
 use Lacus\BrUtils\Cnpj\CnpjCheckDigits;
 

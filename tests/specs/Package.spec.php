@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Cnpj\Tests\Specs;
+namespace Lacus\BrUtils\Tests\Cnpj;
 
 use const Lacus\BrUtils\Cnpj\CNPJ_MAX_LENGTH;
 use const Lacus\BrUtils\Cnpj\CNPJ_MIN_LENGTH;
