@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Lacus\BrUtils\Tests\Cnpj;
+
 use Lacus\BrUtils\Cnpj\CnpjGenerator;
 use Lacus\BrUtils\Cnpj\CnpjGeneratorOptions;
 use Lacus\BrUtils\Cnpj\Enums\CnpjType;

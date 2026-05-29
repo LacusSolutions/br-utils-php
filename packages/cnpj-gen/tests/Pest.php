@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
-$specsDirectory = __DIR__ . DIRECTORY_SEPARATOR . 'Specs' . DIRECTORY_SEPARATOR;
+$specsDirectory = __DIR__ . DIRECTORY_SEPARATOR . 'specs' . DIRECTORY_SEPARATOR;
 
 uses(TestCase::class)->in($specsDirectory);
 
