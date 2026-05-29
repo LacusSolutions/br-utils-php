@@ -2,10 +2,13 @@
 
 declare(strict_types=1);
 
+namespace Lacus\BrUtils\Tests\Cnpj;
+
 use Lacus\BrUtils\Cnpj\CnpjValidator;
 use Lacus\BrUtils\Cnpj\CnpjValidatorOptions;
 use Lacus\BrUtils\Cnpj\Enums\CnpjValidationType;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjValidatorInputTypeError;
+use stdClass;
 
 describe('CnpjValidator', function () {
     describe('constructor', function () {
@@ -248,49 +251,49 @@ describe('CnpjValidator', function () {
             it('throws a `CnpjValidatorInputTypeError` with `null`', function () {
                 $validator = new CnpjValidator();
 
-                expect(function () use ($validator) {
-                    $validator->isValid(null);
-                })->toThrow(CnpjValidatorInputTypeError::class, 'CNPJ input must be of type string or string[]. Got null.');
+                expect(fn () => $validator->isValid(null))
+                    ->toThrow(CnpjValidatorInputTypeError::class)
+                    ->toThrow('CNPJ input must be of type string or string[]. Got null.');
             });
 
             it('throws a `CnpjValidatorInputTypeError` with integer number', function () {
                 $validator = new CnpjValidator();
 
-                expect(function () use ($validator) {
-                    $validator->isValid(42);
-                })->toThrow(CnpjValidatorInputTypeError::class, 'CNPJ input must be of type string or string[]. Got integer number.');
+                expect(fn () => $validator->isValid(42))
+                    ->toThrow(CnpjValidatorInputTypeError::class)
+                    ->toThrow('CNPJ input must be of type string or string[]. Got integer number.');
             });
 
             it('throws a `CnpjValidatorInputTypeError` with float number', function () {
                 $validator = new CnpjValidator();
 
-                expect(function () use ($validator) {
-                    $validator->isValid(3.14);
-                })->toThrow(CnpjValidatorInputTypeError::class, 'CNPJ input must be of type string or string[]. Got float number.');
+                expect(fn () => $validator->isValid(3.14))
+                    ->toThrow(CnpjValidatorInputTypeError::class)
+                    ->toThrow('CNPJ input must be of type string or string[]. Got float number.');
             });
 
             it('throws a `CnpjValidatorInputTypeError` with boolean', function () {
                 $validator = new CnpjValidator();
 
-                expect(function () use ($validator) {
-                    $validator->isValid(true);
-                })->toThrow(CnpjValidatorInputTypeError::class, 'CNPJ input must be of type string or string[]. Got boolean.');
+                expect(fn () => $validator->isValid(true))
+                    ->toThrow(CnpjValidatorInputTypeError::class)
+                    ->toThrow('CNPJ input must be of type string or string[]. Got boolean.');
             });
 
             it('throws a `CnpjValidatorInputTypeError` with object', function () {
                 $validator = new CnpjValidator();
 
-                expect(function () use ($validator) {
-                    $validator->isValid(new stdClass());
-                })->toThrow(CnpjValidatorInputTypeError::class, 'CNPJ input must be of type string or string[]. Got object.');
+                expect(fn () => $validator->isValid(new stdClass()))
+                    ->toThrow(CnpjValidatorInputTypeError::class)
+                    ->toThrow('CNPJ input must be of type string or string[]. Got object.');
             });
 
             it('throws a `CnpjValidatorInputTypeError` with array of numbers', function () {
                 $validator = new CnpjValidator();
 
-                expect(function () use ($validator) {
-                    $validator->isValid([1, 2, 3]);
-                })->toThrow(CnpjValidatorInputTypeError::class, 'CNPJ input must be of type string or string[]. Got number[].');
+                expect(fn () => $validator->isValid([1, 2, 3]))
+                    ->toThrow(CnpjValidatorInputTypeError::class)
+                    ->toThrow('CNPJ input must be of type string or string[]. Got number[].');
             });
         });
     });
