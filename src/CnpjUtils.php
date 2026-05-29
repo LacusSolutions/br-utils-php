@@ -67,9 +67,9 @@ class CnpjUtils
      * @throws CnpjValidatorOptionTypeInvalidException If the `type` option is not one of the allowed values.
      */
     public function __construct(
-        $formatter = [],
-        $generator = [],
-        $validator = [],
+        CnpjFormatterOptions|array $formatter = [],
+        CnpjGeneratorOptions|array $generator = [],
+        CnpjValidatorOptions|array $validator = [],
     ) {
         $formatterOptions = $formatter instanceof CnpjFormatterOptions
             ? $formatter
