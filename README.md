@@ -7,241 +7,427 @@
 [![Last Update Date](https://img.shields.io/github/last-commit/LacusSolutions/br-utils-php)](https://github.com/LacusSolutions/br-utils-php)
 [![Project License](https://img.shields.io/github/license/LacusSolutions/br-utils-php)](https://github.com/LacusSolutions/br-utils-php/blob/main/LICENSE)
 
-Toolkit to deal with CNPJ data (Brazilian employer ID): validation, formatting and generation of valid IDs.
+> 🚀 **Full support for the [new alphanumeric CNPJ format](https://github.com/user-attachments/files/23937961/calculodvcnpjalfanaumerico.pdf).**
+
+> 🌎 [Acessar documentação em português](https://github.com/LacusSolutions/br-utils-php/blob/main/packages/cnpj-utils/README.pt.md)
+
+A PHP utility to format, generate, and validate CNPJ (Brazilian Business Tax ID). It provides a wrapper class to [`lacus/cnpj-fmt`](https://packagist.org/packages/lacus/cnpj-fmt), [`lacus/cnpj-gen`](https://packagist.org/packages/lacus/cnpj-gen), and [`lacus/cnpj-val`](https://packagist.org/packages/lacus/cnpj-val) alongside the resources provided by these packages.
 
 ## PHP Support
 
-| ![PHP 8.1](https://img.shields.io/badge/PHP-8.1-777BB4?logo=php&logoColor=white) | ![PHP 8.2](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white) | ![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white) | ![PHP 8.4](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white) |
-|--- | --- | --- | --- |
+| ![PHP 8.2](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white) | ![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white) | ![PHP 8.4](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white) | ![PHP 8.5](https://img.shields.io/badge/PHP-8.5-777BB4?logo=php&logoColor=white) |
+| --- | --- | --- | --- |
 | Passing ✔ | Passing ✔ | Passing ✔ | Passing ✔ |
+
+## Features
+
+- ✅ **Unified API**: One `CnpjUtils` class for formatting, generation, and validation
+- ✅ **Bundled components**: All formatter, generator, and validator classes, options objects, enums, and helpers from the co-related packages are available under `Lacus\BrUtils\Cnpj\`
+- ✅ **Alphanumeric CNPJ**: Full support for the new alphanumeric CNPJ format (introduced in 2026)
+- ✅ **Flexible input**: `format()` and `isValid()` accept `string` or `list<string>`
+- ✅ **Configurable defaults**: Set formatter, generator, and validator options on the instance
+- ✅ **Per-call overrides**: Override any component option for a single method call
+- ✅ **Validator options**: Configure `type` and `caseSensitive` (new in v2; v1 had no validator settings)
+- ✅ **Dual API style**: Unified façade (`CnpjUtils`) or standalone components (`CnpjFormatter`, `CnpjGenerator`, `CnpjValidator`) and functional helpers (`cnpj_fmt()`, `cnpj_gen()`, `cnpj_val()`)
+- ✅ **Typed error handling**: Dedicated `TypeError` / `Exception` hierarchies from bundled packages
 
 ## Installation
 
 ```bash
+# using Composer
 $ composer require lacus/cnpj-utils
 ```
 
+This installs **`lacus/cnpj-utils`** together with [`lacus/cnpj-fmt`](https://packagist.org/packages/lacus/cnpj-fmt), [`lacus/cnpj-gen`](https://packagist.org/packages/lacus/cnpj-gen), and [`lacus/cnpj-val`](https://packagist.org/packages/lacus/cnpj-val). You do **not** need separate `composer require` calls for the component packages when using **`lacus/cnpj-utils`**.
+
 ## Import
+
+Pick the API that fits your use case. All symbols below share the namespace **`Lacus\BrUtils\Cnpj\`** and are available after installing **`lacus/cnpj-utils`**.
+
+**Unified façade:**
 
 ```php
 <?php
-// Using class-based resource
-use Lacus\CnpjUtils\CnpjUtils;
 
-// Or using function-based approach
-use function Lacus\CnpjUtils\cnpj_fmt;
-use function Lacus\CnpjUtils\cnpj_gen;
-use function Lacus\CnpjUtils\cnpj_val;
+use Lacus\BrUtils\Cnpj\CnpjUtils;
+```
+
+**Standalone components (object-oriented):**
+
+```php
+<?php
+
+use Lacus\BrUtils\Cnpj\CnpjFormatter;
+use Lacus\BrUtils\Cnpj\CnpjFormatterOptions;
+use Lacus\BrUtils\Cnpj\CnpjGenerator;
+use Lacus\BrUtils\Cnpj\CnpjGeneratorOptions;
+use Lacus\BrUtils\Cnpj\CnpjValidator;
+use Lacus\BrUtils\Cnpj\CnpjValidatorOptions;
+use Lacus\BrUtils\Cnpj\Enums\CnpjType as CnpjGenerationType;
+use Lacus\BrUtils\Cnpj\Enums\CnpjValidationType;
+```
+
+**Functional helpers** (autoloaded from the bundled component packages):
+
+```php
+<?php
+
+use function Lacus\BrUtils\Cnpj\cnpj_fmt;
+use function Lacus\BrUtils\Cnpj\cnpj_gen;
+use function Lacus\BrUtils\Cnpj\cnpj_val;
+```
+
+## Quick start
+
+**With `CnpjUtils` (all-in-one):**
+
+```php
+<?php
+
+use Lacus\BrUtils\Cnpj\CnpjUtils;
+
+$utils = new CnpjUtils();
+$cnpj = '03603568000195';
+
+$utils->format($cnpj);    // '03.603.568/0001-95'
+$utils->isValid($cnpj);   // true
+$utils->generate();       // e.g. 'AB123CDE000196'
+```
+
+**With standalone components:**
+
+```php
+<?php
+
+use Lacus\BrUtils\Cnpj\CnpjFormatter;
+use Lacus\BrUtils\Cnpj\CnpjGenerator;
+use Lacus\BrUtils\Cnpj\CnpjValidator;
+
+$cnpj = '03603568000195';
+
+(new CnpjFormatter())->format($cnpj);   // '03.603.568/0001-95'
+(new CnpjValidator())->isValid($cnpj);  // true
+(new CnpjGenerator())->generate();        // e.g. 'AB123CDE000196'
+```
+
+**With functional helpers:**
+
+```php
+<?php
+
+use function Lacus\BrUtils\Cnpj\cnpj_fmt;
+use function Lacus\BrUtils\Cnpj\cnpj_gen;
+use function Lacus\BrUtils\Cnpj\cnpj_val;
+
+$cnpj = '03603568000195';
+
+cnpj_fmt($cnpj);   // '03.603.568/0001-95'
+cnpj_val($cnpj);   // true
+cnpj_gen();        // e.g. 'AB123CDE000196'
 ```
 
 ## Usage
 
-### Object-Oriented Usage
+You can work in three equivalent ways:
 
-The `CnpjUtils` class provides a unified interface for all CNPJ operations:
+1. **`CnpjUtils`** — single instance with shared defaults across format, generate, and validate.
+2. **Component classes** — `CnpjFormatter`, `CnpjGenerator`, and `CnpjValidator` directly (same classes used internally by `CnpjUtils`).
+3. **Functional helpers** — `cnpj_fmt()`, `cnpj_gen()`, and `cnpj_val()` for one-off calls without managing instances.
+
+All three approaches expose the same options and behavior. For full option tables and component-specific details, see the README of each [bundled package](#bundled-packages).
+
+### `CnpjUtils`
+
+- **`__construct`**: `new CnpjUtils($formatter = [], $generator = [], $validator = [])`
+
+  Each argument may be an options array (spread into the component’s `*Options` constructor), a `CnpjFormatterOptions` / `CnpjGeneratorOptions` / `CnpjValidatorOptions` instance (stored by reference — mutating it later affects subsequent calls with no per-call override), or omitted for defaults.
+
+  Example: `new CnpjUtils(formatter: ['hidden' => true], generator: ['format' => true], validator: ['type' => CnpjValidationType::Numeric])`.
+
+- **`format`**: `format(string|list<string> $cnpjInput, ?CnpjFormatterOptions $options = null, …named formatter options…): string`
+
+  Delegates to `CnpjFormatter::format()`. Per-call options are merged over instance defaults for that call only.
+
+- **`generate`**: `generate(?CnpjGeneratorOptions $options = null, $format = null, $prefix = null, $type = null): string`
+
+  Delegates to `CnpjGenerator::generate()`. Per-call options are merged over instance defaults for that call only.
+
+- **`isValid`**: `isValid(string|list<string> $cnpjInput, ?CnpjValidatorOptions $options = null, $type = null, $caseSensitive = null): bool`
+
+  Delegates to `CnpjValidator::isValid()`. Per-call options are merged over instance defaults for that call only.
+
+- **`getFormatter()`**, **`getGenerator()`**, **`getValidator()`**: Return the internal component instances for direct use.
 
 ```php
-$cnpjUtils = new CnpjUtils();
-$cnpj = '03603568000195';
+<?php
 
-// Format CNPJ
-echo $cnpjUtils->format($cnpj);       // returns '03.603.568/0001-95'
+use Lacus\BrUtils\Cnpj\CnpjUtils;
+use Lacus\BrUtils\Cnpj\Enums\CnpjType as CnpjGenerationType;
+use Lacus\BrUtils\Cnpj\Enums\CnpjValidationType;
 
-// Validate CNPJ
-echo $cnpjUtils->isValid($cnpj);      // returns true
+$utils = new CnpjUtils();
 
-// Generate CNPJ
-echo $cnpjUtils->generate();          // returns '65453043000178'
+$utils->format('03603568000195');              // '03.603.568/0001-95'
+$utils->format('12ABC34500DE99');              // '12.ABC.345/00DE-99'
+$utils->isValid('98.765.432/0001-98');         // true
+$utils->isValid('1QB5UKALPYFP59');             // true (alphanumeric)
+$utils->generate(format: true);                // e.g. 'AB.123.CDE/0001-96'
+$utils->generate(type: CnpjGenerationType::Numeric);  // e.g. '12345678000195'
 ```
 
-#### With Configuration Options
-
-You can configure the formatter and generator options in the constructor:
+### Instance defaults and per-call overrides
 
 ```php
-$cnpjUtils = new CnpjUtils(
-    formatter: [
-        'hidden' => true,
-        'hiddenKey' => '#',
-        'hiddenStart' => 5,
-        'hiddenEnd' => 13
-    ],
-    generator: [
-        'format' => true
-    ]
+$utils = new CnpjUtils(
+    formatter: ['hidden' => true, 'hiddenKey' => '#'],
+    generator: ['format' => true],
+    validator: ['type' => CnpjValidationType::Numeric],
 );
 
 $cnpj = '03603568000195';
-echo $cnpjUtils->format($cnpj);       // returns '03.603.###/####-##'
-echo $cnpjUtils->generate();          // returns '73.008.535/0005-06'
+
+$utils->format($cnpj);                  // masked (instance formatter defaults)
+$utils->format($cnpj, hidden: false);    // this call only: unmasked
+$utils->generate(format: false);        // this call only: compact output
+$utils->isValid('1QB5UKALPYFP59');      // false (instance validator is numeric-only)
+$utils->isValid('1QB5UKALPYFP59', type: CnpjValidationType::Alphanumeric);  // true for this call
 ```
 
-### Functional Programming
+### Formatting (`format`)
 
-The package also provides standalone functions for each operation:
+Supports the same options as [`lacus/cnpj-fmt`](https://github.com/LacusSolutions/br-utils-php/blob/main/packages/cnpj-fmt/README.md). Pass them to the `CnpjUtils` constructor (`formatter` argument), per `format()` call, or via `CnpjFormatter` / `cnpj_fmt()`.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `hidden` | `?bool` | `false` | When `true`, replaces the inclusive index range `[hiddenStart, hiddenEnd]` on the normalized 14-character string before punctuation is applied |
+| `hiddenKey` | `?string` | `'*'` | Replacement for each hidden position (may be multi-character or empty); must not use disallowed key characters |
+| `hiddenStart` | `?int` | `5` | Start index `0`–`13` (inclusive) |
+| `hiddenEnd` | `?int` | `13` | End index `0`–`13` (inclusive); if `hiddenStart > hiddenEnd`, they are swapped |
+| `dotKey` | `?string` | `'.'` | Separator between groups `XX` / `XXX` / `XXX` |
+| `slashKey` | `?string` | `'/'` | Separator before the branch block |
+| `dashKey` | `?string` | `'-'` | Separator before the last two characters |
+| `escape` | `?bool` | `false` | When `true`, HTML-escapes the final string (`HtmlUtils::escape`) |
+| `encode` | `?bool` | `false` | When `true`, URL-encodes the final string (`UrlUtils::encodeUriComponent`) |
+| `onFail` | `?\Closure` | see below | `Closure(mixed $value, CnpjFormatterException $e): string` — used when sanitized length ≠ 14 |
+
+Default **`onFail`** returns an empty string. The exception passed for length failures is **`CnpjFormatterInputLengthException`**. Invalid length does **not** throw from `format()`; wrong input types throw **`CnpjFormatterInputTypeError`**.
 
 ```php
 $cnpj = '03603568000195';
 
-// Format CNPJ
-echo cnpj_fmt($cnpj);                 // returns '03.603.568/0001-95'
-
-// Validate CNPJ
-echo cnpj_val($cnpj);                 // returns true
-
-// Generate CNPJ
-echo cnpj_gen();                      // returns '65453043000178'
+$utils->format($cnpj);                                        // '03.603.568/0001-95'
+$utils->format($cnpj, hidden: true, hiddenKey: '#');          // '03.603.###/####-##'
+$utils->format($cnpj, dotKey: '', slashKey: '|', dashKey: '_');  // '03603568|0001_95'
+$utils->format($cnpj, encode: true);                          // URL-encoded output
 ```
 
-## API Reference
+### Generation (`generate`)
 
-### Formatting (`cnpj_fmt` / `CnpjUtils::format`)
-
-Formats a CNPJ string with customizable delimiters and masking options.
-
-```php
-cnpj_fmt(
-    string $cnpjString,
-    ?bool $escape = null,
-    ?bool $hidden = null,
-    ?string $hiddenKey = null,
-    ?int $hiddenStart = null,
-    ?int $hiddenEnd = null,
-    ?string $dotKey = null,
-    ?string $slashKey = null,
-    ?string $dashKey = null,
-    ?Closure $onFail = null,
-): string
-```
-
-**Parameters:**
+Supports the same options as [`lacus/cnpj-gen`](https://github.com/LacusSolutions/br-utils-php/blob/main/packages/cnpj-gen/README.md). Pass them to the `CnpjUtils` constructor (`generator` argument), per `generate()` call, or via `CnpjGenerator` / `cnpj_gen()`.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `escape` | `?bool` | `false` | Whether to HTML escape the result |
-| `hidden` | `?bool` | `false` | Whether to hide digits with a mask |
-| `hiddenKey` | `?string` | `'*'` | Character to replace hidden digits |
-| `hiddenStart` | `?int` | `5` | Starting index for hidden range (0-13) |
-| `hiddenEnd` | `?int` | `13` | Ending index for hidden range (0-13) |
-| `dotKey` | `?string` | `'.'` | String to replace dot characters |
-| `slashKey` | `?string` | `'/'` | String to replace slash character |
-| `dashKey` | `?string` | `'-'` | String to replace dash character |
-| `onFail` | `?callable` | `fn($v) => $v` | Fallback function for invalid input |
+| `format` | `?bool` | `false` | When `true`, returns formatted CNPJ (`XX.XXX.XXX/XXXX-XX`); otherwise returns compact 14-character output |
+| `prefix` | `?string` | `''` | Base seed for generation. Non-alphanumeric chars are stripped, letters are uppercased, and only first 12 chars (indexes `0`–`11`) are used; characters at index `12+` are ignored |
+| `type` | `CnpjGenerationType\|'alphanumeric'\|'alphabetic'\|'numeric'\|null` | `CnpjGenerationType::Alphanumeric` | Character family used for generated base positions (`0`–`9`, `A`–`Z`, or both) |
 
-**Examples:**
+`prefix` validation rules:
+
+- base ID `00000000` is rejected (when first 8 chars are present)
+- branch ID `0000` is rejected (when chars 9–12 are present)
+- 12 repeated numeric digits are rejected (e.g. `111111111111`)
 
 ```php
+$utils->generate();                              // e.g. 'AB123CDE000196'
+$utils->generate(format: true);                  // e.g. 'AB.123.CDE/0001-96'
+$utils->generate(prefix: '12345678', type: CnpjGenerationType::Numeric);
+```
+
+### Validation (`isValid`)
+
+Supports the same options as [`lacus/cnpj-val`](https://github.com/LacusSolutions/br-utils-php/blob/main/packages/cnpj-val/README.md). Unlike v1, validation is now configurable through **`CnpjValidatorOptions`**. Pass them to the `CnpjUtils` constructor (`validator` argument), per `isValid()` call, or via `CnpjValidator` / `cnpj_val()`.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `type` | `CnpjValidationType\|'alphanumeric'\|'numeric'\|null` | `CnpjValidationType::Alphanumeric` | Character set after sanitization |
+| `caseSensitive` | `?bool` | `true` | When `false`, lowercase letters are uppercased before alphanumeric validation |
+
+```php
+$utils = new CnpjUtils();
+
+$utils->isValid('98765432000198');       // true
+$utils->isValid('98765432000199');       // false
+$utils->isValid('1QB5UKALPYFP59');       // true
+$utils->isValid('1QB5UKALpyfp59');       // false (default is case-sensitive)
+$utils->isValid('1QB5UKALpyfp59', caseSensitive: false);  // true
+
+$utils->isValid('1QB5UKALPYFP59', type: CnpjValidationType::Numeric);  // false
+
+// Legacy numeric-only validation as instance default
+$numericUtils = new CnpjUtils(validator: ['type' => CnpjValidationType::Numeric]);
+$numericUtils->isValid('98.765.432/0001-98');   // true
+$numericUtils->isValid('1QB5UKALPYFP59');       // false
+```
+
+Invalid CNPJ returns **`false`** without throwing. Wrong input types throw **`CnpjValidatorInputTypeError`**.
+
+### Bundled components (standalone)
+
+Install **`lacus/cnpj-utils`** once; import and use any resource from the co-related packages without requiring them separately.
+
+#### `CnpjFormatter` and `cnpj_fmt()`
+
+Same API as [`lacus/cnpj-fmt`](https://github.com/LacusSolutions/br-utils-php/blob/main/packages/cnpj-fmt/README.md).
+
+```php
+<?php
+
+use Lacus\BrUtils\Cnpj\CnpjFormatter;
+
+use function Lacus\BrUtils\Cnpj\cnpj_fmt;
+
 $cnpj = '03603568000195';
 
-// Basic formatting
-echo cnpj_fmt($cnpj);                 // '03.603.568/0001-95'
+$formatter = new CnpjFormatter(hidden: true);
+$formatter->format($cnpj);                    // masked with instance defaults
+$formatter->format($cnpj, hidden: false);    // per-call override
 
-// With hidden digits
-echo cnpj_fmt($cnpj, hidden: true);   // '03.603.***/****-**'
-
-// Custom delimiters
-echo cnpj_fmt($cnpj, dotKey: '', slashKey: '|', dashKey: '_');  // '03603568|0001_95'
-
-// Custom hidden range
-echo cnpj_fmt($cnpj, hidden: true, hiddenStart: 2, hiddenEnd: 8, hiddenKey: '#');  // '03###.###/0001-95'
+cnpj_fmt($cnpj);                              // '03.603.568/0001-95'
+cnpj_fmt($cnpj, hidden: true, hiddenKey: '#'); // '03.603.###/####-##'
+cnpj_fmt('12ABC34500DE99');                   // '12.ABC.345/00DE-99'
 ```
 
-### Generation (`cnpj_gen` / `CnpjUtils::generate`)
+#### `CnpjGenerator` and `cnpj_gen()`
 
-Generates valid CNPJ numbers with optional formatting and prefix completion.
+Same API as [`lacus/cnpj-gen`](https://github.com/LacusSolutions/br-utils-php/blob/main/packages/cnpj-gen/README.md).
 
 ```php
-cnpj_gen(
-    ?bool $format = null,
-    ?string $prefix = null,
-): string
+<?php
+
+use Lacus\BrUtils\Cnpj\CnpjGenerator;
+use Lacus\BrUtils\Cnpj\Enums\CnpjType as CnpjGenerationType;
+
+use function Lacus\BrUtils\Cnpj\cnpj_gen;
+
+$generator = new CnpjGenerator(format: true, type: CnpjGenerationType::Numeric);
+
+$generator->generate();                       // formatted numeric CNPJ
+$generator->generate(format: false);         // per-call: compact output
+
+cnpj_gen();                                   // e.g. 'AB123CDE000196'
+cnpj_gen(format: true);                       // e.g. 'AB.123.CDE/0001-96'
+cnpj_gen(prefix: '12345678', type: CnpjGenerationType::Numeric);
 ```
 
-**Parameters:**
+#### `CnpjValidator` and `cnpj_val()`
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `format` | `?bool` | `false` | Whether to format the output |
-| `prefix` | `?string` | `''` | Prefix to complete with valid digits (1-12 digits) |
-
-**Examples:**
+Same API as [`lacus/cnpj-val`](https://github.com/LacusSolutions/br-utils-php/blob/main/packages/cnpj-val/README.md).
 
 ```php
-// Generate random CNPJ
-echo cnpj_gen();                      // '65453043000178'
+<?php
 
-// Generate formatted CNPJ
-echo cnpj_gen(format: true);          // '73.008.535/0005-06'
+use Lacus\BrUtils\Cnpj\CnpjValidator;
+use Lacus\BrUtils\Cnpj\Enums\CnpjValidationType;
 
-// Complete a prefix
-echo cnpj_gen(prefix: '45623767');    // '45623767000296'
+use function Lacus\BrUtils\Cnpj\cnpj_val;
 
-// Complete and format
-echo cnpj_gen(prefix: '456237670002', format: true);  // '45.623.767/0002-96'
+$validator = new CnpjValidator(type: CnpjValidationType::Numeric);
+
+$validator->isValid('98.765.432/0001-98');    // true
+$validator->isValid('1QB5UKALPYFP59');      // false (numeric-only instance)
+
+cnpj_val('98765432000198');                   // true
+cnpj_val('1QB5UKALpyfp59', caseSensitive: false);  // true
+cnpj_val('1QB5UKALPYFP59', type: CnpjValidationType::Numeric);  // false
 ```
 
-### Validation (`cnpj_val` / `CnpjUtils::isValid`)
+#### Mixing styles
 
-Validates CNPJ numbers using the official algorithm.
+Use `CnpjUtils` where a shared configuration helps, and standalone components elsewhere — they are the same underlying classes:
 
 ```php
-cnpj_val(string $cnpjString): bool
+<?php
+
+use Lacus\BrUtils\Cnpj\CnpjFormatter;
+use Lacus\BrUtils\Cnpj\CnpjUtils;
+use Lacus\BrUtils\Cnpj\Enums\CnpjValidationType;
+
+use function Lacus\BrUtils\Cnpj\cnpj_val;
+
+$utils = new CnpjUtils(validator: ['type' => CnpjValidationType::Numeric]);
+
+// Via façade
+$utils->format('03603568000195');
+
+// Via component returned by the façade (same formatter instance)
+$utils->getFormatter()->format('12ABC34500DE99');
+
+// Via a separate component instance
+(new CnpjFormatter())->format('03603568000195');
+
+// Via functional helper
+cnpj_val('98.765.432/0001-98');
 ```
 
-**Examples:**
+### Accessing components from `CnpjUtils`
 
 ```php
-// Valid CNPJ
-echo cnpj_val('98765432000198');      // true
-echo cnpj_val('98.765.432/0001-98');  // true
+$utils = new CnpjUtils();
 
-// Invalid CNPJ
-echo cnpj_val('98765432000199');      // false
-```
+$formatter = $utils->getFormatter();
+$generator = $utils->getGenerator();
+$validator = $utils->getValidator();
 
-## Advanced Usage
-
-### Accessing Individual Components
-
-You can access the individual formatter, generator, and validator instances:
-
-```php
-$cnpjUtils = new CnpjUtils();
-
-// Get individual components
-$formatter = $cnpjUtils->getFormatter();
-$generator = $cnpjUtils->getGenerator();
-$validator = $cnpjUtils->getValidator();
-
-// Use them directly
 $formatter->format('03603568000195', hidden: true);
 $generator->generate(format: true);
 $validator->isValid('03603568000195');
 ```
 
-### Custom Error Handling
+Use **`getFormatter()`**, **`getGenerator()`**, and **`getValidator()`** when you already have a `CnpjUtils` instance and want the configured component without creating a new one. The returned instances share the same options you passed to the `CnpjUtils` constructor.
+
+### Errors & exceptions
+
+`CnpjUtils` does not define its own exception types; it propagates errors from the bundled packages:
+
+- **Formatting**: `CnpjFormatterInputTypeError`, `CnpjFormatterOptionsTypeError`, `CnpjFormatterOptionsHiddenRangeInvalidException`, `CnpjFormatterOptionsForbiddenKeyCharacterException`, and related classes.
+- **Generation**: `CnpjGeneratorOptionsTypeError`, `CnpjGeneratorOptionPrefixInvalidException`, `CnpjGeneratorOptionTypeInvalidException`, and related classes.
+- **Validation**: `CnpjValidatorInputTypeError`, `CnpjValidatorOptionsTypeError`, `CnpjValidatorOptionTypeInvalidException`, and related classes.
+
+Invalid option types are **`TypeError`** subclasses; invalid option values are **`Exception`** subclasses. Validation failure returns `false`; formatting length failure is handled by **`onFail`**.
 
 ```php
-$cnpj = '123'; // Invalid length
+<?php
 
-// Custom fallback
-echo cnpj_fmt($cnpj, onFail: fn($v) => "Invalid CNPJ: {$v}");  // 'Invalid CNPJ: 123'
+use Lacus\BrUtils\Cnpj\CnpjUtils;
+use Lacus\BrUtils\Cnpj\Exceptions\CnpjFormatterInputTypeError;
+use Lacus\BrUtils\Cnpj\Exceptions\CnpjValidatorInputTypeError;
 
-// Return original value
-echo cnpj_fmt($cnpj);  // '123'
+try {
+    (new CnpjUtils())->format(12345);
+} catch (CnpjFormatterInputTypeError $e) {
+    echo $e->getMessage();
+}
+
+try {
+    (new CnpjUtils())->isValid(12345678000198);
+} catch (CnpjValidatorInputTypeError $e) {
+    echo $e->getMessage();
+}
 ```
 
-## Dependencies
+### Bundled packages
 
-This package is built on top of the following specialized packages:
+| Package | Main resources | README |
+|---------|----------------|--------|
+| [`lacus/cnpj-fmt`](https://packagist.org/packages/lacus/cnpj-fmt) | `CnpjFormatter`, `CnpjFormatterOptions`, `cnpj_fmt()` | [docs](https://github.com/LacusSolutions/br-utils-php/blob/main/packages/cnpj-fmt/README.md) |
+| [`lacus/cnpj-gen`](https://packagist.org/packages/lacus/cnpj-gen) | `CnpjGenerator`, `CnpjGeneratorOptions`, `CnpjType`, `cnpj_gen()` | [docs](https://github.com/LacusSolutions/br-utils-php/blob/main/packages/cnpj-gen/README.md) |
+| [`lacus/cnpj-val`](https://packagist.org/packages/lacus/cnpj-val) | `CnpjValidator`, `CnpjValidatorOptions`, `CnpjValidationType`, `cnpj_val()` | [docs](https://github.com/LacusSolutions/br-utils-php/blob/main/packages/cnpj-val/README.md) |
 
-- [`lacus/cnpj-fmt`](https://packagist.org/packages/lacus/cnpj-fmt) - CNPJ formatting
-- [`lacus/cnpj-gen`](https://packagist.org/packages/lacus/cnpj-gen) - CNPJ generation
-- [`lacus/cnpj-val`](https://packagist.org/packages/lacus/cnpj-val) - CNPJ validation
+All of the above are pulled in as dependencies of **`lacus/cnpj-utils`** and share the namespace **`Lacus\BrUtils\Cnpj\`**. For exhaustive option tables, exception lists, and edge-case behavior, see each package README.
 
 ## Contribution & Support
 
-We welcome contributions! Please see our [Contributing Guidelines](https://github.com/LacusSolutions/br-utils-php/blob/main/CONTRIBUTING.md) for details. But if you find this project helpful, please consider:
+We welcome contributions! Please see our [Contributing Guidelines](https://github.com/LacusSolutions/br-utils-php/blob/main/CONTRIBUTING.md) for details. If you find this project helpful, please consider:
 
 - ⭐ Starring the repository
 - 🤝 Contributing to the codebase
@@ -250,7 +436,7 @@ We welcome contributions! Please see our [Contributing Guidelines](https://githu
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/LacusSolutions/br-utils-php/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License — see the [LICENSE](https://github.com/LacusSolutions/br-utils-php/blob/main/LICENSE) file for details.
 
 ## Changelog
 
