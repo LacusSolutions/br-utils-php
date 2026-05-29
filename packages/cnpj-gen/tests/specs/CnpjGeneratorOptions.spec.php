@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
+namespace Lacus\BrUtils\Tests\Cnpj;
+
 use Lacus\BrUtils\Cnpj\CnpjGeneratorOptions;
 use Lacus\BrUtils\Cnpj\Enums\CnpjType;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionPrefixInvalidException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionsTypeError;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionTypeInvalidException;
+use Throwable;
 
 describe('CnpjGeneratorOptions', function () {
     $defaultParameters = [

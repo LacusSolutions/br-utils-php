@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+namespace Lacus\BrUtils\Tests\Cnpj;
+
+use Exception;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjFormatterException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjFormatterInputLengthException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjFormatterInputTypeError;
@@ -9,6 +12,7 @@ use Lacus\BrUtils\Cnpj\Exceptions\CnpjFormatterOptionsForbiddenKeyCharacterExcep
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjFormatterOptionsHiddenRangeInvalidException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjFormatterOptionsTypeError;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjFormatterTypeError;
+use TypeError;
 
 describe('CnpjFormatterTypeError', function () {
     describe('when instantiated through a subclass', function () {

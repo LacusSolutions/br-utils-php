@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Cnpj\Tests\Specs;
+namespace Lacus\BrUtils\Tests\Cnpj;
 
 use Lacus\BrUtils\Cnpj\CnpjCheckDigits;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjCheckDigitsInputInvalidException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjCheckDigitsInputLengthException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjCheckDigitsInputTypeError;
-use Lacus\BrUtils\Cnpj\Tests\Mocks\CnpjCheckDigitsWithCalculateSpy;
+use Lacus\BrUtils\Tests\Mocks\Cnpj\CnpjCheckDigitsWithCalculateSpy;
 
 describe('CnpjCheckDigits', function () {
     /** @var list<string[]> */

@@ -1,7 +1,7 @@
 {
   "name": "lacus/cnpj-utils",
   "type": "library",
-  "description": "Utility functions to deal with CNPJ (Brazilian employer ID)",
+  "description": "Utilities to deal with CNPJ (Brazilian Business Tax ID)",
   "license": "MIT",
   "authors": [
     {
@@ -29,7 +29,7 @@
     "issues": "https://github.com/LacusSolutions/br-utils-php/issues",
     "source": "https://github.com/LacusSolutions/br-utils-php"
   },
-  "homepage": "https://cpf-utils.vercel.app/",
+  "homepage": "https://cnpj-utils.vercel.app/",
   "scripts": {
     "lint": [
       "@lint:format",
@@ -41,39 +41,40 @@
     ],
     "lint:format": "php-cs-fixer fix --config=.php-cs-fixer.config.php",
     "lint:check": "phpstan analyse --configuration=.php-stan.config.neon",
-    "test": "phpunit",
-    "test:watch": "phpunit-watcher watch",
-    "test-coverage": "phpunit --coverage-html coverage"
+    "test": [
+      "pest --configuration=.pest.config.xml --group isolated-process-tests",
+      "pest --configuration=.pest.config.xml --exclude-group isolated-process-tests"
+    ],
+    "test:cov": [
+      "pest --configuration=.pest.config.xml --group isolated-process-tests",
+      "pest --configuration=.pest.config.xml --exclude-group isolated-process-tests --coverage-html coverage"
+    ]
   },
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
   },
   "require": {
-    "php": ">=8.1",
-    "lacus/cnpj-fmt": "^1.0",
-    "lacus/cnpj-gen": "^1.0",
-    "lacus/cnpj-val": "^1.0"
+    "php": "^8.2",
+    "lacus/cnpj-fmt": "^2.0",
+    "lacus/cnpj-gen": "^2.1",
+    "lacus/cnpj-val": "^2.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.94",
-    "phpstan/phpstan": "^2.1",
-    "phpunit/phpunit": "^10.5",
-    "spatie/phpunit-watcher": "~1.24"
+    "pestphp/pest": "^3.8",
+    "phpstan/phpstan": "^2.1"
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\CnpjUtils\\": "src/"
-    },
-    "files": [
-      "src/cnpj_utils.php"
-    ]
+      "Lacus\\BrUtils\\Cnpj\\": "src/"
+    }
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\CnpjUtils\\Tests\\": "tests/",
-      "Lacus\\CnpjFmt\\Tests\\": "vendor/lacus/cnpj-fmt/tests/",
-      "Lacus\\CnpjGen\\Tests\\": "vendor/lacus/cnpj-gen/tests/",
-      "Lacus\\CnpjVal\\Tests\\": "vendor/lacus/cnpj-val/tests/"
+      "Lacus\\BrUtils\\Tests\\Cnpj\\": "tests/specs/"
     }
   }
 }

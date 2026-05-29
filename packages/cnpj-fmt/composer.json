@@ -65,7 +65,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\BrUtils\\Cnpj\\Tests\\": "tests/"
+      "Lacus\\BrUtils\\Tests\\Cnpj\\": "tests/specs/"
     }
   }
 }

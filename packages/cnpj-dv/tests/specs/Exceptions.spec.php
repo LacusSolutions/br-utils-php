@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Cnpj\Tests\Specs;
+namespace Lacus\BrUtils\Tests\Cnpj;
 
 use Exception;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjCheckDigitsException;

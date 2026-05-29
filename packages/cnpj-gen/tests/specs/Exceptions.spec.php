@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
+namespace Lacus\BrUtils\Tests\Cnpj;
+
+use Exception;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionPrefixInvalidException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionsTypeError;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorOptionTypeInvalidException;
 use Lacus\BrUtils\Cnpj\Exceptions\CnpjGeneratorTypeError;
+use TypeError;
 
 describe('CnpjGeneratorTypeError', function () {
     describe('when instantiated through a subclass', function () {
