@@ -44,8 +44,8 @@
       "@lint:format --dry-run --diff",
       "@lint:check --no-progress"
     ],
-    "lint:format": "php-cs-fixer fix --config=.php-cs-fixer.config.php",
-    "lint:check": "phpstan analyse --configuration=.php-stan.config.neon",
+    "lint:format": "@php ../../scripts/lint-format.php",
+    "lint:check": "@php ../../scripts/lint-check.php",
     "test": "phpunit",
     "test:watch": "phpunit-watcher watch",
     "test-coverage": "phpunit --coverage-html coverage"
@@ -65,8 +65,6 @@
     "lacus/cpf-val": "^1.0"
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "^3.94",
-    "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^10.5",
     "spatie/phpunit-watcher": "~1.24"
   },
