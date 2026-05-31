@@ -1,7 +1,0 @@
-includes:
-  - ../../.php-stan.config.neon
-
-parameters:
-  paths:
-    - src/
-    - tests/
