@@ -1,0 +1,268 @@
+name: Release and Publish Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package name to release (e.g. cpf-fmt)'
+        required: true
+        type: string
+      version:
+        description: 'Version to release (e.g., 1.2.3). Leave empty to use the latest section in CHANGELOG.md'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+env:
+  PHP_VERSION: '8.2'
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  lint:
+    uses: ./.github/workflows/.lint.yml
+    with:
+      packages: ${{ format('["{0}"]', inputs.package) }}
+      php-versions: ${{ format('["{0}"]', env.PHP_VERSION) }}
+
+  test:
+    uses: ./.github/workflows/.test.yml
+    with:
+      packages: ${{ format('["{0}"]', inputs.package) }}
+      php-versions: ${{ format('["{0}"]', env.PHP_VERSION) }}
+      api-url: ${{ vars.BR_UTILS_API_URL }}
+    secrets:
+      api-token: ${{ secrets.BR_UTILS_API_TOKEN }}
+
+  prepare-release:
+    name: Prepare Release Notes
+    runs-on: ubuntu-latest
+    outputs:
+      package: ${{ steps.release.outputs.package }}
+      version: ${{ steps.release.outputs.version }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      release_body: ${{ steps.release.outputs.release_body }}
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2.37.1
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: curl, intl, libxml, mbstring
+      - run: composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
+      - id: release
+        run: |
+          set -euo pipefail
+
+          PKG="${{ inputs.package }}"
+
+          echo "📦 Preparing release for package '$PKG'..."
+
+          if [ -n "${{ inputs.version }}" ]; then
+            echo "📌 Using requested version: ${{ inputs.version }}"
+            OUTPUT_PATH=$(php scripts/release.php "$PKG" --version "${{ inputs.version }}")
+          else
+            echo "📌 Using latest version from CHANGELOG.md"
+            OUTPUT_PATH=$(php scripts/release.php "$PKG")
+          fi
+
+          BASENAME=$(basename "$OUTPUT_PATH" .md)
+          VERSION="${BASENAME#*@}"
+
+          echo "package=$PKG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag_name=lacus/${PKG}@${VERSION}" >> "$GITHUB_OUTPUT"
+          {
+            echo 'release_body<<EOF'
+            cat "$OUTPUT_PATH"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+          echo "📝 Release notes written to ${OUTPUT_PATH}"
+          echo "✅ Release preparation complete"
+
+  validate:
+    name: Validate Git State
+    needs: prepare-release
+    runs-on: ubuntu-latest
+    outputs:
+      branch_name: ${{ steps.validate.outputs.branch_name }}
+      commit_sha: ${{ steps.validate.outputs.commit_sha }}
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+
+      - id: validate
+        env:
+          PKG_NAME: ${{ needs.prepare-release.outputs.package }}
+          PKG_VERSION: ${{ needs.prepare-release.outputs.version }}
+          TAG_NAME: ${{ needs.prepare-release.outputs.tag_name }}
+        run: |
+          set -euo pipefail
+
+          echo "🔍 Validating release for package '$PKG_NAME' version '$PKG_VERSION'..."
+          echo "🏷️  Tag: $TAG_NAME"
+          echo ""
+
+          echo "🔍 Checking if tag '$TAG_NAME' already exists..."
+
+          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+            echo "❌ Tag '$TAG_NAME' already exists"
+            exit 1
+          fi
+
+          echo "🔍 Checking if GitHub Release '$TAG_NAME' already exists..."
+
+          ENCODED_TAG=$(jq -rn --arg t "$TAG_NAME" '$t|@uri')
+          RELEASE_CHECK=$(curl -s \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/${ENCODED_TAG}" \
+            -H "Authorization: token $GITHUB_TOKEN")
+
+          if echo "$RELEASE_CHECK" | jq -e '.id' >/dev/null 2>&1; then
+            echo "❌ Release '$TAG_NAME' already exists"
+            exit 1
+          fi
+
+          echo "✅ Tag '$TAG_NAME' is available"
+          echo "✅ Release '$TAG_NAME' does not exist"
+          echo ""
+
+          BRANCH_NAME="${PKG_NAME}/main"
+          echo "🔍 Checking if branch '$BRANCH_NAME' exists..."
+
+          git fetch origin --quiet 2>/dev/null || true
+
+          if ! git show-ref --verify --quiet "refs/heads/$BRANCH_NAME" && \
+             ! git show-ref --verify --quiet "refs/remotes/origin/$BRANCH_NAME"; then
+            echo "❌ Branch '$BRANCH_NAME' does not exist"
+            echo "ℹ️  Available branches:"
+            git branch -a | grep -E "(main|$PKG_NAME)" || echo "   (none found)"
+            exit 1
+          fi
+
+          echo "✅ Branch '$BRANCH_NAME' exists"
+
+          if git show-ref --verify --quiet "refs/heads/$BRANCH_NAME"; then
+            COMMIT_SHA=$(git rev-parse "$BRANCH_NAME")
+          else
+            COMMIT_SHA=$(git rev-parse "origin/$BRANCH_NAME")
+          fi
+
+          echo "📝 Branch '$BRANCH_NAME' points to commit: $COMMIT_SHA"
+          echo "✅ Git state validation complete"
+
+          echo "branch_name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
+          echo "commit_sha=$COMMIT_SHA" >> "$GITHUB_OUTPUT"
+
+  create-release:
+    name: Create GitHub Release
+    needs: validate
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ needs.prepare-release.outputs.tag_name }}
+      package: ${{ needs.prepare-release.outputs.package }}
+      version: ${{ needs.prepare-release.outputs.version }}
+      release_id: ${{ steps.create-release.outputs.release_id }}
+    steps:
+      - id: create-release
+        env:
+          BRANCH_NAME: ${{ needs.validate.outputs.branch_name }}
+          COMMIT_SHA: ${{ needs.validate.outputs.commit_sha }}
+          TAG_NAME: ${{ needs.prepare-release.outputs.tag_name }}
+          RELEASE_BODY: ${{ needs.prepare-release.outputs.release_body }}
+        run: |
+          set -euo pipefail
+
+          echo "🚀 Creating GitHub Release '$TAG_NAME'..."
+          echo "🌿 Target branch: $BRANCH_NAME"
+          echo "📝 Target commit: $COMMIT_SHA"
+          echo ""
+
+          PAYLOAD=$(jq -n \
+            --arg target "$COMMIT_SHA" \
+            --arg tag "$TAG_NAME" \
+            --arg name "$TAG_NAME" \
+            --arg body "$RELEASE_BODY" \
+            '{target_commitish: $target, tag_name: $tag, name: $name, body: $body, draft: false, prerelease: false}')
+
+          RELEASE_RESPONSE=$(curl -s -w "\n%{http_code}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" \
+            -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "$PAYLOAD")
+
+          HTTP_CODE=$(echo "$RELEASE_RESPONSE" | tail -n1)
+          RESPONSE_BODY=$(echo "$RELEASE_RESPONSE" | sed '$d')
+
+          if [ "$HTTP_CODE" -ne 201 ]; then
+            echo "❌ Failed to create release. HTTP status: $HTTP_CODE"
+            echo "Response: $RESPONSE_BODY"
+            exit 1
+          fi
+
+          RELEASE_ID=$(echo "$RESPONSE_BODY" | jq -r '.id')
+
+          if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" = "null" ]; then
+            echo "❌ Failed to get release ID from response"
+            echo "Response: $RESPONSE_BODY"
+            exit 1
+          fi
+
+          echo "✅ Release created successfully (ID: $RELEASE_ID)"
+          echo "release_id=$RELEASE_ID" >> "$GITHUB_OUTPUT"
+
+  sync-tag:
+    name: Push Tag to Subtree Repository
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - env:
+          TAG_NAME: ${{ needs.create-release.outputs.tag_name }}
+          PACKAGE_NAME: ${{ needs.create-release.outputs.package }}
+          PACKAGE_VERSION: ${{ needs.create-release.outputs.version }}
+        run: |
+          set -euo pipefail
+
+          REMOTE_URL="git@github.com:LacusSolutions/br-utils-php_${PACKAGE_NAME}.git"
+
+          echo "---------------------------------------------"
+          echo "🔄 Syncing tag to subtree repository"
+          echo "---------------------------------------------"
+          echo "🏷️  Monorepo tag: $TAG_NAME"
+          echo "📦 Package:      $PACKAGE_NAME"
+          echo "🔖 Version tag:  $PACKAGE_VERSION"
+          echo "🔗 Remote URL:   $REMOTE_URL"
+          echo ""
+
+          echo "🔍 Verifying remote repository..."
+
+          if ! git ls-remote "$REMOTE_URL" &> /dev/null; then
+            echo "❌ Remote repository not found: $REMOTE_URL"
+            exit 1
+          fi
+
+          echo "✅ Remote repository is reachable"
+          echo "🏷️  Creating local tag '$PACKAGE_VERSION' from '$TAG_NAME'..."
+
+          git fetch --tags
+          git remote add "remote-repo-${PACKAGE_NAME}" "$REMOTE_URL" || true
+          git tag "$PACKAGE_VERSION" "refs/tags/$TAG_NAME" -f
+
+          echo "🚀 Pushing tag '$PACKAGE_VERSION' to subtree repository..."
+
+          git push "remote-repo-${PACKAGE_NAME}" "refs/tags/$PACKAGE_VERSION" --force
+
+          echo "✅ Pushed tag '$PACKAGE_VERSION' to remote repository"
