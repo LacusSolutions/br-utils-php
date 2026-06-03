@@ -33,8 +33,8 @@
       "@lint:check"
     ],
     "lint:ci": [
-      "@lint:format --dry-run --diff",
-      "@lint:check --no-progress"
+      "@lint:format --dry-run",
+      "@lint:check --dry-run"
     ],
     "lint:format": "@php ../../scripts/lint-format.php cnpj-dv",
     "lint:check": "@php ../../scripts/lint-check.php cnpj-dv",
