@@ -22,10 +22,10 @@
     "enabled": true,
     "actions": [
       {
-        "action": "php run lint"
+        "action": "composer run lint:ci"
       },
       {
-        "action": "php run test"
+        "action": "composer run test"
       }
     ]
   }
