@@ -86,6 +86,106 @@ function git_lines(array $arguments, ?string $workingDirectory = null): array
     ));
 }
 
+function packages_directory(): string
+{
+    return Path::join(monorepo_root(), 'packages');
+}
+
+function package_names(): array
+{
+    static $names = null;
+
+    if ($names !== null) {
+        return $names;
+    }
+
+    $names = [];
+
+    foreach (scandir(packages_directory()) ?: [] as $entry) {
+        if ($entry === '.' || $entry === '..') {
+            continue;
+        }
+
+        if (is_dir(Path::join(packages_directory(), $entry))) {
+            $names[] = $entry;
+        }
+    }
+
+    sort($names);
+
+    return $names;
+}
+
+function resolve_lint_path(string $argument): ?string
+{
+    if (!str_contains($argument, '/') && !Path::isAbsolute($argument)) {
+        $packagePath = Path::join(packages_directory(), $argument);
+
+        if (is_dir($packagePath)) {
+            return Path::canonicalize($packagePath);
+        }
+    }
+
+    if (!Path::isAbsolute($argument)) {
+        foreach (array_unique([monorepo_root(), getcwd() ?: monorepo_root()]) as $basePath) {
+            $candidate = Path::join($basePath, $argument);
+
+            if (file_exists($candidate)) {
+                return Path::canonicalize($candidate);
+            }
+        }
+    }
+
+    if (Path::isAbsolute($argument) && file_exists($argument)) {
+        return Path::canonicalize($argument);
+    }
+
+    return null;
+}
+
+function split_script_arguments(array $arguments): array
+{
+    $paths = [];
+    $options = [];
+
+    foreach ($arguments as $argument) {
+        if (str_starts_with($argument, '-')) {
+            $options[] = $argument;
+        } else {
+            $paths[] = $argument;
+        }
+    }
+
+    return ['paths' => $paths, 'options' => $options];
+}
+
+function resolve_lint_paths(array $pathArguments): array
+{
+    if ($pathArguments === []) {
+        return array_map(
+            static fn (string $name): string => Path::join('packages', $name),
+            package_names(),
+        );
+    }
+
+    $resolvedPaths = [];
+
+    foreach ($pathArguments as $argument) {
+        $absolutePath = resolve_lint_path($argument);
+
+        if ($absolutePath === null) {
+            fwrite(STDERR, "Invalid lint path: {$argument}\n");
+            fwrite(STDERR, 'Available packages: ' . implode(', ', package_names()) . "\n");
+
+            exit(1);
+        }
+
+        $resolvedPaths[] = path_relative_to($absolutePath, monorepo_root());
+    }
+
+    return array_values(array_unique($resolvedPaths));
+}
+
 function package_directory_for(string $file): ?string
 {
     if (!preg_match('#^packages/([^/]+)/#', $file, $matches)) {
@@ -93,6 +193,74 @@ function package_directory_for(string $file): ?string
     }
 
     return Path::join(monorepo_root(), 'packages', $matches[1]);
+}
+
+function package_directory_for_absolute(string $absolutePath): ?string
+{
+    $packagesDir = Path::canonicalize(packages_directory());
+    $absolutePath = Path::canonicalize($absolutePath);
+
+    if (!str_starts_with($absolutePath, $packagesDir . DIRECTORY_SEPARATOR)) {
+        return null;
+    }
+
+    $relativePath = Path::makeRelative($absolutePath, $packagesDir);
+    $packageName = explode('/', str_replace('\\', '/', $relativePath))[0] ?? '';
+
+    if ($packageName === '' || $packageName === '.') {
+        return null;
+    }
+
+    $packageDirectory = Path::join($packagesDir, $packageName);
+
+    return is_dir($packageDirectory) ? $packageDirectory : null;
+}
+
+function group_lint_paths_by_package(array $monorepoRelativePaths): array
+{
+    $groups = [];
+
+    foreach ($monorepoRelativePaths as $monorepoRelativePath) {
+        $absolutePath = Path::join(monorepo_root(), $monorepoRelativePath);
+        $packageDirectory = package_directory_for_absolute($absolutePath);
+
+        if ($packageDirectory === null) {
+            fwrite(STDERR, "Lint path is outside packages/: {$monorepoRelativePath}\n");
+
+            exit(1);
+        }
+
+        $relativePath = path_relative_to($absolutePath, $packageDirectory);
+        $groups[$packageDirectory][] = $relativePath;
+    }
+
+    foreach ($groups as $packageDirectory => $relativePaths) {
+        $groups[$packageDirectory] = array_values(array_unique($relativePaths));
+    }
+
+    return $groups;
+}
+
+function normalize_package_lint_paths(array $relativePaths, string $packageDirectory): array
+{
+    $relativePaths = array_values(array_filter(
+        $relativePaths,
+        static fn (string $relativePath): bool => $relativePath !== '' && $relativePath !== '.',
+    ));
+
+    if ($relativePaths !== []) {
+        return $relativePaths;
+    }
+
+    $defaults = [];
+
+    foreach (['src', 'tests'] as $directory) {
+        if (is_dir(Path::join($packageDirectory, $directory))) {
+            $defaults[] = $directory;
+        }
+    }
+
+    return $defaults;
 }
 
 function path_relative_to(string $path, string $basePath): string

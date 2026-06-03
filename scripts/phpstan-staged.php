@@ -10,19 +10,19 @@
 
 declare(strict_types=1);
 
+require __DIR__ . '/helpers.php';
+
 class PhpStanStaged
 {
     private const PHP_EXTENSIONS = ['php'];
-    private const GIT_DIFF_COMMAND = 'git diff --cached --name-only --diff-filter=ACM';
-    private const PHPSTAN_COMMAND = 'vendor/bin/phpstan analyse --no-progress';
 
     public function run(): int
     {
         echo "🔍 Checking staged files with PhpStan...\n";
 
-        $stagedFiles = $this->getStagedFiles();
+        $stagedFiles = git_lines(['diff', '--cached', '--name-only', '--diff-filter=ACM']);
 
-        if (empty($stagedFiles)) {
+        if ($stagedFiles === []) {
             echo "✅ No staged PHP files found.\n";
 
             return 0;
@@ -30,7 +30,7 @@ class PhpStanStaged
 
         $phpFiles = $this->filterPhpFiles($stagedFiles);
 
-        if (empty($phpFiles)) {
+        if ($phpFiles === []) {
             echo "✅ No staged PHP files found.\n";
 
             return 0;
@@ -44,16 +44,14 @@ class PhpStanStaged
 
         echo "\n🔧 Running PhpStan on staged files...\n";
 
-        $command = self::PHPSTAN_COMMAND . ' ' . implode(' ', $phpFiles);
-        $output = [];
-        $returnCode = 0;
-
-        exec($command, $output, $returnCode);
-
-        // Show PhpStan output
-        if (!empty($output)) {
-            echo implode("\n", $output) . "\n";
-        }
+        $returnCode = run_vendor_bin('phpstan', array_merge(
+            [
+                'analyse',
+                '--no-progress',
+                '--configuration=' . monorepo_config_path('.php-stan.config.neon'),
+            ],
+            $phpFiles,
+        ), monorepo_root());
 
         if ($returnCode !== 0) {
             echo "❌ PhpStan found issues on staged files.\n";
@@ -66,31 +64,16 @@ class PhpStanStaged
         return 0;
     }
 
-    private function getStagedFiles(): array
-    {
-        $output = [];
-        $returnCode = 0;
-
-        exec(self::GIT_DIFF_COMMAND, $output, $returnCode);
-
-        if ($returnCode !== 0) {
-            throw new RuntimeException('Error running git diff: ' . implode("\n", $output));
-        }
-
-        return array_filter($output, fn ($file) => !empty(trim($file)));
-    }
-
     private function filterPhpFiles(array $files): array
     {
-        return array_filter($files, function ($file) {
+        return array_values(array_filter($files, function (string $file): bool {
             $extension = pathinfo($file, PATHINFO_EXTENSION);
 
             return in_array($extension, self::PHP_EXTENSIONS, true);
-        });
+        }));
     }
 }
 
-// Run the script
 try {
     $phpStanStaged = new PhpStanStaged();
 

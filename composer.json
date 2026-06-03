@@ -14,13 +14,13 @@
     "prepare": "captainhook install --no-interaction --configuration=.captainhook.config.json",
     "commit": "conventional-commits prepare",
     "lint": [
-      "@lint:check",
-      "@lint:format"
+      "@lint:format",
+      "@lint:check"
     ],
     "lint:format": "@php scripts/lint-format.php",
     "lint:check": "@php scripts/lint-check.php",
-    "lint:staged": "php scripts/lint-staged.php",
-    "lint:staged:test": "php scripts/test-lint-staged.php",
+    "lint:staged": "@php scripts/lint-staged.php",
+    "lint:staged:test": "@php scripts/test-lint-staged.php",
     "test:cnpj-fmt": "cd packages/cnpj-fmt && composer test",
     "test:cnpj-gen": "cd packages/cnpj-gen && composer test",
     "test:cnpj-val": "cd packages/cnpj-val && composer test",
