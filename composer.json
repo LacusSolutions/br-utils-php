@@ -34,8 +34,8 @@
       "@lint:format --dry-run --diff",
       "@lint:check --no-progress"
     ],
-    "lint:format": "@php ../../scripts/lint-format.php",
-    "lint:check": "@php ../../scripts/lint-check.php",
+    "lint:format": "@php ../../scripts/lint-format.php cnpj-val",
+    "lint:check": "@php ../../scripts/lint-check.php cnpj-val",
     "test": [
       "pest --configuration=.pest.config.xml --group isolated-process-tests",
       "pest --configuration=.pest.config.xml --exclude-group isolated-process-tests"
