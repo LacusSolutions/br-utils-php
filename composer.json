@@ -13,6 +13,7 @@
   "scripts": {
     "prepare": "captainhook install --no-interaction --configuration=.captainhook.config.json",
     "commit": "conventional-commits prepare",
+    "release": "@php scripts/release.php",
     "lint": [
       "@lint:format",
       "@lint:check"
