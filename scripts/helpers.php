@@ -147,8 +147,15 @@ function split_script_arguments(array $arguments): array
 {
     $paths = [];
     $options = [];
+    $dryRun = false;
 
     foreach ($arguments as $argument) {
+        if (in_array($argument, ['-ci', '--dry-run'], true)) {
+            $dryRun = true;
+
+            continue;
+        }
+
         if (str_starts_with($argument, '-')) {
             $options[] = $argument;
         } else {
@@ -156,7 +163,16 @@ function split_script_arguments(array $arguments): array
         }
     }
 
-    return ['paths' => $paths, 'options' => $options];
+    return ['paths' => $paths, 'options' => $options, 'dryRun' => $dryRun];
+}
+
+function lint_tool_options(array $splitArguments, array $dryRunOptions): array
+{
+    if (!$splitArguments['dryRun']) {
+        return $splitArguments['options'];
+    }
+
+    return array_values(array_unique(array_merge($dryRunOptions, $splitArguments['options'])));
 }
 
 function resolve_lint_paths(array $pathArguments): array

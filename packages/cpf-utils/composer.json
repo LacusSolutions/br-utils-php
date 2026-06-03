@@ -36,8 +36,8 @@
       "@lint:check"
     ],
     "lint:ci": [
-      "@lint:format --dry-run --diff",
-      "@lint:check --no-progress"
+      "@lint:format --dry-run",
+      "@lint:check --dry-run"
     ],
     "lint:format": "@php ../../scripts/lint-format.php cpf-utils",
     "lint:check": "@php ../../scripts/lint-check.php cpf-utils",
