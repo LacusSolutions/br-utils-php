@@ -36,8 +36,8 @@
       "@lint:format --dry-run --diff",
       "@lint:check --no-progress"
     ],
-    "lint:format": "@php ../../scripts/lint-format.php",
-    "lint:check": "@php ../../scripts/lint-check.php",
+    "lint:format": "@php ../../scripts/lint-format.php cpf-dv",
+    "lint:check": "@php ../../scripts/lint-check.php cpf-dv",
     "test": "pest --configuration=.pest.config.xml",
     "test:watch": "@test --watch",
     "test:cov": "@test --coverage-html coverage"
