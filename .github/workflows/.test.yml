@@ -1,0 +1,63 @@
+name: Run Unit Tests
+
+on:
+  workflow_call:
+    inputs:
+      packages:
+        type: string
+        description: 'JSON array of package names to test (e.g. ["br-utils","cpf-val"])'
+        required: true
+      php-versions:
+        type: string
+        description: 'JSON array of PHP versions (e.g. ["8.2","8.3","8.4","8.5"])'
+        required: false
+        default: '["8.2","8.3","8.4","8.5"]'
+      max-parallel:
+        type: number
+        description: 'Maximum number of parallel jobs'
+        required: false
+        default: 4
+      api-url:
+        type: string
+        description: 'BR Utils API URL'
+        required: true
+    secrets:
+      api-token:
+        description: 'BR Utils API token'
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Tests `lacus/${{ matrix.package }}` in PHP v${{ matrix.php-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: ${{ inputs.max-parallel }}
+      matrix:
+        php-version: ${{ fromJSON(inputs.php-versions) }}
+        package: ${{ fromJSON(inputs.packages) }}
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2.37.1
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: curl, intl, libxml, mbstring
+          coverage: xdebug
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: packages/${{ matrix.package }}/vendor/
+          key: ${{ runner.os }}-php-${{ matrix.package }}-${{ hashFiles(format('packages/{0}/composer.lock', matrix.package)) }}
+
+      - run: composer validate --strict
+        working-directory: packages/${{ matrix.package }}
+      - run: composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
+        working-directory: packages/${{ matrix.package }}
+
+      - run: composer test
+        working-directory: packages/${{ matrix.package }}
+        env:
+          API_URL: ${{ inputs.api-url }}
+          API_TOKEN: ${{ secrets.api-token }}
