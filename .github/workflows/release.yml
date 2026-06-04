@@ -158,7 +158,9 @@ jobs:
 
   create-release:
     name: Create GitHub Release
-    needs: validate
+    needs:
+      - prepare-release
+      - validate
     permissions:
       contents: write
     runs-on: ubuntu-latest
