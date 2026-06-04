@@ -12,6 +12,8 @@ function print_release_usage(): void
 }
 
 /**
+ * @param list<string> $arguments
+ *
  * @return array{package: ?string, version: ?string}
  */
 function parse_release_arguments(array $arguments): array
@@ -88,7 +90,7 @@ function extract_changelog_bodies(string $markdown): array
     return $bodies;
 }
 
-$parsedArguments = parse_release_arguments(array_slice($_SERVER['argv'], 1));
+$parsedArguments = parse_release_arguments(script_arguments());
 $package = $parsedArguments['package'];
 $requestedVersion = $parsedArguments['version'];
 

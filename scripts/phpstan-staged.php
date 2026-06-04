@@ -64,6 +64,11 @@ class PhpStanStaged
         return 0;
     }
 
+    /**
+     * @param list<string> $files
+     *
+     * @return list<string>
+     */
     private function filterPhpFiles(array $files): array
     {
         return array_values(array_filter($files, function (string $file): bool {

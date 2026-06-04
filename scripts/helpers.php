@@ -31,6 +31,9 @@ function find_vendor_bin(string $name): string
     return $path;
 }
 
+/**
+ * @param list<string> $command
+ */
 function run_process(array $command, ?string $workingDirectory = null): int
 {
     $process = new Process(
@@ -46,6 +49,9 @@ function run_process(array $command, ?string $workingDirectory = null): int
     return $process->getExitCode() ?? 1;
 }
 
+/**
+ * @param list<string> $arguments
+ */
 function run_vendor_bin(string $name, array $arguments = [], ?string $workingDirectory = null): int
 {
     return run_process(
@@ -54,6 +60,9 @@ function run_vendor_bin(string $name, array $arguments = [], ?string $workingDir
     );
 }
 
+/**
+ * @param list<string> $arguments
+ */
 function run_git(array $arguments, ?string $workingDirectory = null): string
 {
     $process = new Process(
@@ -72,6 +81,11 @@ function run_git(array $arguments, ?string $workingDirectory = null): string
     return $process->getOutput();
 }
 
+/**
+ * @param list<string> $arguments
+ *
+ * @return list<string>
+ */
 function git_lines(array $arguments, ?string $workingDirectory = null): array
 {
     $output = trim(run_git($arguments, $workingDirectory));
@@ -91,8 +105,12 @@ function packages_directory(): string
     return Path::join(monorepo_root(), 'packages');
 }
 
+/**
+ * @return list<string>
+ */
 function package_names(): array
 {
+    /** @var list<string>|null $names */
     static $names = null;
 
     if ($names !== null) {
@@ -143,6 +161,37 @@ function resolve_lint_path(string $argument): ?string
     return null;
 }
 
+/**
+ * @return list<string>
+ */
+function script_arguments(): array
+{
+    if (!isset($_SERVER['argv']) || !is_array($_SERVER['argv'])) {
+        fwrite(STDERR, "Missing CLI arguments.\n");
+
+        exit(1);
+    }
+
+    $arguments = [];
+
+    foreach (array_slice($_SERVER['argv'], 1) as $argument) {
+        if (!is_string($argument)) {
+            fwrite(STDERR, "Invalid CLI argument type.\n");
+
+            exit(1);
+        }
+
+        $arguments[] = $argument;
+    }
+
+    return $arguments;
+}
+
+/**
+ * @param list<string> $arguments
+ *
+ * @return array{paths: list<string>, options: list<string>, dryRun: bool}
+ */
 function split_script_arguments(array $arguments): array
 {
     $paths = [];
@@ -166,6 +215,12 @@ function split_script_arguments(array $arguments): array
     return ['paths' => $paths, 'options' => $options, 'dryRun' => $dryRun];
 }
 
+/**
+ * @param array{paths: list<string>, options: list<string>, dryRun: bool} $splitArguments
+ * @param list<string> $dryRunOptions
+ *
+ * @return list<string>
+ */
 function lint_tool_options(array $splitArguments, array $dryRunOptions): array
 {
     if (!$splitArguments['dryRun']) {
@@ -175,6 +230,11 @@ function lint_tool_options(array $splitArguments, array $dryRunOptions): array
     return array_values(array_unique(array_merge($dryRunOptions, $splitArguments['options'])));
 }
 
+/**
+ * @param list<string> $pathArguments
+ *
+ * @return list<string>
+ */
 function resolve_lint_paths(array $pathArguments): array
 {
     if ($pathArguments === []) {
@@ -238,6 +298,11 @@ function package_directory_for_absolute(string $absolutePath): ?string
     return null;
 }
 
+/**
+ * @param list<string> $monorepoRelativePaths
+ *
+ * @return array<string, list<string>>
+ */
 function group_lint_paths_by_package(array $monorepoRelativePaths): array
 {
     $groups = [];
@@ -263,6 +328,11 @@ function group_lint_paths_by_package(array $monorepoRelativePaths): array
     return $groups;
 }
 
+/**
+ * @param list<string> $relativePaths
+ *
+ * @return list<string>
+ */
 function normalize_package_lint_paths(array $relativePaths, string $packageDirectory): array
 {
     $relativePaths = array_values(array_filter(

@@ -72,6 +72,11 @@ class LintStaged
         return 0;
     }
 
+    /**
+     * @param list<string> $files
+     *
+     * @return list<string>
+     */
     private function filterPhpFiles(array $files): array
     {
         return array_values(array_filter($files, function (string $file): bool {
@@ -81,6 +86,9 @@ class LintStaged
         }));
     }
 
+    /**
+     * @param list<string> $files
+     */
     private function runPhpCsFixer(array $files): bool
     {
         $hasChanges = false;
@@ -120,6 +128,9 @@ class LintStaged
         return $hasChanges;
     }
 
+    /**
+     * @param list<string> $files
+     */
     private function runPhpStan(array $files): int
     {
         return run_vendor_bin('phpstan', array_merge(
@@ -132,6 +143,9 @@ class LintStaged
         ), monorepo_root());
     }
 
+    /**
+     * @param list<string> $files
+     */
     private function addFilesToStaging(array $files): bool
     {
         $failed = false;

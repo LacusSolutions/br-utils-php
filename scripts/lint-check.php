@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/helpers.php';
 
-$arguments = array_slice($_SERVER['argv'], 1);
+$arguments = script_arguments();
 $splitArguments = split_script_arguments($arguments);
 $lintPaths = resolve_lint_paths($splitArguments['paths']);
 $packageGroups = group_lint_paths_by_package($lintPaths);
