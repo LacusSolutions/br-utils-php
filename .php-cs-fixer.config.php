@@ -22,7 +22,8 @@ if ($searchDirs === []) {
     $searchDirs[] = $dir;
 }
 
-$cacheFile = "{$vendorDir}.php-cs-fixer.cache";
+$rootVendorDir = __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
+$cacheFile = "{$rootVendorDir}.php-cs-fixer.cache";
 $finder = Finder::create()
     ->in($searchDirs)
     ->exclude([$vendorDir]);
