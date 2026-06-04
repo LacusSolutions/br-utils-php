@@ -10,8 +10,7 @@ on:
       php-versions:
         type: string
         description: 'JSON array of PHP versions (e.g. ["8.2","8.3","8.4","8.5"])'
-        required: false
-        default: '["8.2"]'
+        required: true
       max-parallel:
         type: number
         description: 'Maximum number of parallel jobs'

@@ -17,7 +17,6 @@ permissions:
   contents: read
 
 env:
-  PHP_VERSION: '8.2'
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
@@ -25,13 +24,13 @@ jobs:
     uses: ./.github/workflows/.lint.yml
     with:
       packages: ${{ format('["{0}"]', inputs.package) }}
-      php-versions: ${{ format('["{0}"]', env.PHP_VERSION) }}
+      php-versions: ${{ format('["{0}","{1}"]', vars.MIN_PHP_VERSION, vars.MAX_PHP_VERSION) }}
 
   test:
     uses: ./.github/workflows/.test.yml
     with:
       packages: ${{ format('["{0}"]', inputs.package) }}
-      php-versions: ${{ format('["{0}"]', env.PHP_VERSION) }}
+      php-versions: ${{ format('["{0}","{1}"]', vars.MIN_PHP_VERSION, vars.MAX_PHP_VERSION) }}
       api-url: ${{ vars.BR_UTILS_API_URL }}
     secrets:
       api-token: ${{ secrets.BR_UTILS_API_TOKEN }}
@@ -48,7 +47,7 @@ jobs:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2.37.1
         with:
-          php-version: ${{ env.PHP_VERSION }}
+          php-version: ${{ vars.MAX_PHP_VERSION }}
           extensions: curl, intl, libxml, mbstring
       - run: composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
       - id: release
