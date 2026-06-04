@@ -207,11 +207,7 @@ function resolve_lint_paths(array $pathArguments): array
 
 function package_directory_for(string $file): ?string
 {
-    if (!preg_match('#^packages/([^/]+)/#', $file, $matches)) {
-        return null;
-    }
-
-    return Path::join(monorepo_root(), 'packages', $matches[1]);
+    return package_directory_for_absolute(Path::join(monorepo_root(), $file));
 }
 
 function package_directory_for_absolute(string $absolutePath): ?string

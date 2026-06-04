@@ -91,7 +91,7 @@ class LintStaged
             $packageDirectory = package_directory_for($file);
 
             if ($packageDirectory === null) {
-                echo "  ⚠️  Skipping file outside packages/: $file\n";
+                echo "  ⚠️  Skipping file outside the monorepo: $file\n";
 
                 continue;
             }

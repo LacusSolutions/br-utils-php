@@ -8,12 +8,23 @@ use PhpCsFixer\Finder;
 $dir = getcwd() ?: __DIR__;
 $dir .= DIRECTORY_SEPARATOR;
 $vendorDir = $dir . 'vendor' . DIRECTORY_SEPARATOR;
-$testsDir = $dir . 'tests' . DIRECTORY_SEPARATOR;
-$srcDir = $dir . 'src' . DIRECTORY_SEPARATOR;
+$searchDirs = [];
+
+foreach (['src', 'tests', 'scripts'] as $directory) {
+    $path = $dir . $directory . DIRECTORY_SEPARATOR;
+
+    if (is_dir($path)) {
+        $searchDirs[] = $path;
+    }
+}
+
+if ($searchDirs === []) {
+    $searchDirs[] = $dir;
+}
 
 $cacheFile = "{$vendorDir}.php-cs-fixer.cache";
 $finder = Finder::create()
-    ->in([$srcDir, $testsDir])
+    ->in($searchDirs)
     ->exclude([$vendorDir]);
 $rules = [
     '@PSR12' => true,
