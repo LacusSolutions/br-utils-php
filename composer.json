@@ -13,14 +13,19 @@
   "scripts": {
     "prepare": "captainhook install --no-interaction --configuration=.captainhook.config.json",
     "commit": "conventional-commits prepare",
+    "release": "@php scripts/release.php",
     "lint": [
-      "phpstan analyse",
-      "php-cs-fixer fix --dry-run --diff"
+      "@lint:format",
+      "@lint:check"
     ],
-    "lint:fix": "php-cs-fixer fix",
-    "lint:staged": "php scripts/lint-staged.php",
-    "lint:staged:test": "php scripts/test-lint-staged.php",
-    "test:sync-configs": "php scripts/phpunit-sync-configs.php",
+    "lint:ci": [
+      "@lint:format --dry-run",
+      "@lint:check --dry-run"
+    ],
+    "lint:format": "@php scripts/lint-format.php",
+    "lint:check": "@php scripts/lint-check.php",
+    "lint:staged": "@php scripts/lint-staged.php",
+    "lint:staged:test": "@php scripts/test-lint-staged.php",
     "test:cnpj-fmt": "cd packages/cnpj-fmt && composer test",
     "test:cnpj-gen": "cd packages/cnpj-gen && composer test",
     "test:cnpj-val": "cd packages/cnpj-val && composer test",
@@ -84,6 +89,8 @@
   "require-dev": {
     "captainhook/captainhook": "^5.29",
     "captainhook/hook-installer": "^1.0",
+    "friendsofphp/php-cs-fixer": "^3.94",
+    "phpstan/phpstan": "^2.1",
     "ramsey/conventional-commits": "^1.7",
     "roave/security-advisories": "dev-latest",
     "symfony/console": "^7.4",

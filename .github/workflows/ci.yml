@@ -1,4 +1,4 @@
-name: CI
+name: Continuous Integration
 
 on:
   push:
@@ -12,7 +12,6 @@ concurrency:
 
 permissions:
   contents: read
-  actions: write
 
 jobs:
   discover:
@@ -24,7 +23,7 @@ jobs:
       has-test: ${{ steps.discover.outputs.has-test }}
       test-packages: ${{ steps.discover.outputs.test-packages }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - id: discover
         run: |
           set -euo pipefail
@@ -70,74 +69,20 @@ jobs:
           echo "Packages with test: $test_json"
 
   lint:
-    name: Lint `lacus/${{ matrix.package }}` in PHP v${{ matrix.php-version }}
     needs: discover
     if: needs.discover.outputs.has-lint == 'true'
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      max-parallel: 4
-      matrix:
-        php-version:
-          - 8.2
-          - 8.3
-          - 8.4
-          - 8.5
-        package: ${{ fromJSON(needs.discover.outputs.lint-packages) }}
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
-        with:
-          php-version: ${{ matrix.php-version }}
-          extensions: curl, intl, libxml, mbstring
-          coverage: xdebug
-      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
-        with:
-          path: packages/${{ matrix.package }}/vendor/
-          key: ${{ runner.os }}-php-lint-${{ matrix.package }}-${{ hashFiles(format('packages/{0}/composer.lock', matrix.package)) }}
-
-      - run: composer validate --strict
-        working-directory: packages/${{ matrix.package }}
-      - run: composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
-        working-directory: packages/${{ matrix.package }}
-
-      - run: composer run lint:ci
-        working-directory: packages/${{ matrix.package }}
+    uses: ./.github/workflows/.lint.yml
+    with:
+      packages: ${{ needs.discover.outputs.lint-packages }}
+      php-versions: '["8.2","8.3","8.4","8.5"]'
 
   test:
-    name: Tests `lacus/${{ matrix.package }}` in PHP v${{ matrix.php-version }}
     needs: discover
     if: needs.discover.outputs.has-test == 'true'
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      max-parallel: 4
-      matrix:
-        php-version:
-          - 8.2
-          - 8.3
-          - 8.4
-          - 8.5
-        package: ${{ fromJSON(needs.discover.outputs.test-packages) }}
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
-        with:
-          php-version: ${{ matrix.php-version }}
-          extensions: curl, intl, libxml, mbstring
-          coverage: xdebug
-      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
-        with:
-          path: packages/${{ matrix.package }}/vendor/
-          key: ${{ runner.os }}-php-${{ matrix.package }}-${{ hashFiles(format('packages/{0}/composer.lock', matrix.package)) }}
-
-      - run: composer validate --strict
-        working-directory: packages/${{ matrix.package }}
-      - run: composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
-        working-directory: packages/${{ matrix.package }}
-
-      - run: composer test
-        working-directory: packages/${{ matrix.package }}
-        env:
-          API_URL: ${{ vars.BR_UTILS_API_URL }}
-          API_TOKEN: ${{ secrets.BR_UTILS_API_TOKEN }}
+    uses: ./.github/workflows/.test.yml
+    with:
+      packages: ${{ needs.discover.outputs.test-packages }}
+      php-versions: '["8.2","8.3","8.4","8.5"]'
+      api-url: ${{ vars.BR_UTILS_API_URL }}
+    secrets:
+      api-token: ${{ secrets.BR_UTILS_API_TOKEN }}
