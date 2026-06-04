@@ -178,10 +178,13 @@ function lint_tool_options(array $splitArguments, array $dryRunOptions): array
 function resolve_lint_paths(array $pathArguments): array
 {
     if ($pathArguments === []) {
-        return array_map(
-            static fn (string $name): string => Path::join('packages', $name),
-            package_names(),
-        );
+        return array_values(array_unique(array_merge(
+            ['scripts'],
+            array_map(
+                static fn (string $name): string => Path::join('packages', $name),
+                package_names(),
+            ),
+        )));
     }
 
     $resolvedPaths = [];
@@ -213,23 +216,30 @@ function package_directory_for(string $file): ?string
 
 function package_directory_for_absolute(string $absolutePath): ?string
 {
+    $monorepoRoot = Path::canonicalize(monorepo_root());
     $packagesDir = Path::canonicalize(packages_directory());
     $absolutePath = Path::canonicalize($absolutePath);
 
-    if (!str_starts_with($absolutePath, $packagesDir . DIRECTORY_SEPARATOR)) {
-        return null;
+    if (str_starts_with($absolutePath, $packagesDir . DIRECTORY_SEPARATOR)
+        || $absolutePath === $packagesDir) {
+        $relativePath = Path::makeRelative($absolutePath, $packagesDir);
+        $packageName = explode('/', str_replace('\\', '/', $relativePath))[0] ?? '';
+
+        if ($packageName === '' || $packageName === '.') {
+            return null;
+        }
+
+        $packageDirectory = Path::join($packagesDir, $packageName);
+
+        return is_dir($packageDirectory) ? $packageDirectory : null;
     }
 
-    $relativePath = Path::makeRelative($absolutePath, $packagesDir);
-    $packageName = explode('/', str_replace('\\', '/', $relativePath))[0] ?? '';
-
-    if ($packageName === '' || $packageName === '.') {
-        return null;
+    if (str_starts_with($absolutePath, $monorepoRoot . DIRECTORY_SEPARATOR)
+        || $absolutePath === $monorepoRoot) {
+        return $monorepoRoot;
     }
 
-    $packageDirectory = Path::join($packagesDir, $packageName);
-
-    return is_dir($packageDirectory) ? $packageDirectory : null;
+    return null;
 }
 
 function group_lint_paths_by_package(array $monorepoRelativePaths): array
@@ -241,7 +251,7 @@ function group_lint_paths_by_package(array $monorepoRelativePaths): array
         $packageDirectory = package_directory_for_absolute($absolutePath);
 
         if ($packageDirectory === null) {
-            fwrite(STDERR, "Lint path is outside packages/: {$monorepoRelativePath}\n");
+            fwrite(STDERR, "Lint path is outside the monorepo: {$monorepoRelativePath}\n");
 
             exit(1);
         }
@@ -270,7 +280,11 @@ function normalize_package_lint_paths(array $relativePaths, string $packageDirec
 
     $defaults = [];
 
-    foreach (['src', 'tests'] as $directory) {
+    $defaultDirectories = Path::canonicalize($packageDirectory) === Path::canonicalize(monorepo_root())
+        ? ['scripts']
+        : ['src', 'tests'];
+
+    foreach ($defaultDirectories as $directory) {
         if (is_dir(Path::join($packageDirectory, $directory))) {
             $defaults[] = $directory;
         }
