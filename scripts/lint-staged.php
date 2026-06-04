@@ -57,7 +57,13 @@ class LintStaged
 
         if ($hasChanges) {
             echo "✨ Fixes applied! Adding fixed files to the staging area...\n";
-            $this->addFilesToStaging($phpFiles);
+
+            if (!$this->addFilesToStaging($phpFiles)) {
+                echo "❌ Failed to add fixed files to the staging area.\n";
+
+                return 1;
+            }
+
             echo "✅ Fixed files added to the staging area.\n";
         } else {
             echo "✅ No fixes needed.\n";
@@ -126,15 +132,20 @@ class LintStaged
         ), monorepo_root());
     }
 
-    private function addFilesToStaging(array $files): void
+    private function addFilesToStaging(array $files): bool
     {
+        $failed = false;
+
         foreach ($files as $file) {
             try {
                 run_git(['add', $file]);
             } catch (RuntimeException $exception) {
                 echo "  ⚠️  Error adding $file to the staging area: {$exception->getMessage()}\n";
+                $failed = true;
             }
         }
+
+        return !$failed;
     }
 }
 
