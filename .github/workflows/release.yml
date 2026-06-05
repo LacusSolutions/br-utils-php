@@ -158,6 +158,8 @@ jobs:
   create-release:
     name: Create GitHub Release
     needs:
+      - lint
+      - test
       - prepare-release
       - validate
     permissions:
