@@ -53,7 +53,5 @@ First stable release of **`lacus/cnpj-val`** focused on CNPJ checksum validation
   - Calculations reuse `CnpjGeneratorVerifierDigit` from **`lacus/cnpj-gen`** `^1.0`.
 - **Return model**:
   - Ordinary validation failures return `false` (no exceptions for invalid CNPJ).
-- **Runtime**:
-  - PHP `>=8.1`.
-- **Testing**:
-  - PHPUnit-based suite.
+- **Runtime**: PHP `>=8.1`.
+- **Testing**: PHPUnit-based suite.
