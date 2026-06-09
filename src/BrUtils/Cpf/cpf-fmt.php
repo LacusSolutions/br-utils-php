@@ -29,13 +29,13 @@ use InvalidArgumentException;
  */
 function cpf_fmt(
     string $cpfString,
+    ?bool $escape = null,
     ?bool $hidden = null,
     ?string $hiddenKey = null,
     ?int $hiddenStart = null,
     ?int $hiddenEnd = null,
     ?string $dotKey = null,
     ?string $dashKey = null,
-    ?bool $escape = null,
     ?Closure $onFail = null,
 ): string {
     return \Lacus\CpfFmt\cpf_fmt(
