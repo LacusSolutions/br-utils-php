@@ -84,8 +84,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\BrUtils\\Tests\\Cnpj\\": "tests/pest/",
-      "Lacus\\BrUtils\\Tests\\Cpf\\": "tests/phpunit/"
+      "Lacus\\BrUtils\\Tests\\": "tests/specs/",
+      "Lacus\\BrUtils\\Tests\\Legacy\\": "tests/phpunit/"
     }
   }
 }

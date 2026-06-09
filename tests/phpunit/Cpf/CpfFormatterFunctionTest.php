@@ -2,23 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Tests\Cpf;
+namespace Lacus\BrUtils\Tests\Legacy\Cpf;
 
 use Closure;
-use Lacus\BrUtils\Cpf\CpfFormatter;
+
+use function Lacus\BrUtils\Cpf\cpf_fmt;
+
 use Lacus\CpfFmt\Tests\CpfFormatterTestCases;
 use PHPUnit\Framework\TestCase;
 
-class CpfFormatterClassTest extends TestCase
+class CpfFormatterFunctionTest extends TestCase
 {
     use CpfFormatterTestCases;
-
-    private CpfFormatter $formatter;
-
-    protected function setUp(): void
-    {
-        $this->formatter = new CpfFormatter();
-    }
 
     protected function format(
         string $cpfString,
@@ -31,7 +26,7 @@ class CpfFormatterClassTest extends TestCase
         ?string $dashKey = null,
         ?Closure $onFail = null,
     ): string {
-        return $this->formatter->format(
+        return cpf_fmt(
             $cpfString,
             $escape,
             $hidden,

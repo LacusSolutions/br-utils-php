@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Tests\Cpf;
+namespace Lacus\BrUtils\Tests\Legacy\Cpf;
 
 use Lacus\BrUtils\Cpf\CpfValidator;
 use Lacus\CpfVal\Tests\CpfValidatorTestCases;
