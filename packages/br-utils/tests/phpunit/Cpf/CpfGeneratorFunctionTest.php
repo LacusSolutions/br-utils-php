@@ -2,28 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Tests\Cpf;
+namespace Lacus\BrUtils\Tests\Legacy\Cpf;
 
-use Lacus\BrUtils\Cpf\CpfGenerator;
+use function Lacus\BrUtils\Cpf\cpf_gen;
+
 use Lacus\CpfGen\Tests\CpfGeneratorTestCases;
 use PHPUnit\Framework\TestCase;
 
-class CpfGeneratorClassTest extends TestCase
+class CpfGeneratorFunctionTest extends TestCase
 {
     use CpfGeneratorTestCases;
-
-    private CpfGenerator $generator;
-
-    protected function setUp(): void
-    {
-        $this->generator = new CpfGenerator();
-    }
 
     protected function generate(
         ?bool $format = null,
         ?string $prefix = null,
     ): string {
-        return $this->generator->generate(
+        return cpf_gen(
             $format,
             $prefix,
         );

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Tests;
+namespace Lacus\BrUtils\Tests\Legacy\Cpf;
 
 use Closure;
-use Lacus\BrUtils\CpfUtils;
+use Lacus\BrUtils\Cpf\CpfUtils;
 use Lacus\CpfUtils\Tests\CpfUtilsTestCases;
 use PHPUnit\Framework\TestCase;
 
