@@ -85,7 +85,11 @@
   "autoload-dev": {
     "psr-4": {
       "Lacus\\BrUtils\\Tests\\": "tests/specs/",
-      "Lacus\\BrUtils\\Tests\\Legacy\\": "tests/phpunit/"
+      "Lacus\\BrUtils\\Tests\\Legacy\\": "tests/phpunit/",
+      "Lacus\\CpfFmt\\Tests\\": "vendor/lacus/cpf-fmt/tests/",
+      "Lacus\\CpfGen\\Tests\\": "vendor/lacus/cpf-gen/tests/",
+      "Lacus\\CpfVal\\Tests\\": "vendor/lacus/cpf-val/tests/",
+      "Lacus\\CpfUtils\\Tests\\": "vendor/lacus/cpf-utils/tests/"
     }
   }
 }
