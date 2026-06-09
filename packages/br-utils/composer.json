@@ -74,8 +74,13 @@
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\BrUtils\\": "src/"
-    }
+      "Lacus\\": "src/"
+    },
+    "files": [
+      "src/BrUtils/Cpf/cpf-fmt.php",
+      "src/BrUtils/Cpf/cpf-gen.php",
+      "src/BrUtils/Cpf/cpf-val.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
