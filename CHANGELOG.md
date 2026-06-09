@@ -81,7 +81,5 @@ First stable release of **`lacus/cnpj-gen`** focused on numeric CNPJ generation.
   - Prefix-based generation for numeric seeds.
 - **Validation model**:
   - Option errors handled by generic exceptions.
-- **Runtime**:
-  - PHP `>=8.1`.
-- **Testing**:
-  - PHPUnit-based suite.
+- **Runtime**: PHP `>=8.1`.
+- **Testing**: PHPUnit-based suite.
