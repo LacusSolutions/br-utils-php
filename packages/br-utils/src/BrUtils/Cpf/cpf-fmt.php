@@ -16,13 +16,13 @@ use InvalidArgumentException;
  * length is handled by the configured `onFail` callback instead of throwing.
  *
  * @param string $cpfString
+ * @param ?bool $escape
  * @param ?bool $hidden
  * @param ?string $hiddenKey
  * @param ?int $hiddenStart
  * @param ?int $hiddenEnd
  * @param ?string $dotKey
  * @param ?string $dashKey
- * @param ?bool $escape
  * @param ?Closure(mixed, Exception): string $onFail
  *
  * @throws InvalidArgumentException If any option has an invalid type.
