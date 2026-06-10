@@ -12,7 +12,7 @@
 >
   <testsuites>
     <testsuite name="BR Utils Test Suite">
-      <directory suffix=".spec.php">tests/pest/</directory>
+      <directory suffix=".spec.php">tests/specs/</directory>
     </testsuite>
   </testsuites>
   <source>
