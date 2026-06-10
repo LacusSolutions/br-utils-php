@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lacus\BrUtils\Cpf;
 
-use Lacus\CpfGen\CpfGenerator as BaseCpfGenerator;
+use Lacus\CpfUtils\CpfGenerator as BaseCpfGenerator;
 
 class CpfGenerator extends BaseCpfGenerator
 {
