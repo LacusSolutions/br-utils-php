@@ -1,5 +1,11 @@
 # lacus/cnpj-gen
 
+## 2.1.1
+
+### Patch Changes
+
+- **Dependency constraints** — Changed internal dependency version constraints from caret to tilde notation for more predictable feature propagation.
+
 ## 2.1.0
 
 ### Improvements
