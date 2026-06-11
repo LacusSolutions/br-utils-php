@@ -33,6 +33,18 @@ use Lacus\CpfUtils\CpfGenerator as LegacyCpfGenerator;
 use Lacus\CpfUtils\CpfValidator as LegacyCpfValidator;
 
 describe('BrUtils', function () {
+    /**
+     * @return array{
+     *     escape: bool,
+     *     hidden: bool,
+     *     hiddenKey: string,
+     *     hiddenStart: int,
+     *     hiddenEnd: int,
+     *     dotKey: string,
+     *     dashKey: string,
+     *     onFail: \Closure(string, \Exception): string,
+     * }
+     */
     function getCpfFormatterOptions(LegacyCpfFormatterOptions $options): array
     {
         return [
@@ -47,6 +59,12 @@ describe('BrUtils', function () {
         ];
     }
 
+    /**
+     * @return array{
+     *     format: bool,
+     *     prefix: string,
+     * }
+     */
     function getCpfGeneratorOptions(LegacyCpfGeneratorOptions $options): array
     {
         return [
