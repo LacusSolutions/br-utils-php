@@ -185,7 +185,7 @@ For packages still on PHPUnit, follow existing test files in `packages/cpf-fmt/t
 
 ## Running tests
 
-From the **php/** subrepo root:
+From the repo root:
 
 | Goal | Command |
 |------|---------|

@@ -44,8 +44,8 @@
       "@lint:format --dry-run",
       "@lint:check --dry-run"
     ],
-    "lint:format": "@php ../../scripts/lint-format.php br-utils",
-    "lint:check": "@php ../../scripts/lint-check.php br-utils",
+    "lint:format": "@php ../../run lint:format br-utils",
+    "lint:check": "@php ../../run lint:check br-utils",
     "test": [
       "pest --configuration=.pest.config.xml --group isolated-process-tests",
       "pest --configuration=.pest.config.xml --exclude-group isolated-process-tests",

@@ -14,7 +14,7 @@ triggers:
 
 # dependencies
 
-Manage dependencies in the br-utils-php monorepo following the rules below. All paths are relative to the **php/** subrepo root.
+Manage dependencies in the br-utils-php monorepo following the rules below. All paths are relative to the repo root.
 
 ## Repository constraints
 
@@ -40,29 +40,29 @@ Bumping an **already-declared internal dependency** to a new published semver ra
 
 1. Check `packages/<pkg>/composer.json` `"require"` and `"require-dev"` fields.
 2. Check the root `composer.json` `"require-dev"` to confirm shared tooling is not already available at root.
-3. Identify downstream packages that will be affected by a new internal dep version bump — use `scripts/deps-tree.php` (see [Inspecting internal dependencies](#inspecting-internal-dependencies)).
+3. Identify downstream packages that will be affected by a new internal dep version bump — use `php run deps` (see [Inspecting internal dependencies](#inspecting-internal-dependencies)).
 4. Confirm the proposed edge respects [dependency direction](#dependency-direction-reference); a reverse edge will show up as an unexpected branch in the forward tree.
 5. If approval is needed, stop and ask — do not speculatively add the dependency.
 
 ## Inspecting internal dependencies
 
-`scripts/deps-tree.php` scans every `packages/*/composer.json`, builds the `lacus/*` dependency graph from declared constraints, and prints box-drawing trees to the console. Use it before adding or bumping internal deps to verify direction and blast radius.
+`php run deps` runs the `DepsCommand` Symfony Console command (`scripts/Commands/DepsCommand.php`), which scans every `packages/*/composer.json`, builds the `lacus/*` dependency graph from declared constraints, and prints box-drawing trees to the console. Use it before adding or bumping internal deps to verify direction and blast radius.
 
 ```bash
 # All packages — forward trees from roots (default)
-php scripts/deps-tree.php
+php run deps
 
 # All packages — who depends on whom
-php scripts/deps-tree.php -r
+php run deps -r
 
 # One package — its internal dependencies
-php scripts/deps-tree.php cnpj-utils
+php run deps cnpj-utils
 
 # One package — packages that depend on it (e.g. before bumping utils)
-php scripts/deps-tree.php -r utils
+php run deps -r utils
 
 # Include require-dev edges (marked [dev])
-php scripts/deps-tree.php --dev
+php run deps --dev
 ```
 
 Package names accept the folder name (`cnpj-utils`) or Composer name (`lacus/cnpj-utils`). Only `"require"` edges are shown unless `--dev` is passed.
@@ -139,7 +139,7 @@ Before applying this harness, check whether the target package defines `packages
 
 | Concern | File |
 |---------|------|
-| Internal dependency graph (CLI) | `scripts/deps-tree.php` |
+| Internal dependency graph (CLI) | `php run deps` (`scripts/Commands/DepsCommand.php`) |
 | Root dev tooling | `composer.json` `"require-dev"` |
 | Package runtime deps | `packages/<pkg>/composer.json` `"require"` |
 | Package lockfile | `packages/<pkg>/composer.lock` |

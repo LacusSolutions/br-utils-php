@@ -6,7 +6,7 @@
         "action": "\\CaptainHook\\App\\Hook\\PHP\\Action\\Linting"
       },
       {
-        "action": "php scripts/lint-staged.php"
+        "action": "php run lint:staged"
       }
     ]
   },
@@ -22,10 +22,10 @@
     "enabled": true,
     "actions": [
       {
-        "action": "composer run lint:ci"
+        "action": "php run lint:ci"
       },
       {
-        "action": "composer run test"
+        "action": "composer run test:all"
       }
     ]
   }

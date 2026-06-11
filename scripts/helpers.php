@@ -17,20 +17,6 @@ function monorepo_config_path(string $filename): string
     return Path::join(monorepo_root(), $filename);
 }
 
-function find_vendor_bin(string $name): string
-{
-    $path = Path::join(monorepo_root(), 'vendor', 'bin', $name);
-
-    if (!is_file($path)) {
-        fwrite(STDERR, "Vendor binary not found: {$path}\n");
-        fwrite(STDERR, "Run `composer install` from the monorepo root (`php/`).\n");
-
-        exit(1);
-    }
-
-    return $path;
-}
-
 /**
  * @param list<string> $command
  */
@@ -54,8 +40,17 @@ function run_process(array $command, ?string $workingDirectory = null): int
  */
 function run_vendor_bin(string $name, array $arguments = [], ?string $workingDirectory = null): int
 {
+    $path = Path::join(monorepo_root(), 'vendor', 'bin', $name);
+
+    if (!is_file($path)) {
+        fwrite(STDERR, "Vendor binary not found: {$path}\n");
+        fwrite(STDERR, "Run `composer install` from the monorepo root.\n");
+
+        exit(1);
+    }
+
     return run_process(
-        array_merge([PHP_BINARY, find_vendor_bin($name)], $arguments),
+        array_merge([PHP_BINARY, $path], $arguments),
         $workingDirectory,
     );
 }
@@ -159,75 +154,6 @@ function resolve_lint_path(string $argument): ?string
     }
 
     return null;
-}
-
-/**
- * @return list<string>
- */
-function script_arguments(): array
-{
-    if (!isset($_SERVER['argv']) || !is_array($_SERVER['argv'])) {
-        fwrite(STDERR, "Missing CLI arguments.\n");
-
-        exit(1);
-    }
-
-    $arguments = [];
-
-    foreach (array_slice($_SERVER['argv'], 1) as $argument) {
-        if (!is_string($argument)) {
-            fwrite(STDERR, "Invalid CLI argument type.\n");
-
-            exit(1);
-        }
-
-        $arguments[] = $argument;
-    }
-
-    return $arguments;
-}
-
-/**
- * @param list<string> $arguments
- *
- * @return array{paths: list<string>, options: list<string>, dryRun: bool}
- */
-function split_script_arguments(array $arguments): array
-{
-    $paths = [];
-    $options = [];
-    $dryRun = false;
-
-    foreach ($arguments as $argument) {
-        if (in_array($argument, ['-ci', '--dry-run'], true)) {
-            $dryRun = true;
-
-            continue;
-        }
-
-        if (str_starts_with($argument, '-')) {
-            $options[] = $argument;
-        } else {
-            $paths[] = $argument;
-        }
-    }
-
-    return ['paths' => $paths, 'options' => $options, 'dryRun' => $dryRun];
-}
-
-/**
- * @param array{paths: list<string>, options: list<string>, dryRun: bool} $splitArguments
- * @param list<string> $dryRunOptions
- *
- * @return list<string>
- */
-function lint_tool_options(array $splitArguments, array $dryRunOptions): array
-{
-    if (!$splitArguments['dryRun']) {
-        return $splitArguments['options'];
-    }
-
-    return array_values(array_unique(array_merge($dryRunOptions, $splitArguments['options'])));
 }
 
 /**

@@ -11,7 +11,7 @@ triggers:
 
 # domain-parity
 
-Use this harness when a change touches CPF packages and you need to determine whether the symmetric CNPJ package requires the same change, or when reviewing whether two domains stay in sync. All paths are relative to the **php/** subrepo root.
+Use this harness when a change touches CPF packages and you need to determine whether the symmetric CNPJ package requires the same change, or when reviewing whether two domains stay in sync. All paths are relative to the repo root.
 
 ## Repository constraints
 

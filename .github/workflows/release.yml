@@ -51,27 +51,31 @@ jobs:
           extensions: curl, intl, libxml, mbstring
       - run: composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
       - id: release
+        env:
+          PACKAGE_NAME: ${{ inputs.package }}
+          PACKAGE_VERSION: ${{ inputs.version }}
         run: |
           set -euo pipefail
 
-          PKG="${{ inputs.package }}"
+          [[ "$PACKAGE_NAME" =~ ^[a-z0-9-]+$ ]] || { echo "❌ Invalid package name format"; exit 1; }
 
-          echo "📦 Preparing release for package '$PKG'..."
+          echo "📦 Preparing release for package '$PACKAGE_NAME'..."
 
-          if [ -n "${{ inputs.version }}" ]; then
-            echo "📌 Using requested version: ${{ inputs.version }}"
-            OUTPUT_PATH=$(php scripts/release.php "$PKG" --version "${{ inputs.version }}")
+          if [ -n "$PACKAGE_VERSION" ]; then
+            echo "📌 Using requested version: $PACKAGE_VERSION"
+            [[ "$PACKAGE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "❌ Invalid version format"; exit 1; }
+            OUTPUT_PATH=$(php run release "$PACKAGE_NAME" --version "$PACKAGE_VERSION")
           else
             echo "📌 Using latest version from CHANGELOG.md"
-            OUTPUT_PATH=$(php scripts/release.php "$PKG")
+            OUTPUT_PATH=$(php run release "$PACKAGE_NAME")
           fi
 
           BASENAME=$(basename "$OUTPUT_PATH" .md)
           VERSION="${BASENAME#*@}"
 
-          echo "package=$PKG" >> "$GITHUB_OUTPUT"
+          echo "package=$PACKAGE_NAME" >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "tag_name=lacus/${PKG}@${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag_name=lacus/${PACKAGE_NAME}@${VERSION}" >> "$GITHUB_OUTPUT"
           {
             echo 'release_body<<EOF'
             cat "$OUTPUT_PATH"
@@ -95,13 +99,13 @@ jobs:
 
       - id: validate
         env:
-          PKG_NAME: ${{ needs.prepare-release.outputs.package }}
-          PKG_VERSION: ${{ needs.prepare-release.outputs.version }}
+          PACKAGE_NAME: ${{ needs.prepare-release.outputs.package }}
+          PACKAGE_VERSION: ${{ needs.prepare-release.outputs.version }}
           TAG_NAME: ${{ needs.prepare-release.outputs.tag_name }}
         run: |
           set -euo pipefail
 
-          echo "🔍 Validating release for package '$PKG_NAME' version '$PKG_VERSION'..."
+          echo "🔍 Validating release for package '$PACKAGE_NAME' version '$PACKAGE_VERSION'..."
           echo "🏷️  Tag: $TAG_NAME"
           echo ""
 
@@ -128,7 +132,7 @@ jobs:
           echo "✅ Release '$TAG_NAME' does not exist"
           echo ""
 
-          BRANCH_NAME="${PKG_NAME}/main"
+          BRANCH_NAME="${PACKAGE_NAME}/main"
           echo "🔍 Checking if branch '$BRANCH_NAME' exists..."
 
           git fetch origin --quiet 2>/dev/null || true
@@ -137,7 +141,7 @@ jobs:
              ! git show-ref --verify --quiet "refs/remotes/origin/$BRANCH_NAME"; then
             echo "❌ Branch '$BRANCH_NAME' does not exist"
             echo "ℹ️  Available branches:"
-            git branch -a | grep -E "(main|$PKG_NAME)" || echo "   (none found)"
+            git branch -a | grep -E "(main|$PACKAGE_NAME)" || echo "   (none found)"
             exit 1
           fi
 

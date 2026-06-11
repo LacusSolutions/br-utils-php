@@ -1,18 +1,19 @@
 ---
 id: lint-config
 title: Lint and static analysis configuration
-scope: .php-cs-fixer.config.php, .php-stan.config.neon, scripts/lint-*.php, packages/*/composer.json
+scope: .php-cs-fixer.config.php, .php-stan.config.neon, run, scripts/Application.php, scripts/Commands/, scripts/helpers.php, packages/*/composer.json
 triggers:
   - changing the shared php-cs-fixer configuration
   - changing the shared PHPStan configuration
-  - modifying lint orchestration scripts
+  - modifying dev CLI commands or shared helpers
+  - adding or changing `run` command aliases
   - understanding how lint runs per-package vs root
   - adding or changing package lint scripts
 ---
 
 # lint-config
 
-Manage the lint and static analysis setup for br-utils-php packages. All paths are relative to the **php/** subrepo root.
+Manage the lint and static analysis setup for br-utils-php packages. All paths are relative to the repo root.
 
 > PHP packages have **no build step** — there is no `dist/` output. This harness replaces the JS `build-config` harness. The equivalent of "building" is linting and type-checking.
 
@@ -43,26 +44,32 @@ Config: [`.php-stan.config.neon`](.php-stan.config.neon)
 
 Key settings:
 - Level: **10** (maximum strictness)
-- Paths: resolved per-package by `scripts/lint-check.php`
+- Paths: resolved per-package by the `lint:check` command (`scripts/Commands/LintCheckCommand.php`)
 
-### Lint orchestration scripts (`scripts/`)
+### Dev CLI (`run`)
 
-Packages do not call lint tools directly — they invoke root PHP scripts that handle tool resolution and argument parsing:
+Monorepo dev commands are implemented with **Symfony Console**. The entry point is [`run`](run); it boots [`scripts/Application.php`](scripts/Application.php), which registers command classes under [`scripts/Commands/`](scripts/Commands/). Shared utilities (path resolution, process spawning, git helpers) live in [`scripts/helpers.php`](scripts/helpers.php).
 
-| Script | Called by | Purpose |
-|--------|-----------|---------|
-| `scripts/lint-format.php` | Package `lint:format` script | Runs php-cs-fixer on the package's files |
-| `scripts/lint-check.php` | Package `lint:check` script | Runs PHPStan on the package's files |
-| `scripts/lint-staged.php` | CaptainHook pre-commit | Lint only git-staged files |
+| Command | Class | Purpose |
+|---------|-------|---------|
+| `lint:format` | `LintFormatCommand` | Runs php-cs-fixer on monorepo paths |
+| `lint:check` | `LintCheckCommand` | Runs PHPStan on monorepo paths |
+| `lint` | `LintCommand` | Runs `lint:format` then `lint:check` |
+| `lint:ci` | `LintCiCommand` | Dry-run format + static analysis (CI equivalent) |
+| `lint:staged` | `LintStagedCommand` | CaptainHook pre-commit — lint only git-staged files |
+| `lint:staged:test` | `LintStagedTestCommand` | Exercise `lint:staged` against the current git index |
+| `phpstan:staged` | `PhpStanStagedCommand` | Run PHPStan only on git-staged PHP files |
+| `deps` | `DepsCommand` | Internal `lacus/*` dependency graph |
+| `release` | `ReleaseCommand` | Extract release notes from a package `CHANGELOG.md` |
 
-Package scripts delegate to these via:
+Package scripts delegate to `run` with the package name as a path argument:
 
 ```json
-"lint:format": "@php ../../scripts/lint-format.php cnpj-fmt",
-"lint:check": "@php ../../scripts/lint-check.php cnpj-fmt"
+"lint:format": "@php ../../run lint:format cnpj-fmt",
+"lint:check": "@php ../../run lint:check cnpj-fmt"
 ```
 
-The package name argument tells the script which `packages/<pkg>/vendor/` to use for tool resolution.
+The package name argument tells the command which `packages/<pkg>/` directory to use for tool resolution.
 
 ## Per-package `composer.json` lint scripts
 
@@ -72,15 +79,15 @@ Every package must define these four scripts:
 "scripts": {
     "lint": ["@lint:format", "@lint:check"],
     "lint:ci": ["@lint:format --dry-run", "@lint:check --dry-run"],
-    "lint:format": "@php ../../scripts/lint-format.php <pkg-name>",
-    "lint:check": "@php ../../scripts/lint-check.php <pkg-name>"
+    "lint:format": "@php ../../run lint:format <pkg-name>",
+    "lint:check": "@php ../../run lint:check <pkg-name>"
 }
 ```
 
 - `lint` — applies style fixes and runs static analysis
 - `lint:ci` — dry-run (checks without mutating); used in CI and pre-push hook
 
-Do not add extra lint scripts or change the invocation pattern without updating the shared scripts.
+Do not add extra lint scripts or change the invocation pattern without updating the shared commands.
 
 ## Running lint
 
@@ -88,9 +95,14 @@ Do not add extra lint scripts or change the invocation pattern without updating 
 
 ```bash
 # All packages
-composer run lint:ci        # dry-run check
-composer run lint:format    # apply style fixes to all packages
-composer run lint:check     # run PHPStan on all packages
+php run lint:ci               # dry-run check
+php run lint:format           # apply style fixes to all packages
+php run lint:check            # run PHPStan on all packages
+
+# Equivalent via Composer
+composer run lint:ci
+composer run lint:format
+composer run lint:check
 ```
 
 ### From a package directory (`packages/<pkg>/`):
@@ -105,18 +117,29 @@ composer run lint:check     # PHPStan
 
 ## Git hooks (CaptainHook)
 
-The pre-commit hook runs `scripts/lint-staged.php` to lint only the staged files. The pre-push hook runs `composer run lint:ci` from the subrepo root. Config: [`.captainhook.config.json`](.captainhook.config.json).
+The pre-commit hook runs `php run lint:staged` to lint only the staged files. The pre-push hook runs `composer run lint:ci` from the subrepo root (equivalent to `php run lint:ci`). Config: [`.captainhook.config.json`](.captainhook.config.json).
+
+## Adding a new dev command
+
+When adding a new root orchestration command that should be user-facing:
+
+1. Create a command class in [`scripts/Commands/`](scripts/Commands/) extending `Symfony\Component\Console\Command\Command`.
+2. Register it in [`scripts/Application.php`](scripts/Application.php).
+3. Add a root `composer.json` script that delegates to `@php run <command>` when appropriate.
+4. Extend [`scripts/run.test.php`](scripts/run.test.php) if the new command has non-trivial routing behavior.
+
+Package-level `composer.json` scripts call `php ../../run <command> <pkg-name>` directly — they do not need a separate script file per package.
 
 ## When to extend the shared config
 
-**Edit root scripts or config** only when the change applies to **all** packages (e.g. adding a new php-cs-fixer rule, changing the PHPStan level).
+**Edit root commands, helpers, or config** only when the change applies to **all** packages (e.g. adding a new php-cs-fixer rule, changing the PHPStan level).
 
 **Add a package-level override** only when the package genuinely cannot follow the root config. Document the reason in the package's `composer.json` or `AGENTS.md`.
 
 ## Checklist
 
 - [ ] Package has `lint`, `lint:ci`, `lint:format`, `lint:check` scripts in `composer.json`
-- [ ] Scripts delegate to `../../scripts/lint-format.php <pkg>` and `../../scripts/lint-check.php <pkg>`
+- [ ] Scripts delegate to `../../run lint:format <pkg>` and `../../run lint:check <pkg>`
 - [ ] No per-package `.php-cs-fixer.php` or `phpstan.neon` added
 - [ ] `composer run lint:ci` passes from the package directory
 
@@ -128,10 +151,14 @@ Before applying this harness, check whether the target package defines `packages
 
 | Concern | Path |
 |---------|------|
+| CLI entry | `run` → `scripts/Application.php` |
+| Command classes | `scripts/Commands/` |
+| Shared helpers | `scripts/helpers.php` |
 | Shared CS fixer config | `.php-cs-fixer.config.php` |
 | Shared PHPStan config | `.php-stan.config.neon` |
-| Format orchestration | `scripts/lint-format.php` |
-| Static analysis orchestration | `scripts/lint-check.php` |
-| Staged-file lint | `scripts/lint-staged.php` |
+| Format orchestration | `php run lint:format` (`LintFormatCommand`) |
+| Static analysis orchestration | `php run lint:check` (`LintCheckCommand`) |
+| Staged-file lint | `php run lint:staged` (`LintStagedCommand`) |
+| CLI smoke tests | `scripts/run.test.php` |
 | Git hook config | `.captainhook.config.json` |
 | Canonical package scripts | `packages/cnpj-fmt/composer.json` (`scripts`) |
