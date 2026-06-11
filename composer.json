@@ -65,8 +65,8 @@
   },
   "require": {
     "php": "^8.2",
-    "lacus/cnpj-utils": "^2.0",
-    "lacus/cpf-utils": "^1.1"
+    "lacus/cnpj-utils": "~2.0.0",
+    "lacus/cpf-utils": "~1.1.0"
   },
   "require-dev": {
     "pestphp/pest": "^3.8",
