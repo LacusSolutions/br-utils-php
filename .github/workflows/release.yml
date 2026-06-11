@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       package:
-        description: 'Package name to release (e.g. cpf-fmt)'
+        description: 'Package(s) to release: single name (e.g. cpf-fmt), comma-separated list (e.g. cnpj-fmt,cnpj-gen), or * for all packages'
         required: true
         type: string
       version:
@@ -20,47 +20,118 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
+  resolve-packages:
+    name: Resolve Packages
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.resolve.outputs.packages }}
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - id: resolve
+        env:
+          PACKAGE_INPUT: ${{ inputs.package }}
+        run: |
+          set -euo pipefail
+
+          INPUT=$(echo "$PACKAGE_INPUT" | tr -d ' ')
+
+          if [ "$INPUT" = "*" ]; then
+            PACKAGES=()
+            for dir in packages/*/; do
+              [ -d "$dir" ] || continue
+              pkg=$(basename "${dir%/}")
+              [ -f "${dir%/}/CHANGELOG.md" ] || continue
+              PACKAGES+=("$pkg")
+            done
+          else
+            IFS=',' read -ra PACKAGES <<< "$INPUT"
+          fi
+
+          if [ "${#PACKAGES[@]}" -eq 0 ]; then
+            echo "❌ No packages to release"
+            exit 1
+          fi
+
+          VALIDATED=()
+          for pkg in "${PACKAGES[@]}"; do
+            pkg=$(echo "$pkg" | xargs)
+            [ -n "$pkg" ] || continue
+
+            if [ ! -d "packages/$pkg" ]; then
+              echo "❌ Invalid package: $pkg"
+              exit 1
+            fi
+
+            if [ ! -f "packages/$pkg/CHANGELOG.md" ]; then
+              echo "❌ Package '$pkg' has no CHANGELOG.md"
+              exit 1
+            fi
+
+            VALIDATED+=("$pkg")
+          done
+
+          if [ "${#VALIDATED[@]}" -eq 0 ]; then
+            echo "❌ No valid packages to release"
+            exit 1
+          fi
+
+          packages_json=$(jq -n -c --args '$ARGS.positional | sort' -- "${VALIDATED[@]}")
+          echo "packages=$packages_json" >> "$GITHUB_OUTPUT"
+          echo "📦 Packages to release: $packages_json"
+
   lint:
+    needs: resolve-packages
     uses: ./.github/workflows/.lint.yml
     with:
-      packages: ${{ format('["{0}"]', inputs.package) }}
+      packages: ${{ needs.resolve-packages.outputs.packages }}
       php-versions: ${{ format('["{0}","{1}"]', vars.MIN_PHP_VERSION, vars.MAX_PHP_VERSION) }}
 
   test:
+    needs: resolve-packages
     uses: ./.github/workflows/.test.yml
     with:
-      packages: ${{ format('["{0}"]', inputs.package) }}
+      packages: ${{ needs.resolve-packages.outputs.packages }}
       php-versions: ${{ format('["{0}","{1}"]', vars.MIN_PHP_VERSION, vars.MAX_PHP_VERSION) }}
       api-url: ${{ vars.BR_UTILS_API_URL }}
     secrets:
       api-token: ${{ secrets.BR_UTILS_API_TOKEN }}
 
-  prepare-release:
-    name: Prepare Release Notes
+  release-package:
+    name: Release `lacus/${{ matrix.package }}`
+    needs:
+      - lint
+      - test
+      - resolve-packages
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
-    outputs:
-      package: ${{ steps.release.outputs.package }}
-      version: ${{ steps.release.outputs.version }}
-      tag_name: ${{ steps.release.outputs.tag_name }}
-      release_body: ${{ steps.release.outputs.release_body }}
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.resolve-packages.outputs.packages) }}
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+
+      # --- Prepare Release Notes ---
       - uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2.37.1
         with:
           php-version: ${{ vars.MAX_PHP_VERSION }}
           extensions: curl, intl, libxml, mbstring
       - run: composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
-      - id: release
+      - id: prepare
+        env:
+          PKG: ${{ matrix.package }}
+          VERSION_INPUT: ${{ inputs.version }}
         run: |
           set -euo pipefail
 
-          PKG="${{ inputs.package }}"
-
           echo "📦 Preparing release for package '$PKG'..."
 
-          if [ -n "${{ inputs.version }}" ]; then
-            echo "📌 Using requested version: ${{ inputs.version }}"
-            OUTPUT_PATH=$(php scripts/release.php "$PKG" --version "${{ inputs.version }}")
+          if [ -n "$VERSION_INPUT" ]; then
+            echo "📌 Using requested version: $VERSION_INPUT"
+            OUTPUT_PATH=$(php scripts/release.php "$PKG" --version "$VERSION_INPUT")
           else
             echo "📌 Using latest version from CHANGELOG.md"
             OUTPUT_PATH=$(php scripts/release.php "$PKG")
@@ -69,7 +140,6 @@ jobs:
           BASENAME=$(basename "$OUTPUT_PATH" .md)
           VERSION="${BASENAME#*@}"
 
-          echo "package=$PKG" >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "tag_name=lacus/${PKG}@${VERSION}" >> "$GITHUB_OUTPUT"
           {
@@ -81,23 +151,12 @@ jobs:
           echo "📝 Release notes written to ${OUTPUT_PATH}"
           echo "✅ Release preparation complete"
 
-  validate:
-    name: Validate Git State
-    needs: prepare-release
-    runs-on: ubuntu-latest
-    outputs:
-      branch_name: ${{ steps.validate.outputs.branch_name }}
-      commit_sha: ${{ steps.validate.outputs.commit_sha }}
-    steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-        with:
-          fetch-depth: 0
-
+      # --- Validate Git State ---
       - id: validate
         env:
-          PKG_NAME: ${{ needs.prepare-release.outputs.package }}
-          PKG_VERSION: ${{ needs.prepare-release.outputs.version }}
-          TAG_NAME: ${{ needs.prepare-release.outputs.tag_name }}
+          PKG_NAME: ${{ matrix.package }}
+          PKG_VERSION: ${{ steps.prepare.outputs.version }}
+          TAG_NAME: ${{ steps.prepare.outputs.tag_name }}
         run: |
           set -euo pipefail
 
@@ -155,28 +214,13 @@ jobs:
           echo "branch_name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
           echo "commit_sha=$COMMIT_SHA" >> "$GITHUB_OUTPUT"
 
-  create-release:
-    name: Create GitHub Release
-    needs:
-      - lint
-      - test
-      - prepare-release
-      - validate
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
-    outputs:
-      tag_name: ${{ needs.prepare-release.outputs.tag_name }}
-      package: ${{ needs.prepare-release.outputs.package }}
-      version: ${{ needs.prepare-release.outputs.version }}
-      release_id: ${{ steps.create-release.outputs.release_id }}
-    steps:
+      # --- Create GitHub Release ---
       - id: create-release
         env:
-          BRANCH_NAME: ${{ needs.validate.outputs.branch_name }}
-          COMMIT_SHA: ${{ needs.validate.outputs.commit_sha }}
-          TAG_NAME: ${{ needs.prepare-release.outputs.tag_name }}
-          RELEASE_BODY: ${{ needs.prepare-release.outputs.release_body }}
+          BRANCH_NAME: ${{ steps.validate.outputs.branch_name }}
+          COMMIT_SHA: ${{ steps.validate.outputs.commit_sha }}
+          TAG_NAME: ${{ steps.prepare.outputs.tag_name }}
+          RELEASE_BODY: ${{ steps.prepare.outputs.release_body }}
         run: |
           set -euo pipefail
 
@@ -219,23 +263,15 @@ jobs:
           echo "✅ Release created successfully (ID: $RELEASE_ID)"
           echo "release_id=$RELEASE_ID" >> "$GITHUB_OUTPUT"
 
-  sync-tag:
-    name: Push Tag to Subtree Repository
-    needs: create-release
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-        with:
-          fetch-depth: 0
-          persist-credentials: false
+      # --- Push Tag to Subtree Repository ---
       - uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - env:
-          TAG_NAME: ${{ needs.create-release.outputs.tag_name }}
-          PACKAGE_NAME: ${{ needs.create-release.outputs.package }}
-          PACKAGE_VERSION: ${{ needs.create-release.outputs.version }}
+          TAG_NAME: ${{ steps.prepare.outputs.tag_name }}
+          PACKAGE_NAME: ${{ matrix.package }}
+          PACKAGE_VERSION: ${{ steps.prepare.outputs.version }}
         run: |
           set -euo pipefail
 
