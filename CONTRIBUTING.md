@@ -135,7 +135,7 @@ Configured in [`.captainhook.config.json`](.captainhook.config.json):
 
 ## Project Structure
 
-```
+```text
 (root)                         # Subrepo root — run all dev commands from here
 ├── packages/                  # 13 independent Composer packages
 │   ├── utils/                 # Shared foundation
