@@ -39,7 +39,7 @@ Load and apply every layer relevant to the task. Package-level `AGENTS.md` or `a
 | `domain-parity` | [`domain-parity.md`](domain-parity.md) | Porting a CPF feature to CNPJ (or vice versa); checking intentional divergences |
 | `aggregator-package` | [`aggregator-package.md`](aggregator-package.md) | Implementing or changing `cpf-utils`, `cnpj-utils`, or `br-utils` |
 | `ci-release` | [`ci-release.md`](ci-release.md) | Editing `.github/workflows/` files; understanding the CI pipeline; local validation before declaring done |
-| `dependencies` | [`dependencies.md`](dependencies.md) | Adding any new Composer dependency; changing runtime `require` constraints; updating `composer.lock` |
+| `dependencies` | [`dependencies.md`](dependencies.md) | Adding any new Composer dependency; changing runtime `require` constraints; updating `composer.lock`; inspecting the internal graph via `scripts/deps-tree.php` |
 
 ## Adding a harness
 

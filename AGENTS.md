@@ -180,6 +180,7 @@ Cursor agents may load these workspace skills as a shortcut; each skill is a thi
 | Shared CS fixer config | `.php-cs-fixer.config.php` |
 | Shared PHPStan config | `.php-stan.config.neon` |
 | Lint orchestration scripts | `scripts/lint-format.php`, `scripts/lint-check.php`, `scripts/lint-staged.php` |
+| Internal dependency graph | `scripts/deps-tree.php` (see [`agents/dependencies.md`](agents/dependencies.md)) |
 | Release script | `scripts/release.php` |
 | Git hooks | `.captainhook.config.json` |
 | CI / release workflows | `.github/workflows/` |

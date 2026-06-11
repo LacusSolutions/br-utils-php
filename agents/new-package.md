@@ -212,6 +212,7 @@ This installs `vendor/` for the new package and generates `packages/<pkg>/compos
 - [ ] `tests/specs/` implemented per `unit-tests.md`
 - [ ] Root `composer.json` `test:<pkg>` script added
 - [ ] `composer install --working-dir=packages/<pkg>` runs successfully
+- [ ] Internal `"require"` edges respect dependency direction — verify with `php scripts/deps-tree.php <pkg>` (see [`agents/dependencies.md`](dependencies.md#inspecting-internal-dependencies))
 - [ ] `composer run lint:ci` passes from the package directory
 - [ ] `composer run test` passes from the package directory
 - [ ] `README.md` and `README.pt.md` written

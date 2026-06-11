@@ -215,7 +215,7 @@ Defaults live as `public const` class constants. The constructor validates optio
 utils → {cpf,cnpj}-dv → {cpf,cnpj}-{fmt,gen,val} → {cpf,cnpj}-utils → br-utils
 ```
 
-Upstream packages must not import downstream ones. `utils` is a leaf with no internal deps.
+Upstream packages must not import downstream ones. `utils` is a leaf with no internal deps. To inspect the live graph from `composer.json` declarations, run `php scripts/deps-tree.php` — see [`agents/dependencies.md`](dependencies.md#inspecting-internal-dependencies).
 
 ## Checklist
 

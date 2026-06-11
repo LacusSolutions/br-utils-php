@@ -16,7 +16,7 @@ Implement and maintain the three aggregator packages (`cpf-utils`, `cnpj-utils`,
 ## Repository constraints
 
 - Aggregator packages are **thin wrappers** — they delegate to sub-package class instances and add no new business logic.
-- Aggregator packages depend on sub-packages via their published Packagist versions (`lacus/cnpj-fmt: ^2.0`, etc.); sub-packages must not depend on aggregators.
+- Aggregator packages depend on sub-packages via their published Packagist versions (`lacus/cnpj-fmt: ^2.0`, etc.); sub-packages must not depend on aggregators. After changing aggregator `"require"` constraints, confirm the graph with `php scripts/deps-tree.php` — see [`agents/dependencies.md`](dependencies.md#inspecting-internal-dependencies).
 - Tests in aggregator packages import from their `vendor/` sub-packages (installed per-package).
 
 ## Migration context
