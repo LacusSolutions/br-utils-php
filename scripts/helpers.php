@@ -44,7 +44,7 @@ function run_vendor_bin(string $name, array $arguments = [], ?string $workingDir
 
     if (!is_file($path)) {
         fwrite(STDERR, "Vendor binary not found: {$path}\n");
-        fwrite(STDERR, "Run `composer install` from the monorepo root (`php/`).\n");
+        fwrite(STDERR, "Run `composer install` from the monorepo root.\n");
 
         exit(1);
     }
