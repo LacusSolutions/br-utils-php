@@ -81,10 +81,17 @@ final class DepsCommand extends Command
         if ($reverse) {
             $this->renderReverseDependencies($output, 'Packages depending on', $reverseDependencies, $includeDev);
         } else {
+            $roots = $this->findRootPackages($dependencies);
+
+            if ($roots === []) {
+                $roots = array_keys($dependencies);
+                sort($roots);
+            }
+
             $this->renderDependencyTrees(
                 $output,
                 'Packages dependencies',
-                $this->findRootPackages($dependencies),
+                $roots,
                 $dependencies,
                 $includeDev,
             );
