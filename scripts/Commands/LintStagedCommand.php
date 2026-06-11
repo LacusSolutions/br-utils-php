@@ -66,18 +66,13 @@ final class LintStagedCommand extends Command
         }
 
         $output->writeln('');
-        $output->writeln('Running PhpStan on staged files...');
-
-        $phpStanResult = $this->runPhpStan($phpFiles);
-
-        if ($phpStanResult !== 0) {
-            $output->writeln('PhpStan found issues. Fixing with php-cs-fixer...');
-        }
-
-        $output->writeln('');
         $output->writeln('Running php-cs-fixer on staged files...');
 
         $hasChanges = $this->runPhpCsFixer($phpFiles, $output);
+
+        if ($hasChanges === null) {
+            return Command::FAILURE;
+        }
 
         if ($hasChanges) {
             $output->writeln('Fixes applied. Adding fixed files to the staging area...');
@@ -89,8 +84,29 @@ final class LintStagedCommand extends Command
             }
 
             $output->writeln('Fixed files added to the staging area.');
-        } else {
+        }
+
+        if (!$hasChanges) {
             $output->writeln('No fixes needed.');
+        }
+
+        return $this->runPhpStanCheck($phpFiles, $output);
+    }
+
+    /**
+     * @param list<string> $files
+     */
+    private function runPhpStanCheck(array $files, OutputInterface $output): int
+    {
+        $output->writeln('');
+        $output->writeln('Running PhpStan on staged files...');
+
+        $phpStanResult = $this->runPhpStan($files);
+
+        if ($phpStanResult !== 0) {
+            $output->writeln('<error>PhpStan found issues on staged files.</error>');
+
+            return Command::FAILURE;
         }
 
         return Command::SUCCESS;
@@ -113,7 +129,7 @@ final class LintStagedCommand extends Command
     /**
      * @param list<string> $files
      */
-    private function runPhpCsFixer(array $files, OutputInterface $output): bool
+    private function runPhpCsFixer(array $files, OutputInterface $output): ?bool
     {
         $hasChanges = false;
 
@@ -136,17 +152,19 @@ final class LintStagedCommand extends Command
             ], $packageDirectory);
 
             if ($returnCode !== 0) {
-                $output->writeln("  Error processing {$file} (exit code {$returnCode}).");
+                $output->writeln("<error>Error processing {$file} (exit code {$returnCode}).</error>");
 
-                continue;
+                return null;
             }
 
             if (git_lines(['diff', '--name-only', $file]) !== []) {
                 $output->writeln("  Fixes applied to: {$file}");
                 $hasChanges = true;
-            } else {
-                $output->writeln("  No fixes needed for: {$file}");
+
+                continue;
             }
+
+            $output->writeln("  No fixes needed for: {$file}");
         }
 
         return $hasChanges;

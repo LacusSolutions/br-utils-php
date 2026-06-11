@@ -1,6 +1,8 @@
 # Shared PHPStan configuration for all packages. Paths are passed via `php run lint:check`.
 parameters:
   level: 10
+  bootstrapFiles:
+    - scripts/helpers.php
   excludePaths:
     - **/vendor/**
   reportUnmatchedIgnoredErrors: false
