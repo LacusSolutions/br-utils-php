@@ -25,7 +25,7 @@
         "action": "php run lint:ci"
       },
       {
-        "action": "php run test:all"
+        "action": "composer run test:all"
       }
     ]
   }
