@@ -1,5 +1,11 @@
 # lacus/br-utils
 
+## 2.0.1
+
+### Patch Changes
+
+- **Dependency constraints** — Changed internal dependency version constraints from caret to tilde notation for more predictable feature propagation.
+
 ## 2.0.0
 
 ### 🎉 v2 at a glance 🎊

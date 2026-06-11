@@ -32,7 +32,7 @@ Reverse edges (e.g. `utils` importing from `cnpj-fmt`) are forbidden.
 
 ### When developer approval is NOT needed
 
-Bumping an **already-declared internal dependency** to a new published semver range that mirrors what a sibling package uses (e.g. upgrading `lacus/utils: ^1.0` to `^1.1` across all packages) is safe to replicate without explicit approval. Verify the existing declaration before updating.
+Bumping an **already-declared internal dependency** to a new published semver range that mirrors what a sibling package uses (e.g. upgrading `lacus/cnpj-dv: ~1.1.0` to `~1.2.0` across all packages) is safe to replicate without explicit approval. Verify the existing declaration before updating.
 
 ## Before changing dependencies
 
@@ -43,16 +43,33 @@ Bumping an **already-declared internal dependency** to a new published semver ra
 
 ## Internal dependencies (Packagist versioning)
 
-PHP packages depend on each other via published Packagist semver constraints — not path repositories or workspace symlinks:
+PHP packages depend on each other via published Packagist semver constraints — not path repositories or workspace symlinks.
+
+### Version constraint convention
+
+Use **tilde notation** (`~X.Y.Z`) for BR Utils monorepo packages (`lacus/cpf-*`, `lacus/cnpj-*`, `lacus/br-utils`):
 
 ```json
 {
   "require": {
     "php": "^8.2",
+    "lacus/cnpj-dv": "~1.1.0",
     "lacus/utils": "^1.0"
   }
 }
 ```
+
+Tilde notation allows only patch-level updates within the pinned minor line (`~1.1.0` accepts `>=1.1.0 <1.2.0`). This prevents unexpected minor-version feature additions from propagating between BR Utils packages without explicit constraint bumps and changelog visibility.
+
+**Exception — `lacus/utils`:** Use **caret notation** (`^X.Y`). `lacus/utils` is a standalone foundation package (planned to detach from this monorepo) with its own release roadmap. BR Utils packages should accept minor-version updates from `lacus/utils` — bug fixes and new features alike — while still excluding major versions (`^1.0` accepts `>=1.0.0 <2.0.0`).
+
+When bumping a **tilde-constrained** internal dependency, specify the **full `X.Y.Z` version** based on the currently published release — look up the latest tag with:
+
+```bash
+cd php && git tag -l 'lacus/<pkg>@*' | sort -V | tail -n 1
+```
+
+Strip the `lacus/<pkg>@` prefix to get the bare SemVer (e.g. `1.1.0`), then write `~1.1.0`. For `lacus/utils`, bump the caret minor line instead (e.g. `^1.0` → `^1.1`) when a new minor release should be adopted.
 
 After editing any `composer.json` dependency field, install and regenerate the lockfile:
 
