@@ -1,0 +1,13 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Scripts\Application;
+
+$app = new Application();
+$exitCode = $app->run();
+
+exit($exitCode);
