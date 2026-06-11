@@ -58,9 +58,9 @@
   },
   "require": {
     "php": "^8.2",
-    "lacus/cnpj-fmt": "^2.0",
-    "lacus/cnpj-gen": "^2.1",
-    "lacus/cnpj-val": "^2.0"
+    "lacus/cnpj-fmt": "~2.0.0",
+    "lacus/cnpj-gen": "~2.1.0",
+    "lacus/cnpj-val": "~2.0.0"
   },
   "require-dev": {
     "pestphp/pest": "^3.8"
