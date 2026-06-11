@@ -36,106 +36,124 @@ Before contributing, please:
 
 ### Prerequisites
 
-- **PHP** (v8.1 or higher)
-- **Composer** (v2.0 or higher) - for package management
-- **Git** - for version control
+- **PHP** 8.2 or higher
+- **Composer** 2.x — package management
+- **Git** — version control
+
+All commands below assume your shell is in the root directory (the monorepo directory that contains `run`, `composer.json`, and `packages/`).
 
 ### Installation
 
 ```bash
 # Clone your fork
 git clone https://github.com/YOUR_USERNAME/br-utils-php.git
-cd br-utils-php
-
-# Install dependencies
+# Root dev tooling (lint, hooks, run router)
 composer install
 
-# PHPStan runs per package using each package's Composer autoload; install those too
-for pkg in packages/*/; do composer install --working-dir="$pkg"; done
+# Each package has its own vendor/ — install per package
+for pkg in packages/*/; do composer install --no-interaction --working-dir="$pkg"; done
 
 # Verify setup
-composer test
-composer lint
+php run lint:ci
+composer run test:all
 ```
 
-### Available Scripts
+CaptainHook installs git hooks automatically via the root `prepare` script when you run `composer install`.
+
+### CLI router (`run`)
+
+The `run` file is the preferred entry point for monorepo scripts. It works with `php run …` or `php run …`:
 
 ```bash
-# Development
-composer test              # Run all tests
-composer test:watch        # Run tests in watch mode
-composer test-coverage     # Run tests with coverage report
-composer lint              # @lint:cs + @lint:phpstan (all packages)
-composer lint:cs           # php-cs-fixer dry-run + diff (all packages)
-composer lint:phpstan      # PHPStan (all packages)
-composer lint:fix          # Apply php-cs-fixer (all packages; mutates files)
-
-# From `packages/<name>/` after `composer install` there:
-composer cs-fix:check      # Style check (dry-run)
-composer cs-fix            # Apply style fixes
-composer lint              # cs-fix:check + phpstan
-
-# Package-specific testing
-composer test:cnpj         # Test all CNPJ packages
-composer test:cpf          # Test all CPF packages
-composer test:formatters   # Test formatter packages
-composer test:generators   # Test generator packages
-composer test:validators   # Test validator packages
-composer test:utils        # Test utility packages
+php run --help                # List available commands
+php run lint:ci               # Dry-run format + PHPStan (CI equivalent)
+php run lint                  # Apply fixes, then run static analysis
+php run lint:format           # Apply php-cs-fixer to all packages
+php run lint:check            # Run PHPStan on all packages
+php run deps                  # Internal lacus/* dependency graph
+php run deps -r utils         # Packages that depend on utils
+php run deps cnpj-utils       # Dependencies of one package
 ```
+
+Root `composer.json` scripts delegate to the same router (`composer run lint:ci` is equivalent to `php run lint:ci`).
+
+Optional path arguments narrow lint to specific packages or paths, for example `php run lint:ci cnpj-fmt`.
+
+### Available scripts
+
+#### From the repo root
+
+```bash
+# Lint (via run — see above)
+composer run lint:ci
+composer run lint
+composer run lint:format
+composer run lint:check
+composer run lint:staged          # Lint only staged PHP files
+composer run lint:staged:test     # Exercise lint-staged locally
+composer run run:test             # Smoke tests for the run router
+
+# Tests (orchestrate per-package composer test)
+composer run test:all
+composer run test:cnpj
+composer run test:cpf
+composer run test:formatters
+composer run test:generators
+composer run test:validators
+composer run test:utils
+composer run test:cnpj-fmt        # Single package (and similar test:<pkg> aliases)
+
+# Commits
+composer run commit               # Prepare a conventional commit message
+```
+
+`composer run release` exists for maintainers only — do not run it when contributing.
+
+#### From a package directory (`packages/<pkg>/`)
+
+After `composer install` in that package:
+
+```bash
+composer run lint:ci              # Dry-run check (what CI runs)
+composer run lint                 # Format + static analysis
+composer run lint:format
+composer run lint:check
+composer test                     # Package test suite (Pest or PHPUnit)
+composer run test:cov             # HTML coverage (Pest packages)
+composer run test:watch           # Watch mode (Pest packages)
+```
+
+### Git hooks (CaptainHook)
+
+Configured in [`.captainhook.config.json`](.captainhook.config.json):
+
+| Hook | Action |
+|------|--------|
+| **pre-commit** | Lint staged PHP files (`php run lint:staged`) |
+| **commit-msg** | Validate conventional commit format |
+| **pre-push** | `composer run lint:ci` and `composer run test:all` at the root |
 
 ## Project Structure
 
 ```
-br-utils-php/
-├── packages/                  # Monorepo packages
-│   ├── br-utils/              # Core BR utilities
-│   │   ├── src/               # Source code
-│   │   ├── tests/             # Test files
-│   │   ├── vendor/            # Composer dependencies
-│   │   ├── composer.json      # Package configuration
-│   │   ├── phpstan.neon       # PHPStan configuration
-│   │   └── phpunit.xml        # Pest/PHPUnit configuration
-│   ├── cnpj-dv/               # CNPJ check digits calculation package
-│   │   ├── src/               # Source code
-│   │   ├── tests/             # Test files
-│   │   ├── vendor/            # Composer dependencies
-│   │   ├── composer.json      # Package configuration
-│   │   ├── phpstan.neon       # PHPStan configuration
-│   │   └── phpunit.xml        # Pest/PHPUnit configuration
-│   ├── cnpj-fmt/              # CNPJ formatter package
-│   │   ├── src/               # Source code
-│   │   ├── tests/             # Test files
-│   │   ├── vendor/            # Composer dependencies
-│   │   ├── composer.json      # Package configuration
-│   │   ├── phpstan.neon       # PHPStan configuration
-│   │   └── phpunit.xml        # Pest/PHPUnit configuration
-│   ├── cnpj-gen/              # CNPJ generator package
-│   │   └── ...
-│   ├── cnpj-utils/            # CNPJ utilities package
-│   │   └── ...
-│   ├── cnpj-val/              # CNPJ validator package
-│   │   └── ...
-│   ├── cpf-dv/                # CPF check digits calculation package
-│   │   └── ...
-│   ├── cpf-fmt/               # CPF formatter package
-│   │   └── ...
-│   ├── cpf-gen/               # CPF generator package
-│   │   └── ...
-│   ├── cpf-utils/             # CPF utilities package
-│   │   └── ...
-│   ├── cpf-val/               # CPF validator package
-│   │   └── ...
-│   └── utils/                 # Lacus's utilities package
-│       └── ...
-├── vendor/                    # Composer dependencies
-├── .php-stan.config.neon      # Shared PHPStan defaults (packages extend via phpstan.neon)
-├── .php-cs-fixer.config.php   # Shared PHP CS Fixer rules (root + packages include this)
-├── .captainhook.config.json   # Git hooks configuration (CaptainHook)
-├── composer.json              # Root composer configuration
-├── composer.lock              # Locked dependencies
-└── README.md                  # Project documentation
+(root)                         # Subrepo root — run all dev commands from here
+├── packages/                  # 13 independent Composer packages
+│   ├── utils/                 # Shared foundation
+│   ├── cpf-dv/, cpf-fmt/, cpf-gen/, cpf-val/, cpf-utils/
+│   ├── cnpj-dv/, cnpj-fmt/, cnpj-gen/, cnpj-val/, cnpj-utils/
+│   └── br-utils/              # Top-level CPF + CNPJ aggregator
+├── scripts/                   # Symfony Console app (Commands/, helpers.php, run.test.php)
+├── run                        # Dev CLI entry (php run <command> [args...])
+├── vendor/                    # Root dev-tool dependencies
+├── .php-stan.config.neon      # Shared PHPStan config (level 10)
+├── .php-cs-fixer.config.php   # Shared php-cs-fixer rules (PSR-12)
+├── .captainhook.config.json   # Git hooks
+├── composer.json              # Root dev tooling and orchestration scripts
+├── AGENTS.md                  # Agent/contributor baseline rules
+└── agents/                    # Task-specific contributor harnesses
 ```
+
+Each package under `packages/<pkg>/` has its own `composer.json`, `vendor/`, `src/`, and `tests/` (or `tests/specs/` for Pest packages). Lint and static analysis use the **root** configs — packages do not ship their own php-cs-fixer or PHPStan config files.
 
 ## Contributing Guidelines
 
@@ -177,32 +195,37 @@ git checkout -b fix/issue-description
 ### 3. Test Your Changes
 
 ```bash
-# Run all tests
-composer run test
+# Full CI equivalent — from the subrepo root
+php run lint:ci
+composer run test:all
 
-# Run with coverage
-composer run test-coverage
+# When changes are isolated to one package
+cd packages/<pkg>
+composer run lint:ci
+composer test
+```
 
-# Static analysis
-composer run analyze
+Before pushing, hooks run root `lint:ci` and `test:all` automatically. Fix failures locally first.
 
-# Check code style
-composer run check
+Inspect internal dependency edges after changing `composer.json` `"require"` fields:
 
-# Fix code style issues
-composer run fix
+```bash
+php run deps <pkg>
+php run deps -r <pkg>
 ```
 
 ### 4. Commit Your Changes
 
-Use conventional commit messages:
+Use [conventional commits](https://www.conventionalcommits.org/). When a change touches a single package, use the package folder name as the scope:
 
 ```bash
-git commit -m "feat: add string field processor"
-git commit -m "fix: resolve validation error in int processor"
-git commit -m "docs: update README with new examples"
-git commit -m "test: add tests for bail option"
+git commit -m "feat(cnpj-fmt): add alphanumeric mask option"
+git commit -m "fix(cpf-val): reject empty input"
+git commit -m "docs(br-utils): update README examples"
+git commit -m "test(cnpj-gen): cover edge case for check digits"
 ```
+
+Run `composer run commit` to prepare an interactive commit message.
 
 ### 5. Push and Create PR
 
@@ -214,50 +237,36 @@ Then create a pull request on GitHub.
 
 ## Testing
 
-### Test Structure
+### Test structure
 
-- Tests are located in the `tests/` directory within each package
-- Test files use the `Test.php` suffix (e.g., `CnpjGeneratorTest.php`)
-- Tests mirror the `src/` directory structure
-- Use PHPUnit as the test runner
+The monorepo is mid-migration between two runners:
 
-### Writing Tests
+| Generation | Runner | Packages |
+|------------|--------|----------|
+| **v2** | Pest 3 | All `cnpj-*`, `cpf-dv`, `utils` |
+| **v1 (legacy)** | PHPUnit 10 | `cpf-fmt`, `cpf-gen`, `cpf-val`, `cpf-utils`, `br-utils` |
 
-```php
-<?php
+**v2 (Pest):** tests live in `tests/specs/` with a `.spec.php` suffix (e.g. `CnpjFormatter.spec.php`). Config: `.pest.config.xml`.
 
-declare(strict_types=1);
+**v1 (PHPUnit):** tests live in `tests/` with a `Test.php` suffix. Config: `phpunit.xml`.
 
-namespace Lacus\BrUtils\Tests;
+Match the structure and style of sibling tests in the package you are editing. New or migrated packages should follow the v2 (CNPJ) conventions.
 
-use PHPUnit\Framework\TestCase;
-use Lacus\BrUtils\CnpjGenerator;
+### Running tests
 
-class CnpjGeneratorTest extends TestCase
-{
-    private CnpjGenerator $generator;
+```bash
+# All packages
+composer run test:all
 
-    protected function setUp(): void
-    {
-        $this->generator = new CnpjGenerator();
-    }
-
-    public function testShouldGenerateValidCnpj(): void
-    {
-        $cnpj = $this->generator->generate();
-
-        $this->assertIsString($cnpj);
-        $this->assertMatchesRegularExpression('/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/', $cnpj);
-    }
-}
+# One package — from packages/<pkg>/
+composer test
 ```
 
-### Test Requirements
+### Test requirements
 
-- **Coverage**: Maintain 100% line coverage
-- **Edge Cases**: Test boundary conditions and error cases
-- **Performance**: Consider performance implications
-- **Documentation**: Tests should be self-documenting
+- Cover public behavior, options, and error paths
+- Test edge cases and boundary conditions
+- Keep tests self-documenting; follow existing naming in the package
 
 ## Code Style
 
@@ -330,12 +339,11 @@ class CnpjGenerator
 ### Before Submitting
 
 - [ ] Code follows our style guidelines (PSR-12)
-- [ ] All tests pass (`composer run test`)
-- [ ] PHPStan analysis passes (`composer run analyze`)
-- [ ] Code style check passes (`composer run check`)
-- [ ] Mutation testing passes (`composer run infection`)
+- [ ] Lint passes (`php run lint:ci` from root, or `composer run lint:ci` in the affected package)
+- [ ] Tests pass (`composer run test:all` from root, or `composer test` in the affected package)
+- [ ] User-facing changes have a `CHANGELOG.md` entry in the affected package
 - [ ] Documentation is updated
-- [ ] Commit messages follow conventional format
+- [ ] Commit messages follow conventional format (with package scope when applicable)
 
 ### PR Description Template
 
@@ -363,7 +371,7 @@ Brief description of changes
 
 ### Review Process
 
-1. **Automated Checks**: CI will run tests, linting, and type checking
+1. **Automated Checks**: CI runs `lint:ci` and `test` per package across PHP 8.2–8.5
 2. **Code Review**: Maintainers will review your code
 3. **Feedback**: Address any requested changes
 4. **Approval**: Once approved, your PR will be merged
@@ -397,7 +405,7 @@ Steps to reproduce the behavior:
 What you expected to happen.
 
 **Environment:**
-- PHP version: [e.g. 8.1.0]
+- PHP version: [e.g. 8.2.0]
 - OS: [e.g. macOS 13.0]
 - The version of the package you are changing: [e.g. 1.1.2]
 
@@ -445,7 +453,7 @@ Add any other context or screenshots about the feature request.
 
 - **GitHub Issues**: For bugs and feature requests
 - **GitHub Discussions**: For questions and general discussion
-- **Documentation**: Check the README and inline code comments
+- **Documentation**: Package `README.md` files, [`AGENTS.md`](AGENTS.md), and harnesses under [`agents/`](agents/)
 
 ## Recognition
 

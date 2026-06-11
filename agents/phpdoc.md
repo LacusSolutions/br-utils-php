@@ -11,7 +11,7 @@ triggers:
 
 # phpdoc
 
-Write and maintain PHPDoc for all exported and internal API symbols across br-utils-php v2 packages. All paths are relative to the **php/** subrepo root.
+Write and maintain PHPDoc for all exported and internal API symbols across br-utils-php v2 packages. All paths are relative to the repo root.
 
 ## Repository constraints
 

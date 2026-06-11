@@ -10,7 +10,7 @@ triggers:
 
 # new-package
 
-Step-by-step checklist for adding a new package to the br-utils-php monorepo. Adding a package is a rare, high-blast-radius operation. All paths are relative to the **php/** subrepo root.
+Step-by-step checklist for adding a new package to the br-utils-php monorepo. Adding a package is a rare, high-blast-radius operation. All paths are relative to the repo root.
 
 ## Prerequisites
 
@@ -81,8 +81,8 @@ Copy from the sibling package of the same archetype and update all package-speci
   "scripts": {
     "lint": ["@lint:format", "@lint:check"],
     "lint:ci": ["@lint:format --dry-run", "@lint:check --dry-run"],
-    "lint:format": "@php ../../scripts/lint-format.php <pkg>",
-    "lint:check": "@php ../../scripts/lint-check.php <pkg>",
+    "lint:format": "@php ../../run lint:format <pkg>",
+    "lint:check": "@php ../../run lint:check <pkg>",
     "test": "pest --configuration=.pest.config.xml",
     "test:watch": "@test --watch",
     "test:cov": "@test --coverage-html coverage"
@@ -212,7 +212,7 @@ This installs `vendor/` for the new package and generates `packages/<pkg>/compos
 - [ ] `tests/specs/` implemented per `unit-tests.md`
 - [ ] Root `composer.json` `test:<pkg>` script added
 - [ ] `composer install --working-dir=packages/<pkg>` runs successfully
-- [ ] Internal `"require"` edges respect dependency direction — verify with `php scripts/deps-tree.php <pkg>` (see [`agents/dependencies.md`](dependencies.md#inspecting-internal-dependencies))
+- [ ] Internal `"require"` edges respect dependency direction — verify with `php run deps <pkg>` (see [`agents/dependencies.md`](dependencies.md#inspecting-internal-dependencies))
 - [ ] `composer run lint:ci` passes from the package directory
 - [ ] `composer run test` passes from the package directory
 - [ ] `README.md` and `README.pt.md` written

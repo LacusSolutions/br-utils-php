@@ -13,7 +13,7 @@ triggers:
 
 # public-api
 
-This is a meta-checklist harness. When a change touches the public API of any `packages/*` package, use this file as the coordination checklist — it ties together the specialized harnesses that each govern one artifact type. All paths are relative to the **php/** subrepo root.
+This is a meta-checklist harness. When a change touches the public API of any `packages/*` package, use this file as the coordination checklist — it ties together the specialized harnesses that each govern one artifact type. All paths are relative to the repo root.
 
 ## What counts as a public API change
 

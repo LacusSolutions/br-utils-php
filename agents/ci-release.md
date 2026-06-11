@@ -11,11 +11,11 @@ triggers:
 
 # ci-release
 
-This harness documents CI and release workflows for awareness. Agents do **not** run releases. All paths are relative to the **php/** subrepo root.
+This harness documents CI and release workflows for awareness. Agents do **not** run releases. All paths are relative to the repo root.
 
 ## Repository constraints
 
-- **Do not run** `composer run release`, create GitHub Releases, or push git tags. Only the developer (via the release workflow) does that.
+- **Do not run** `php run release`, `composer run release`, create GitHub Releases, or push git tags. Only the developer (via the release workflow) does that.
 - CI workflow edits must stay within `.github/workflows/`.
 - Do not add secrets, tokens, or credentials to workflow files.
 - Before claiming any implementation task is done, validate locally with the commands in the "Local validation" section below.
@@ -60,7 +60,7 @@ Triggered by **manual `workflow_dispatch`** only. Inputs: `package` (required), 
 
 Steps:
 1. Run lint + test for the package (same reusable workflows as CI)
-2. Extract release notes from `packages/<pkg>/CHANGELOG.md` via `scripts/release.php`
+2. Extract release notes from `packages/<pkg>/CHANGELOG.md` via `php run release` (`scripts/Commands/ReleaseCommand.php`)
 3. Validate that a `{pkg}/main` branch exists
 4. Create a GitHub Release with tag `lacus/<pkg>@X.Y.Z`
 5. Push the version tag to the standalone subtree repo `LacusSolutions/br-utils-php_{pkg}`
@@ -77,7 +77,7 @@ Agents do not interact with subtree sync.
 
 ## Local validation commands
 
-Run these from the **php/** subrepo root before declaring any implementation task complete:
+Run these from the repo root before declaring any implementation task complete:
 
 ```bash
 # Single package — full CI equivalent
@@ -87,7 +87,7 @@ composer run lint:ci
 composer run test
 
 # From the root — all packages
-composer run lint:ci
+php run lint:ci
 composer run test:all
 ```
 
@@ -111,5 +111,6 @@ Workflow file changes are dev-only and do **not** require a CHANGELOG entry.
 | Reusable test workflow | `.github/workflows/.test.yml` |
 | Release workflow | `.github/workflows/release.yml` |
 | Subtree sync | `.github/workflows/subtrees-sync.yml` |
-| Release script | `scripts/release.php` |
+| CLI router | `run` (`php run lint:ci`, `php run release`, etc.) |
+| Release command | `php run release` (`scripts/Commands/ReleaseCommand.php`) |
 | Changelog harness | [`agents/changelogs.md`](changelogs.md) |

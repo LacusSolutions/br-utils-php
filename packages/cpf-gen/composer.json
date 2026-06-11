@@ -35,8 +35,8 @@
       "@lint:format --dry-run",
       "@lint:check --dry-run"
     ],
-    "lint:format": "@php ../../scripts/lint-format.php cpf-gen",
-    "lint:check": "@php ../../scripts/lint-check.php cpf-gen",
+    "lint:format": "@php ../../run lint:format cpf-gen",
+    "lint:check": "@php ../../run lint:check cpf-gen",
     "test": "phpunit",
     "test:watch": "phpunit-watcher watch",
     "test-coverage": "phpunit --coverage-html coverage"

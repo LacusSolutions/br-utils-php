@@ -32,8 +32,8 @@
       "@lint:format --dry-run",
       "@lint:check --dry-run"
     ],
-    "lint:format": "@php ../../scripts/lint-format.php utils",
-    "lint:check": "@php ../../scripts/lint-check.php utils",
+    "lint:format": "@php ../../run lint:format utils",
+    "lint:check": "@php ../../run lint:check utils",
     "test": "phpunit",
     "test:watch": "phpunit-watcher watch",
     "test-coverage": "phpunit --coverage-html coverage"

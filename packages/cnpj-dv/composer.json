@@ -36,8 +36,8 @@
       "@lint:format --dry-run",
       "@lint:check --dry-run"
     ],
-    "lint:format": "@php ../../scripts/lint-format.php cnpj-dv",
-    "lint:check": "@php ../../scripts/lint-check.php cnpj-dv",
+    "lint:format": "@php ../../run lint:format cnpj-dv",
+    "lint:check": "@php ../../run lint:check cnpj-dv",
     "test": "pest --configuration=.pest.config.xml",
     "test:watch": "@test --watch",
     "test:cov": "@test --coverage-html coverage"

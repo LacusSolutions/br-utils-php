@@ -13,7 +13,7 @@ triggers:
 
 # package-arch
 
-Follow the repeatable implementation architecture when adding or changing source code in any `packages/*` package. All paths are relative to the **php/** subrepo root.
+Follow the repeatable implementation architecture when adding or changing source code in any `packages/*` package. All paths are relative to the repo root.
 
 ## Migration context
 
@@ -215,7 +215,7 @@ Defaults live as `public const` class constants. The constructor validates optio
 utils → {cpf,cnpj}-dv → {cpf,cnpj}-{fmt,gen,val} → {cpf,cnpj}-utils → br-utils
 ```
 
-Upstream packages must not import downstream ones. `utils` is a leaf with no internal deps. To inspect the live graph from `composer.json` declarations, run `php scripts/deps-tree.php` — see [`agents/dependencies.md`](dependencies.md#inspecting-internal-dependencies).
+Upstream packages must not import downstream ones. `utils` is a leaf with no internal deps. To inspect the live graph from `composer.json` declarations, run `php run deps` — see [`agents/dependencies.md`](dependencies.md#inspecting-internal-dependencies).
 
 ## Checklist
 

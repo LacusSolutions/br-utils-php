@@ -22,7 +22,7 @@ Load and apply every layer relevant to the task. Package-level `AGENTS.md` or `a
 1. Read [`AGENTS.md`](../AGENTS.md) for general project rules (Composer, lint, tests, changelogs, etc.).
 2. If working inside `packages/<pkg>/`, check for `packages/<pkg>/AGENTS.md` and `packages/<pkg>/agents/` and prefer them over root instructions when they differ.
 3. When a root harness trigger matches (table below), read and follow that harness file **in full** before making changes — unless step 2 provides a more specific override.
-4. Paths are relative to the **php/** subrepo root.
+4. Paths are relative to the repo root.
 
 ## Available harnesses
 
@@ -34,12 +34,12 @@ Load and apply every layer relevant to the task. Package-level `AGENTS.md` or `a
 | `package-arch` | [`package-arch.md`](package-arch.md) | Implementing or changing package source code; designing `src/` layout; exception classes; snake_case helpers |
 | `public-api` | [`public-api.md`](public-api.md) | Any change to exported classes, method signatures, options, defaults, or namespace visible to Packagist consumers |
 | `new-package` | [`new-package.md`](new-package.md) | Scaffolding a new workspace package from scratch |
-| `lint-config` | [`lint-config.md`](lint-config.md) | Changing `.php-cs-fixer.config.php`, `.php-stan.config.neon`, or `scripts/lint-*.php` shared helpers |
+| `lint-config` | [`lint-config.md`](lint-config.md) | Changing `.php-cs-fixer.config.php`, `.php-stan.config.neon`, `run`, `scripts/Application.php`, `scripts/Commands/`, or `scripts/helpers.php` |
 | `phpdoc` | [`phpdoc.md`](phpdoc.md) | Adding or reviewing PHPDoc on classes, methods, exceptions, constants, or function files |
 | `domain-parity` | [`domain-parity.md`](domain-parity.md) | Porting a CPF feature to CNPJ (or vice versa); checking intentional divergences |
 | `aggregator-package` | [`aggregator-package.md`](aggregator-package.md) | Implementing or changing `cpf-utils`, `cnpj-utils`, or `br-utils` |
 | `ci-release` | [`ci-release.md`](ci-release.md) | Editing `.github/workflows/` files; understanding the CI pipeline; local validation before declaring done |
-| `dependencies` | [`dependencies.md`](dependencies.md) | Adding any new Composer dependency; changing runtime `require` constraints; updating `composer.lock`; inspecting the internal graph via `scripts/deps-tree.php` |
+| `dependencies` | [`dependencies.md`](dependencies.md) | Adding any new Composer dependency; changing runtime `require` constraints; updating `composer.lock`; inspecting the internal graph via `php run deps` |
 
 ## Adding a harness
 

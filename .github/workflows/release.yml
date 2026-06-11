@@ -60,10 +60,10 @@ jobs:
 
           if [ -n "${{ inputs.version }}" ]; then
             echo "📌 Using requested version: ${{ inputs.version }}"
-            OUTPUT_PATH=$(php scripts/release.php "$PKG" --version "${{ inputs.version }}")
+            OUTPUT_PATH=$(php run release "$PKG" --version "${{ inputs.version }}")
           else
             echo "📌 Using latest version from CHANGELOG.md"
-            OUTPUT_PATH=$(php scripts/release.php "$PKG")
+            OUTPUT_PATH=$(php run release "$PKG")
           fi
 
           BASENAME=$(basename "$OUTPUT_PATH" .md)

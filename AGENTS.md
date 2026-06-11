@@ -60,7 +60,8 @@ Shared tooling lives at the PHP subrepo root:
 - `.php-cs-fixer.config.php` — shared PSR-12 formatting rules
 - `.php-stan.config.neon` — shared PHPStan level-10 config
 - `.captainhook.config.json` — git hooks (pre-commit, commit-msg, pre-push)
-- `scripts/lint-format.php`, `scripts/lint-check.php`, `scripts/lint-staged.php` — shared lint orchestration
+- `run` — Symfony Console CLI for monorepo dev commands (`php run <command> [args...]`)
+- `scripts/Application.php`, `scripts/Commands/`, `scripts/helpers.php` — dev CLI and shared orchestration
 
 Prefer changing these only when necessary and in line with existing patterns. Do not add per-package php-cs-fixer or PHPStan config files.
 
@@ -79,8 +80,10 @@ Upstream packages must not import downstream ones.
 Linting and formatting use **php-cs-fixer** (style) and **PHPStan** (static analysis, level 10). Run from the subrepo root:
 
 ```bash
-composer run lint:ci        # dry-run check (CI equivalent)
-composer run lint           # format + check
+php run lint:ci               # dry-run check (CI equivalent)
+php run lint                  # format + check
+composer run lint:ci        # same via Composer
+composer run lint           # same via Composer
 ```
 
 From inside a package directory (`packages/<pkg>/`):
@@ -141,7 +144,7 @@ Use [`agents/public-api.md`](agents/public-api.md) as the coordination checklist
 
 ### CHANGELOG.md
 
-Edit `packages/<pkg>/CHANGELOG.md` following the rules in [`agents/changelogs.md`](agents/changelogs.md). Do **not** run `composer run release` — that creates GitHub Releases and is the developer's responsibility.
+Edit `packages/<pkg>/CHANGELOG.md` following the rules in [`agents/changelogs.md`](agents/changelogs.md). Do **not** run `php run release` or `composer run release` — that creates GitHub Releases and is the developer's responsibility.
 
 ---
 
@@ -179,12 +182,13 @@ Cursor agents may load these workspace skills as a shortcut; each skill is a thi
 | Agent harnesses (catalog) | `agents/` |
 | Shared CS fixer config | `.php-cs-fixer.config.php` |
 | Shared PHPStan config | `.php-stan.config.neon` |
-| Lint orchestration scripts | `scripts/lint-format.php`, `scripts/lint-check.php`, `scripts/lint-staged.php` |
-| Internal dependency graph | `scripts/deps-tree.php` (see [`agents/dependencies.md`](agents/dependencies.md)) |
-| Release script | `scripts/release.php` |
+| CLI entry | `run` (`php run deps`, `php run lint:ci`, etc.) |
+| Dev CLI application | `scripts/Application.php` + `scripts/Commands/` |
+| Shared helpers | `scripts/helpers.php` |
+| Internal dependency graph | `php run deps` (see [`agents/dependencies.md`](agents/dependencies.md)) |
+| Release command | `php run release` (`scripts/Commands/ReleaseCommand.php`) |
 | Git hooks | `.captainhook.config.json` |
 | CI / release workflows | `.github/workflows/` |
 | Root Composer config | `composer.json` |
 | Package Composer config | `packages/*/composer.json` |
 | Package changelogs | `packages/*/CHANGELOG.md` |
-| Cursor skills (PHP) | `.cursor/skills/*-php/SKILL.md` (workspace root; thin pointers only) |

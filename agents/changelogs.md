@@ -11,12 +11,12 @@ triggers:
 
 # changelogs
 
-Maintain `packages/<pkg>/CHANGELOG.md` files following the rules below. All `git tag` and SemVer lookups must run from inside the PHP subrepo (`cd php/`); the workspace root is not a Git repo.
+Maintain `packages/<pkg>/CHANGELOG.md` files following the rules below. All `git tag` and SemVer lookups must run from inside the PHP repo.
 
 ## Repository constraints
 
 - `packages/<pkg>/CHANGELOG.md` files are the **only** files agents create or edit in this workflow.
-- Do **not** run `composer run release`, create GitHub Releases, or push git tags. Only the developer does that.
+- Do **not** run `php run release`, `composer run release`, create GitHub Releases, or push git tags. Only the developer does that.
 - Do **not** edit released sections — once tagged, history is immutable.
 - Do **not** edit the top-level `# lacus/<pkg>` heading.
 
@@ -152,4 +152,4 @@ Before applying this harness, check whether the target package defines `packages
 |---------|------|
 | Format reference | `packages/cnpj-fmt/CHANGELOG.md` |
 | DV format reference | `packages/cpf-dv/CHANGELOG.md` |
-| Tag lookup (from php/ root) | `git tag -l 'lacus/<pkg>@*' \| sort -V` |
+| Tag lookup | `git tag -l 'lacus/<pkg>@*' \| sort -V` |
