@@ -49,6 +49,7 @@
 - **Documentation** — README and README.pt.md updated for the v2 API (namespaces, constructor, CNPJ validator options, bundled-package imports).
 - **CNPJ dependency alignment** — Transitive runtime updated to `lacus/cnpj-fmt` ^2.0, `lacus/cnpj-gen` ^2.1, `lacus/cnpj-val` ^2.0, and `lacus/cnpj-dv` ^1.1.
 - **CNPJ options objects** — Formatter, generator, and validator settings use `*Options` instances with per-call overrides via named parameters or an options object.
+- **`CpfUtils` constructor** — Accepts `CpfFormatterOptions` / `CpfGeneratorOptions` instances or option arrays when constructing directly or via `BrUtils`.
 - **CNPJ generator reliability** — Internal retry when check-digit computation rejects a generated candidate (from `lacus/cnpj-gen` ^2.0).
 - **CNPJ validator reuse** — `cnpj_val()` keeps the `CnpjValidator` instance alive across calls (from `lacus/cnpj-val` ^2.0).
 - **CNPJ check-digit performance** — Faster `CnpjCheckDigits` engine used by generation and validation (from `lacus/cnpj-dv` ^1.1).
