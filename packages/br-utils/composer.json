@@ -1,7 +1,7 @@
 {
   "name": "lacus/br-utils",
   "type": "library",
-  "description": "Utility resources to deal with Brazilian-related data.",
+  "description": "Utilities to deal with Brazilian-related data",
   "license": "MIT",
   "authors": [
     {
@@ -46,48 +46,50 @@
     ],
     "lint:format": "@php ../../scripts/lint-format.php br-utils",
     "lint:check": "@php ../../scripts/lint-check.php br-utils",
-    "test": "phpunit",
-    "test:watch": "phpunit-watcher watch",
-    "test-coverage": "phpunit --coverage-html coverage"
+    "test": [
+      "pest --configuration=.pest.config.xml --group isolated-process-tests",
+      "pest --configuration=.pest.config.xml --exclude-group isolated-process-tests",
+      "phpunit --configuration=.phpunit.config.xml"
+    ],
+    "test:cov": [
+      "pest --configuration=.pest.config.xml --group isolated-process-tests",
+      "pest --configuration=.pest.config.xml --exclude-group isolated-process-tests --coverage-html coverage",
+      "phpunit --configuration=.phpunit.config.xml --coverage-html coverage"
+    ]
   },
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
   },
   "require": {
-    "php": ">=8.1",
-    "lacus/cnpj-fmt": "^1.0",
-    "lacus/cnpj-gen": "^1.0",
-    "lacus/cnpj-utils": "^1.1",
-    "lacus/cnpj-val": "^1.0",
-    "lacus/cpf-fmt": "^1.0",
-    "lacus/cpf-gen": "^1.0",
-    "lacus/cpf-utils": "^1.1",
-    "lacus/cpf-val": "^1.0"
+    "php": "^8.2",
+    "lacus/cnpj-utils": "^2.0",
+    "lacus/cpf-utils": "^1.1"
   },
   "require-dev": {
-    "phpunit/phpunit": "^10.5",
-    "spatie/phpunit-watcher": "~1.24"
+    "pestphp/pest": "^3.8",
+    "phpunit/phpunit": "^11.5"
   },
   "autoload": {
     "psr-4": {
-      "Lacus\\BrUtils\\": "src/"
+      "Lacus\\": "src/"
     },
     "files": [
-      "src/Cnpj/cnpj_utils.php",
-      "src/Cpf/cpf_utils.php"
+      "src/BrUtils/Cpf/cpf-fmt.php",
+      "src/BrUtils/Cpf/cpf-gen.php",
+      "src/BrUtils/Cpf/cpf-val.php"
     ]
   },
   "autoload-dev": {
     "psr-4": {
-      "Lacus\\BrUtils\\Tests\\": "tests/",
-      "Lacus\\CnpjUtils\\Tests\\": "vendor/lacus/cnpj-utils/tests/",
-      "Lacus\\CpfUtils\\Tests\\": "vendor/lacus/cpf-utils/tests/",
-      "Lacus\\CnpjFmt\\Tests\\": "vendor/lacus/cnpj-fmt/tests/",
-      "Lacus\\CnpjGen\\Tests\\": "vendor/lacus/cnpj-gen/tests/",
-      "Lacus\\CnpjVal\\Tests\\": "vendor/lacus/cnpj-val/tests/",
+      "Lacus\\BrUtils\\Tests\\": "tests/specs/",
+      "Lacus\\BrUtils\\Tests\\Legacy\\": "tests/phpunit/",
       "Lacus\\CpfFmt\\Tests\\": "vendor/lacus/cpf-fmt/tests/",
       "Lacus\\CpfGen\\Tests\\": "vendor/lacus/cpf-gen/tests/",
-      "Lacus\\CpfVal\\Tests\\": "vendor/lacus/cpf-val/tests/"
+      "Lacus\\CpfVal\\Tests\\": "vendor/lacus/cpf-val/tests/",
+      "Lacus\\CpfUtils\\Tests\\": "vendor/lacus/cpf-utils/tests/"
     }
   }
 }

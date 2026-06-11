@@ -2,6 +2,8 @@
 
 This file is the **primary entry point** for AI agents working in the PHP subrepo. Read this file first. It provides baseline rules for every task and links to the specialized harnesses in [`agents/`](agents/) for task-specific instructions.
 
+**Reference standard:** `packages/utils` and `packages/cnpj-*` reflect the current v2 conventions. `packages/cpf-*` (except `cpf-dv`) still follow older v1 patterns (PHPUnit, legacy namespaces, `*Test.php` files) and are being migrated — match `cnpj-*` for new or updated packages.
+
 ## Instruction precedence
 
 When instructions conflict, **the more specific scope wins**:
@@ -18,7 +20,7 @@ Apply every layer relevant to your task. Where a package-level `AGENTS.md` or `a
 
 ### Runtime and package manager
 
-The project is managed by **Composer**. Each package has its own `composer.json` and `vendor/` directory — there is no hoisted monorepo install. Install dependencies per package:
+The project uses **PHP** (`^8.2`) and **Composer**. Each package has its own `composer.json` and `vendor/` directory — there is no hoisted monorepo install. Install dependencies per package:
 
 ```bash
 composer install --working-dir=packages/<pkg>
@@ -101,6 +103,12 @@ See [`agents/ci-release.md`](agents/ci-release.md) for the full pipeline (matrix
 ---
 
 ## Package-specific guidelines
+
+### PHP version and strictness
+
+- Require `"php": "^8.2"` in all modern (v2) packages.
+- Every PHP file must start with `declare(strict_types=1);`.
+- Use typed properties, parameters, and return types.
 
 ### Lint / static analysis (DRY)
 

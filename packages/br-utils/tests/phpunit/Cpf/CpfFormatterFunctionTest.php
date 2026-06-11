@@ -2,45 +2,38 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Tests\Cnpj;
+namespace Lacus\BrUtils\Tests\Legacy\Cpf;
 
 use Closure;
-use Lacus\BrUtils\Cnpj\CnpjFormatter;
-use Lacus\CnpjFmt\Tests\CnpjFormatterTestCases;
+
+use function Lacus\BrUtils\Cpf\cpf_fmt;
+
+use Lacus\CpfFmt\Tests\CpfFormatterTestCases;
 use PHPUnit\Framework\TestCase;
 
-class CnpjFormatterClassTest extends TestCase
+class CpfFormatterFunctionTest extends TestCase
 {
-    use CnpjFormatterTestCases;
-
-    private CnpjFormatter $formatter;
-
-    protected function setUp(): void
-    {
-        $this->formatter = new CnpjFormatter();
-    }
+    use CpfFormatterTestCases;
 
     protected function format(
-        string $cnpjString,
+        string $cpfString,
         ?bool $escape = null,
         ?bool $hidden = null,
         ?string $hiddenKey = null,
         ?int $hiddenStart = null,
         ?int $hiddenEnd = null,
         ?string $dotKey = null,
-        ?string $slashKey = null,
         ?string $dashKey = null,
         ?Closure $onFail = null,
     ): string {
-        return $this->formatter->format(
-            $cnpjString,
+        return cpf_fmt(
+            $cpfString,
             $escape,
             $hidden,
             $hiddenKey,
             $hiddenStart,
             $hiddenEnd,
             $dotKey,
-            $slashKey,
             $dashKey,
             $onFail,
         );

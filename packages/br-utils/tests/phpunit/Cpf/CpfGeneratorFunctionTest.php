@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Tests\Cnpj;
+namespace Lacus\BrUtils\Tests\Legacy\Cpf;
 
-use function Lacus\BrUtils\Cnpj\cnpj_gen;
+use function Lacus\BrUtils\Cpf\cpf_gen;
 
-use Lacus\CnpjGen\Tests\CnpjGeneratorTestCases;
+use Lacus\CpfGen\Tests\CpfGeneratorTestCases;
 use PHPUnit\Framework\TestCase;
 
-class CnpjGeneratorFunctionTest extends TestCase
+class CpfGeneratorFunctionTest extends TestCase
 {
-    use CnpjGeneratorTestCases;
+    use CpfGeneratorTestCases;
 
     protected function generate(
         ?bool $format = null,
         ?string $prefix = null,
     ): string {
-        return cnpj_gen(
+        return cpf_gen(
             $format,
             $prefix,
         );

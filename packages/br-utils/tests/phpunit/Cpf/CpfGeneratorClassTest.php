@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Lacus\BrUtils\Tests\Cnpj;
+namespace Lacus\BrUtils\Tests\Legacy\Cpf;
 
-use Lacus\BrUtils\Cnpj\CnpjGenerator;
-use Lacus\CnpjGen\Tests\CnpjGeneratorTestCases;
+use Lacus\BrUtils\Cpf\CpfGenerator;
+use Lacus\CpfGen\Tests\CpfGeneratorTestCases;
 use PHPUnit\Framework\TestCase;
 
-class CnpjGeneratorClassTest extends TestCase
+class CpfGeneratorClassTest extends TestCase
 {
-    use CnpjGeneratorTestCases;
+    use CpfGeneratorTestCases;
 
-    private CnpjGenerator $generator;
+    private CpfGenerator $generator;
 
     protected function setUp(): void
     {
-        $this->generator = new CnpjGenerator();
+        $this->generator = new CpfGenerator();
     }
 
     protected function generate(
