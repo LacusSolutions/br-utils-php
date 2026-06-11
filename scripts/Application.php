@@ -44,7 +44,11 @@ final class Application extends BaseApplication
     ): int {
         $root = monorepo_root();
 
-        chdir($root);
+        if (!chdir($root)) {
+            fwrite(STDERR, "Failed to change directory to monorepo root: {$root}\n");
+
+            return 1;
+        }
 
         return parent::run($input, $output);
     }
