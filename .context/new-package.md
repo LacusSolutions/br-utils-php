@@ -14,8 +14,8 @@ Step-by-step checklist for adding a new package to the br-utils-php monorepo. Ad
 
 ## Prerequisites
 
-- **Developer approval is required** before adding any new package or dependency. Stop and confirm before starting. See [`agents/dependencies.md`](dependencies.md).
-- Identify the archetype (DV / Val / Fmt / Gen / Foundation / Aggregator) — this determines the `src/` layout. See [`agents/package-arch.md`](package-arch.md).
+- **Developer approval is required** before adding any new package or dependency. Stop and confirm before starting. See [`.context/dependencies.md`](dependencies.md).
+- Identify the archetype (DV / Val / Fmt / Gen / Foundation / Aggregator) — this determines the `src/` layout. See [`.context/package-arch.md`](package-arch.md).
 - Identify the canonical sibling package to clone from (table below).
 - All new packages must use the **v2** pattern (Pest, `Lacus\BrUtils\{Cpf|Cnpj}\` namespace, full Exceptions/). Do not scaffold new packages in the v1 style.
 
@@ -158,18 +158,18 @@ Copy from `packages/cnpj-fmt/.pest.config.xml` and update the testsuite name and
 
 ## Step 4 — Implement `src/`
 
-Follow [`agents/package-arch.md`](package-arch.md):
+Follow [`.context/package-arch.md`](package-arch.md):
 
 - Choose the layout for the archetype (DV / Val / Fmt / Gen / Foundation / Aggregator).
 - Implement the main class with v2 namespace `Lacus\BrUtils\{Cpf|Cnpj}\`.
 - Write `Exceptions/` with abstract base classes + concrete subclasses.
 - Write the snake_case helper function file for Val/Fmt/Gen.
 - Write `Enums/` for Gen and Val packages.
-- Add PHPDoc per [`agents/phpdoc.md`](phpdoc.md).
+- Add PHPDoc per [`.context/phpdoc.md`](phpdoc.md).
 
 ## Step 5 — Add `tests/`
 
-Follow [`agents/unit-tests.md`](unit-tests.md):
+Follow [`.context/unit-tests.md`](unit-tests.md):
 
 - `tests/specs/{ClassName}.spec.php` — behavior tests (happy path, edge cases, error cases)
 - `tests/specs/{ClassName}Options.spec.php` — options class defaults and validation
@@ -199,7 +199,7 @@ This installs `vendor/` for the new package and generates `packages/<pkg>/compos
 
 ## Step 8 — README and CHANGELOG
 
-- Write `README.md` and `README.pt.md` per [`agents/readme-docs.md`](readme-docs.md).
+- Write `README.md` and `README.pt.md` per [`.context/readme-docs.md`](readme-docs.md).
 - Create `CHANGELOG.md` with a `## 1.0.0` section for the initial release.
 
 ## Final checklist
@@ -212,7 +212,7 @@ This installs `vendor/` for the new package and generates `packages/<pkg>/compos
 - [ ] `tests/specs/` implemented per `unit-tests.md`
 - [ ] Root `composer.json` `test:<pkg>` script added
 - [ ] `composer install --working-dir=packages/<pkg>` runs successfully
-- [ ] Internal `"require"` edges respect dependency direction — verify with `php run deps <pkg>` (see [`agents/dependencies.md`](dependencies.md#inspecting-internal-dependencies))
+- [ ] Internal `"require"` edges respect dependency direction — verify with `php run deps <pkg>` (see [`.context/dependencies.md`](dependencies.md#inspecting-internal-dependencies))
 - [ ] `composer run lint:ci` passes from the package directory
 - [ ] `composer run test` passes from the package directory
 - [ ] `README.md` and `README.pt.md` written
@@ -220,4 +220,4 @@ This installs `vendor/` for the new package and generates `packages/<pkg>/compos
 
 ## Package-level overrides
 
-Before applying this harness, check whether a package-level `AGENTS.md` or `agents/` directory was created for this package. If so, follow it over this file for any conflicting instructions (see [`agents/README.md`](README.md#instruction-precedence)).
+Before applying this harness, check whether a package-level `AGENTS.md` or `agents/` directory was created for this package. If so, follow it over this file for any conflicting instructions (see [`.context/README.md`](README.md#instruction-precedence)).

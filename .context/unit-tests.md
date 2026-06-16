@@ -60,7 +60,7 @@ Test-only changes are dev-only — do not add a changelog entry for test edits, 
 
 ### Package-level overrides
 
-Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/agents/`. If either exists and contradicts this file, **follow the package-level instruction** (see [`agents/README.md`](README.md#instruction-precedence)).
+Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/agents/`. If either exists and contradicts this file, **follow the package-level instruction** (see [`.context/README.md`](README.md#instruction-precedence)).
 
 ---
 

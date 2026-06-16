@@ -113,4 +113,4 @@ Workflow file changes are dev-only and do **not** require a CHANGELOG entry.
 | Subtree sync | `.github/workflows/subtrees-sync.yml` |
 | CLI router | `run` (`php run lint:ci`, `php run release`, etc.) |
 | Release command | `php run release` (`scripts/Commands/ReleaseCommand.php`) |
-| Changelog harness | [`agents/changelogs.md`](changelogs.md) |
+| Changelog harness | [`.context/changelogs.md`](changelogs.md) |

@@ -215,7 +215,7 @@ Defaults live as `public const` class constants. The constructor validates optio
 utils → {cpf,cnpj}-dv → {cpf,cnpj}-{fmt,gen,val} → {cpf,cnpj}-utils → br-utils
 ```
 
-Upstream packages must not import downstream ones. `utils` is a leaf with no internal deps. To inspect the live graph from `composer.json` declarations, run `php run deps` — see [`agents/dependencies.md`](dependencies.md#inspecting-internal-dependencies).
+Upstream packages must not import downstream ones. `utils` is a leaf with no internal deps. To inspect the live graph from `composer.json` declarations, run `php run deps` — see [`.context/dependencies.md`](dependencies.md#inspecting-internal-dependencies).
 
 ## Checklist
 
@@ -227,12 +227,12 @@ Upstream packages must not import downstream ones. `utils` is a leaf with no int
 - [ ] `Exceptions/` defines abstract base + concrete subclasses
 - [ ] Options class uses `const` defaults; constructor validates and throws
 - [ ] `Enums/` added for Gen and Val packages only
-- [ ] PHPDoc on all exported symbols per [`agents/phpdoc.md`](phpdoc.md)
-- [ ] Tests per [`agents/unit-tests.md`](unit-tests.md)
+- [ ] PHPDoc on all exported symbols per [`.context/phpdoc.md`](phpdoc.md)
+- [ ] Tests per [`.context/unit-tests.md`](unit-tests.md)
 
 ## Package-level overrides
 
-Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/agents/`. If either exists and contradicts this file on the same topic, **follow the package-level instruction** (see [`agents/README.md`](README.md#instruction-precedence)).
+Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/agents/`. If either exists and contradicts this file on the same topic, **follow the package-level instruction** (see [`.context/README.md`](README.md#instruction-precedence)).
 
 ## Reference packages
 
