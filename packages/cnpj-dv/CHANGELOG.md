@@ -1,5 +1,11 @@
 # lacus/cnpj-dv
 
+## 1.2.0
+
+### Improvements
+
+- **Error messages**: `CnpjCheckDigitsInputLengthException` refers to "characters" instead of "digits" to match alphanumeric input support.
+
 ## 1.1.0
 
 ### New Features
