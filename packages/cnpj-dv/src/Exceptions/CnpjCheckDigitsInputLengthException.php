@@ -33,7 +33,7 @@ class CnpjCheckDigitsInputLengthException extends CnpjCheckDigitsException
             ? (string) strlen($evaluatedInput)
             : strlen($evaluatedInput) . ' in "' . $evaluatedInput . '"';
 
-        parent::__construct("CNPJ input {$fmtActual} does not contain {$minExpectedLength} to {$maxExpectedLength} digits. Got {$fmtEvaluated}.");
+        parent::__construct("CNPJ input {$fmtActual} does not contain {$minExpectedLength} to {$maxExpectedLength} characters. Got {$fmtEvaluated}.");
         $this->actualInput = $actualInput;
         $this->evaluatedInput = $evaluatedInput;
         $this->minExpectedLength = $minExpectedLength;

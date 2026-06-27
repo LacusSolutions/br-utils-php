@@ -191,7 +191,7 @@ describe('CnpjCheckDigitsInputLengthException', function () {
             $evaluatedInput = '12345';
             $minExpectedLength = 12;
             $maxExpectedLength = 14;
-            $actualMessage = 'CNPJ input "'.$actualInput.'" does not contain '.$minExpectedLength.' to '.$maxExpectedLength.' digits. Got '.strlen($evaluatedInput).' in "'.$evaluatedInput.'".';
+            $actualMessage = 'CNPJ input "'.$actualInput.'" does not contain '.$minExpectedLength.' to '.$maxExpectedLength.' characters. Got '.strlen($evaluatedInput).' in "'.$evaluatedInput.'".';
 
             $exception = new CnpjCheckDigitsInputLengthException(
                 $actualInput,
