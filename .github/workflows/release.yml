@@ -159,13 +159,68 @@ jobs:
           echo "branch_name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
           echo "commit_sha=$COMMIT_SHA" >> "$GITHUB_OUTPUT"
 
-  create-release:
-    name: Create GitHub Release
+  sync-tag:
+    name: Push Tag to Subtree Repository
     needs:
       - lint
       - test
       - prepare-release
       - validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - env:
+          TAG_NAME: ${{ needs.prepare-release.outputs.tag_name }}
+          PACKAGE_NAME: ${{ needs.prepare-release.outputs.package }}
+          PACKAGE_VERSION: ${{ needs.prepare-release.outputs.version }}
+          COMMIT_SHA: ${{ needs.validate.outputs.commit_sha }}
+        run: |
+          set -euo pipefail
+
+          REMOTE_URL="git@github.com:LacusSolutions/br-utils-php_${PACKAGE_NAME}.git"
+
+          echo "---------------------------------------------"
+          echo "🔄 Syncing tag to subtree repository"
+          echo "---------------------------------------------"
+          echo "🏷️  Monorepo tag: $TAG_NAME"
+          echo "📦 Package:      $PACKAGE_NAME"
+          echo "🔖 Version tag:  $PACKAGE_VERSION"
+          echo "📝 Commit:       $COMMIT_SHA"
+          echo "🔗 Remote URL:   $REMOTE_URL"
+          echo ""
+
+          echo "🔍 Verifying remote repository..."
+
+          if ! git ls-remote "$REMOTE_URL" &> /dev/null; then
+            echo "❌ Remote repository not found: $REMOTE_URL"
+            exit 1
+          fi
+
+          echo "✅ Remote repository is reachable"
+          echo "🏷️  Creating local tag '$PACKAGE_VERSION' at commit '$COMMIT_SHA'..."
+
+          git remote add "remote-repo-${PACKAGE_NAME}" "$REMOTE_URL" || true
+          git tag "$PACKAGE_VERSION" "$COMMIT_SHA" -f
+
+          echo "🚀 Pushing tag '$PACKAGE_VERSION' to subtree repository..."
+
+          git push "remote-repo-${PACKAGE_NAME}" "refs/tags/$PACKAGE_VERSION" --force
+
+          echo "✅ Pushed tag '$PACKAGE_VERSION' to remote repository"
+
+  create-release:
+    name: Create GitHub Release
+    needs:
+      - prepare-release
+      - validate
+      - sync-tag
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -222,54 +277,3 @@ jobs:
 
           echo "✅ Release created successfully (ID: $RELEASE_ID)"
           echo "release_id=$RELEASE_ID" >> "$GITHUB_OUTPUT"
-
-  sync-tag:
-    name: Push Tag to Subtree Repository
-    needs: create-release
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - env:
-          TAG_NAME: ${{ needs.create-release.outputs.tag_name }}
-          PACKAGE_NAME: ${{ needs.create-release.outputs.package }}
-          PACKAGE_VERSION: ${{ needs.create-release.outputs.version }}
-        run: |
-          set -euo pipefail
-
-          REMOTE_URL="git@github.com:LacusSolutions/br-utils-php_${PACKAGE_NAME}.git"
-
-          echo "---------------------------------------------"
-          echo "🔄 Syncing tag to subtree repository"
-          echo "---------------------------------------------"
-          echo "🏷️  Monorepo tag: $TAG_NAME"
-          echo "📦 Package:      $PACKAGE_NAME"
-          echo "🔖 Version tag:  $PACKAGE_VERSION"
-          echo "🔗 Remote URL:   $REMOTE_URL"
-          echo ""
-
-          echo "🔍 Verifying remote repository..."
-
-          if ! git ls-remote "$REMOTE_URL" &> /dev/null; then
-            echo "❌ Remote repository not found: $REMOTE_URL"
-            exit 1
-          fi
-
-          echo "✅ Remote repository is reachable"
-          echo "🏷️  Creating local tag '$PACKAGE_VERSION' from '$TAG_NAME'..."
-
-          git fetch --tags
-          git remote add "remote-repo-${PACKAGE_NAME}" "$REMOTE_URL" || true
-          git tag "$PACKAGE_VERSION" "refs/tags/$TAG_NAME" -f
-
-          echo "🚀 Pushing tag '$PACKAGE_VERSION' to subtree repository..."
-
-          git push "remote-repo-${PACKAGE_NAME}" "refs/tags/$PACKAGE_VERSION" --force
-
-          echo "✅ Pushed tag '$PACKAGE_VERSION' to remote repository"
