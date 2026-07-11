@@ -36,14 +36,14 @@ For every public API change, work through the following artifacts in order:
 
 | # | Artifact | Harness |
 |---|----------|---------|
-| 1 | Source (`src/`) changes + `Exceptions/` | [`.context/package-arch.md`](package-arch.md) |
-| 2 | PHPDoc on all changed/new symbols | [`.context/phpdoc.md`](phpdoc.md) |
-| 3 | Behavior unit tests | [`.context/unit-tests.md`](unit-tests.md) |
-| 4 | README update (options table, usage example) | [`.context/readme-docs.md`](readme-docs.md) |
-| 5 | CHANGELOG entry | [`.context/changelogs.md`](changelogs.md) |
-| 6 | `composer.json` `"require"` / `"autoload"` (if changed) | [`.context/dependencies.md`](dependencies.md) |
-| 7 | Domain parity check (if `cpf-*` / `cnpj-*`) | [`.context/domain-parity.md`](domain-parity.md) |
-| 8 | Aggregator cascade (if sub-package changed) | [`.context/aggregator-package.md`](aggregator-package.md) |
+| 1 | Source (`src/`) changes + `Exceptions/` | [`context/package-arch.md`](package-arch.md) |
+| 2 | PHPDoc on all changed/new symbols | [`context/phpdoc.md`](phpdoc.md) |
+| 3 | Behavior unit tests | [`context/unit-tests.md`](unit-tests.md) |
+| 4 | README update (options table, usage example) | [`context/readme-docs.md`](readme-docs.md) |
+| 5 | CHANGELOG entry | [`context/changelogs.md`](changelogs.md) |
+| 6 | `composer.json` `"require"` / `"autoload"` (if changed) | [`context/dependencies.md`](dependencies.md) |
+| 7 | Domain parity check (if `cpf-*` / `cnpj-*`) | [`context/domain-parity.md`](domain-parity.md) |
+| 8 | Aggregator cascade (if sub-package changed) | [`context/aggregator-package.md`](aggregator-package.md) |
 
 > There is no step for distribution tests (`output.spec.*`) — PHP packages have no build step. The PSR-4 autoload contract is validated by the behavior tests and lint.
 
@@ -81,7 +81,7 @@ When changing a sub-package public API, check whether the aggregator wrapping it
 | `cnpj-{fmt,gen,val}` | `cnpj-utils` re-exports + `CnpjUtils` class |
 | `cpf-utils` or `cnpj-utils` | `br-utils` |
 
-If the aggregator re-export does not yet expose the new symbol, add it to the `src/` entry point of that aggregator. See [`.context/aggregator-package.md`](aggregator-package.md).
+If the aggregator re-export does not yet expose the new symbol, add it to the `src/` entry point of that aggregator. See [`context/aggregator-package.md`](aggregator-package.md).
 
 ## `composer.json` `"autoload"` as public API
 
@@ -92,8 +92,8 @@ Changing `"autoload"."psr-4"` (moving a class to a new namespace) or `"autoload"
 
 ## Checklist
 
-- [ ] All `src/` changes implemented per [`.context/package-arch.md`](package-arch.md)
-- [ ] PHPDoc updated on all changed symbols per [`.context/phpdoc.md`](phpdoc.md)
+- [ ] All `src/` changes implemented per [`context/package-arch.md`](package-arch.md)
+- [ ] PHPDoc updated on all changed symbols per [`context/phpdoc.md`](phpdoc.md)
 - [ ] Behavior tests added or updated in `tests/`
 - [ ] README updated if option, default, or public behavior changed
 - [ ] CHANGELOG entry added unless change is entirely dev-only
@@ -103,4 +103,4 @@ Changing `"autoload"."psr-4"` (moving a class to a new namespace) or `"autoload"
 
 ## Package-level overrides
 
-Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/agents/`. If either exists and contradicts this file on the same topic, **follow the package-level instruction** (see [`.context/README.md`](README.md#instruction-precedence)).
+Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/context/`. If either exists and contradicts this file on the same topic, **follow the package-level instruction** (see [`context/README.md`](README.md#instruction-precedence)).

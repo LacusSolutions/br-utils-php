@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This file is the **primary entry point** for AI agents working in the PHP subrepo. Read this file first. It provides baseline rules for every task and links to the specialized harnesses in [`.context/`](.context/) for task-specific instructions.
+This file is the **primary entry point** for AI agents working in the PHP subrepo. Read this file first. It provides baseline rules for every task and links to the specialized harnesses in [`context/`](context/) for task-specific instructions.
 
 **Reference standard:** `packages/utils` and `packages/cnpj-*` reflect the current v2 conventions. `packages/cpf-*` (except `cpf-dv`) still follow older v1 patterns (PHPUnit, legacy namespaces, `*Test.php` files) and are being migrated — match `cnpj-*` for new or updated packages.
 
@@ -8,11 +8,11 @@ This file is the **primary entry point** for AI agents working in the PHP subrep
 
 When instructions conflict, **the more specific scope wins**:
 
-1. **`packages/<pkg>/agents/`** — package-level harness (if present)
+1. **`packages/<pkg>/context/`** — package-level harness (if present)
 2. **`packages/<pkg>/AGENTS.md`** — package-level agent rules (if present)
-3. **Repository root** — [`.context/`](.context/) harnesses, then this file
+3. **Repository root** — [`context/`](context/) harnesses, then this file
 
-Apply every layer relevant to your task. Where a package-level `AGENTS.md` or `agents/` entry contradicts or overrides root-level guidance, follow the package-level instruction.
+Apply every layer relevant to your task. Where a package-level `AGENTS.md` or `context/` entry contradicts or overrides root-level guidance, follow the package-level instruction.
 
 ---
 
@@ -30,7 +30,7 @@ Do not assume a root-level install covers package dependencies. Prefer Composer 
 
 ### Dependencies
 
-See [`.context/dependencies.md`](.context/dependencies.md) for the full policy (approval, Packagist versioning, internal dep direction, lockfile update).
+See [`context/dependencies.md`](context/dependencies.md) for the full policy (approval, Packagist versioning, internal dep direction, lockfile update).
 
 ### Project structure
 
@@ -93,7 +93,7 @@ composer run lint:ci
 composer run lint
 ```
 
-See [`.context/lint-config.md`](.context/lint-config.md) for the full setup, shared script invocation, and per-package script conventions.
+See [`context/lint-config.md`](context/lint-config.md) for the full setup, shared script invocation, and per-package script conventions.
 
 ### Commit and standards
 
@@ -101,7 +101,7 @@ See [`.context/lint-config.md`](.context/lint-config.md) for the full setup, sha
 
 ### CI
 
-See [`.context/ci-release.md`](.context/ci-release.md) for the full pipeline (matrix PHP versions, reusable lint and test workflows, what agents must not run, local validation commands).
+See [`context/ci-release.md`](context/ci-release.md) for the full pipeline (matrix PHP versions, reusable lint and test workflows, what agents must not run, local validation commands).
 
 ---
 
@@ -115,7 +115,7 @@ See [`.context/ci-release.md`](.context/ci-release.md) for the full pipeline (ma
 
 ### Lint / static analysis (DRY)
 
-See [`.context/lint-config.md`](.context/lint-config.md) for shared config invocation patterns, PHPStan level, and the rule against adding per-package lint config files.
+See [`context/lint-config.md`](context/lint-config.md) for shared config invocation patterns, PHPStan level, and the rule against adding per-package lint config files.
 
 ### Dev tool configs
 
@@ -128,7 +128,7 @@ Avoid adding per-package configuration files for shared tools (e.g. no `.php-cs-
 
 ### PHPDoc
 
-See [`.context/phpdoc.md`](.context/phpdoc.md) for conventions (class/method docs, `@throws`, `@param`, `@property-read`, constants, tone).
+See [`context/phpdoc.md`](context/phpdoc.md) for conventions (class/method docs, `@throws`, `@param`, `@property-read`, constants, tone).
 
 ### Commit scope
 
@@ -136,23 +136,23 @@ If a commit touches only one package directory (`packages/<pkg-name>/`), use the
 
 ### Changelog
 
-See [`.context/changelogs.md`](.context/changelogs.md) for the full workflow (when to add an entry, SemVer bump decision, format, section headings, conciseness rules). Agents **do** edit `packages/<pkg>/CHANGELOG.md` directly — changelogs are managed manually (not by Changesets).
+See [`context/changelogs.md`](context/changelogs.md) for the full workflow (when to add an entry, SemVer bump decision, format, section headings, conciseness rules). Agents **do** edit `packages/<pkg>/CHANGELOG.md` directly — changelogs are managed manually (not by Changesets).
 
 ### API and docs
 
-Use [`.context/public-api.md`](.context/public-api.md) as the coordination checklist for any public API change (new class, method signature, option, or namespace). It links to the specialized harnesses for source, PHPDoc, tests, README, and changelog. All README rules are in [`.context/readme-docs.md`](.context/readme-docs.md).
+Use [`context/public-api.md`](context/public-api.md) as the coordination checklist for any public API change (new class, method signature, option, or namespace). It links to the specialized harnesses for source, PHPDoc, tests, README, and changelog. All README rules are in [`context/readme-docs.md`](context/readme-docs.md).
 
 ### CHANGELOG.md
 
-Edit `packages/<pkg>/CHANGELOG.md` following the rules in [`.context/changelogs.md`](.context/changelogs.md). Do **not** run `php run release` or `composer run release` — that creates GitHub Releases and is the developer's responsibility.
+Edit `packages/<pkg>/CHANGELOG.md` following the rules in [`context/changelogs.md`](context/changelogs.md). Do **not** run `php run release` or `composer run release` — that creates GitHub Releases and is the developer's responsibility.
 
 ---
 
 ## Agent harnesses
 
-Task-specific instructions live in [`.context/`](.context/). The harness catalog — IDs, files, and triggers — is [`.context/README.md`](.context/README.md). Read and follow the matching harness file **in full** before starting the task.
+Task-specific instructions live in [`context/`](context/). The harness catalog — IDs, files, and triggers — is [`context/README.md`](context/README.md). Read and follow the matching harness file **in full** before starting the task.
 
-A package may define its own `packages/<pkg>/agents/` or `packages/<pkg>/AGENTS.md`; those override conflicting root harness or README rules for that package (see [Instruction precedence](#instruction-precedence) above).
+A package may define its own `packages/<pkg>/context/` or `packages/<pkg>/AGENTS.md`; those override conflicting root harness or README rules for that package (see [Instruction precedence](#instruction-precedence) above).
 
 ### Skill ↔ harness mapping
 
@@ -160,18 +160,18 @@ Cursor agents may load these workspace skills as a shortcut; each skill is a thi
 
 | Cursor skill | Harness file | When triggered |
 |--------------|-------------|----------------|
-| `readme-php` | [`.context/readme-docs.md`](.context/readme-docs.md) | Writing or reviewing `README.md` / `README.pt.md` |
-| `unit-tests-php` | [`.context/unit-tests.md`](.context/unit-tests.md) | Writing, reviewing, or running tests |
-| `changelogs-php` | [`.context/changelogs.md`](.context/changelogs.md) | Editing `CHANGELOG.md`; choosing a SemVer bump |
-| `package-arch-php` | [`.context/package-arch.md`](.context/package-arch.md) | Adding or changing `src/` code |
-| `public-api-php` | [`.context/public-api.md`](.context/public-api.md) | Any public API change |
-| `new-package-php` | [`.context/new-package.md`](.context/new-package.md) | Scaffolding a new package |
-| `lint-config-php` | [`.context/lint-config.md`](.context/lint-config.md) | Editing lint/static-analysis config |
-| `phpdoc-php` | [`.context/phpdoc.md`](.context/phpdoc.md) | Adding or reviewing PHPDoc |
-| `domain-parity-php` | [`.context/domain-parity.md`](.context/domain-parity.md) | CPF ↔ CNPJ parity check |
-| `aggregator-package-php` | [`.context/aggregator-package.md`](.context/aggregator-package.md) | Working on `cpf-utils`, `cnpj-utils`, or `br-utils` |
-| `ci-release-php` | [`.context/ci-release.md`](.context/ci-release.md) | Editing CI workflows; local validation |
-| `dependencies-php` | [`.context/dependencies.md`](.context/dependencies.md) | Adding or changing Composer dependencies |
+| `readme-php` | [`context/readme-docs.md`](context/readme-docs.md) | Writing or reviewing `README.md` / `README.pt.md` |
+| `unit-tests-php` | [`context/unit-tests.md`](context/unit-tests.md) | Writing, reviewing, or running tests |
+| `changelogs-php` | [`context/changelogs.md`](context/changelogs.md) | Editing `CHANGELOG.md`; choosing a SemVer bump |
+| `package-arch-php` | [`context/package-arch.md`](context/package-arch.md) | Adding or changing `src/` code |
+| `public-api-php` | [`context/public-api.md`](context/public-api.md) | Any public API change |
+| `new-package-php` | [`context/new-package.md`](context/new-package.md) | Scaffolding a new package |
+| `lint-config-php` | [`context/lint-config.md`](context/lint-config.md) | Editing lint/static-analysis config |
+| `phpdoc-php` | [`context/phpdoc.md`](context/phpdoc.md) | Adding or reviewing PHPDoc |
+| `domain-parity-php` | [`context/domain-parity.md`](context/domain-parity.md) | CPF ↔ CNPJ parity check |
+| `aggregator-package-php` | [`context/aggregator-package.md`](context/aggregator-package.md) | Working on `cpf-utils`, `cnpj-utils`, or `br-utils` |
+| `ci-release-php` | [`context/ci-release.md`](context/ci-release.md) | Editing CI workflows; local validation |
+| `dependencies-php` | [`context/dependencies.md`](context/dependencies.md) | Adding or changing Composer dependencies |
 
 ---
 
@@ -179,13 +179,13 @@ Cursor agents may load these workspace skills as a shortcut; each skill is a thi
 
 | Purpose | Path |
 |---------|------|
-| Agent harnesses (catalog) | `.context/` |
+| Agent harnesses (catalog) | `context/` |
 | Shared CS fixer config | `.php-cs-fixer.config.php` |
 | Shared PHPStan config | `.php-stan.config.neon` |
 | CLI entry | `run` (`php run deps`, `php run lint:ci`, etc.) |
 | Dev CLI application | `scripts/Application.php` + `scripts/Commands/` |
 | Shared helpers | `scripts/helpers.php` |
-| Internal dependency graph | `php run deps` (see [`.context/dependencies.md`](.context/dependencies.md)) |
+| Internal dependency graph | `php run deps` (see [`context/dependencies.md`](context/dependencies.md)) |
 | Release command | `php run release` (`scripts/Commands/ReleaseCommand.php`) |
 | Git hooks | `.captainhook.config.json` |
 | CI / release workflows | `.github/workflows/` |

@@ -16,7 +16,7 @@ Implement and maintain the three aggregator packages (`cpf-utils`, `cnpj-utils`,
 ## Repository constraints
 
 - Aggregator packages are **thin wrappers** — they delegate to sub-package class instances and add no new business logic.
-- Aggregator packages depend on sub-packages via their published Packagist versions (`lacus/cnpj-fmt: ^2.0`, etc.); sub-packages must not depend on aggregators. After changing aggregator `"require"` constraints, confirm the graph with `php run deps` — see [`.context/dependencies.md`](dependencies.md#inspecting-internal-dependencies).
+- Aggregator packages depend on sub-packages via their published Packagist versions (`lacus/cnpj-fmt: ^2.0`, etc.); sub-packages must not depend on aggregators. After changing aggregator `"require"` constraints, confirm the graph with `php run deps` — see [`context/dependencies.md`](dependencies.md#inspecting-internal-dependencies).
 - Tests in aggregator packages import from their `vendor/` sub-packages (installed per-package).
 
 ## Migration context
@@ -151,7 +151,7 @@ When a leaf package gains a new option, method, or exception:
 2. Add the new `@throws` annotations for any new exceptions.
 3. Add a delegation method if the sub-package gains a new method.
 4. Update the aggregator's `README.md` options table.
-5. Add a CHANGELOG entry per [`.context/changelogs.md`](changelogs.md).
+5. Add a CHANGELOG entry per [`context/changelogs.md`](changelogs.md).
 
 ## Checklist
 
@@ -164,7 +164,7 @@ When a leaf package gains a new option, method, or exception:
 
 ## Package-level overrides
 
-Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/agents/`. If either exists and contradicts this file on the same topic, **follow the package-level instruction** (see [`.context/README.md`](README.md#instruction-precedence)).
+Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/context/`. If either exists and contradicts this file on the same topic, **follow the package-level instruction** (see [`context/README.md`](README.md#instruction-precedence)).
 
 ## Reference
 

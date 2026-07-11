@@ -129,11 +129,11 @@ Package-level `"require-dev"` holds only the test runner for that package: `pest
 
 ## Changelog
 
-Adding or bumping a runtime `"require"` constraint in `packages/<pkg>/composer.json` is user-facing and requires a CHANGELOG entry (see [`.context/changelogs.md`](changelogs.md)). Changing `"require-dev"` or `"scripts"` only does not require a CHANGELOG entry.
+Adding or bumping a runtime `"require"` constraint in `packages/<pkg>/composer.json` is user-facing and requires a CHANGELOG entry (see [`context/changelogs.md`](changelogs.md)). Changing `"require-dev"` or `"scripts"` only does not require a CHANGELOG entry.
 
 ## Package-level overrides
 
-Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/agents/`. If either exists and contradicts this file on the same topic, **follow the package-level instruction** (see [`.context/README.md`](README.md#instruction-precedence)).
+Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/context/`. If either exists and contradicts this file on the same topic, **follow the package-level instruction** (see [`context/README.md`](README.md#instruction-precedence)).
 
 ## Reference
 

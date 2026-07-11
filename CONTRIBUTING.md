@@ -150,7 +150,7 @@ Configured in [`.captainhook.config.json`](.captainhook.config.json):
 ├── .captainhook.config.json   # Git hooks
 ├── composer.json              # Root dev tooling and orchestration scripts
 ├── AGENTS.md                  # Agent/contributor baseline rules
-└── .context/                    # Task-specific contributor harnesses
+└── context/                   # Task-specific contributor harnesses
 ```
 
 Each package under `packages/<pkg>/` has its own `composer.json`, `vendor/`, `src/`, and `tests/` (or `tests/specs/` for Pest packages). Lint and static analysis use the **root** configs — packages do not ship their own php-cs-fixer or PHPStan config files.
@@ -453,7 +453,7 @@ Add any other context or screenshots about the feature request.
 
 - **GitHub Issues**: For bugs and feature requests
 - **GitHub Discussions**: For questions and general discussion
-- **Documentation**: Package `README.md` files, [`AGENTS.md`](AGENTS.md), and harnesses under [`.context/`](.context/)
+- **Documentation**: Package `README.md` files, [`AGENTS.md`](AGENTS.md), and harnesses under [`context/`](context/)
 
 ## Recognition
 

@@ -30,11 +30,11 @@ Package `CHANGELOG.md` files are edited manually. READMEs link to the changelog 
 
 ### Package-level overrides
 
-Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/agents/`. If either exists and contradicts this file on the same topic, **follow the package-level instruction** (see [`.context/README.md`](README.md#instruction-precedence)).
+Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/context/`. If either exists and contradicts this file on the same topic, **follow the package-level instruction** (see [`context/README.md`](README.md#instruction-precedence)).
 
 ## Before writing
 
-1. Check for `packages/<pkg>/AGENTS.md` and `packages/<pkg>/agents/`; apply package-level overrides when present.
+1. Check for `packages/<pkg>/AGENTS.md` and `packages/<pkg>/context/`; apply package-level overrides when present.
 2. Read `packages/<pkg>/composer.json` for the Packagist name and description.
 3. Read `src/` to list public classes, functions, constants, and namespaces accurately.
 4. Skim tests in `tests/` for realistic examples.

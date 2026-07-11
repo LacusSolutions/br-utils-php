@@ -67,7 +67,7 @@ Do not "fix" these toward CPF behavior without explicit product intent.
 When changing a `cpf-*` package:
 
 1. Identify the CNPJ counterpart from the table above.
-2. Check if the same issue or feature applies to the CNPJ package (same archetype, same `src/` structure per [`.context/package-arch.md`](package-arch.md)).
+2. Check if the same issue or feature applies to the CNPJ package (same archetype, same `src/` structure per [`context/package-arch.md`](package-arch.md)).
 3. If parity applies → open or note a corresponding change for `cnpj-*`.
 4. If divergence is intentional (table above) → no action needed; note it in the CHANGELOG body if user-visible.
 5. If unsure → ask the developer.
@@ -79,10 +79,10 @@ When a feature or fix is applied to one domain, verify the following in the coun
 - [ ] Same change in the main class if logic is symmetric
 - [ ] Same change in the options class if a new option is added
 - [ ] Same new exception class in `Exceptions/` if a new error case is introduced
-- [ ] Same `@throws` annotation in PHPDoc per [`.context/phpdoc.md`](phpdoc.md)
-- [ ] Same test cases per [`.context/unit-tests.md`](unit-tests.md)
-- [ ] Both packages included in CHANGELOG entries if user-facing per [`.context/changelogs.md`](changelogs.md)
-- [ ] Both READMEs updated per [`.context/readme-docs.md`](readme-docs.md) if options or defaults change
+- [ ] Same `@throws` annotation in PHPDoc per [`context/phpdoc.md`](phpdoc.md)
+- [ ] Same test cases per [`context/unit-tests.md`](unit-tests.md)
+- [ ] Both packages included in CHANGELOG entries if user-facing per [`context/changelogs.md`](changelogs.md)
+- [ ] Both READMEs updated per [`context/readme-docs.md`](readme-docs.md) if options or defaults change
 
 ## Key files for comparison
 
@@ -97,4 +97,4 @@ When a feature or fix is applied to one domain, verify the following in the coun
 
 ## Package-level overrides
 
-Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/agents/`. If either exists and contradicts this file on the same topic, **follow the package-level instruction** (see [`.context/README.md`](README.md#instruction-precedence)).
+Before applying this harness, check whether the target package defines `packages/<pkg>/AGENTS.md` or `packages/<pkg>/context/`. If either exists and contradicts this file on the same topic, **follow the package-level instruction** (see [`context/README.md`](README.md#instruction-precedence)).
