@@ -13,12 +13,6 @@
 
 Kit de utilitários em PHP para formatar, gerar e validar CPF (Cadastro de Pessoa Física) e CNPJ (Cadastro Nacional da Pessoa Jurídica). Oferece um wrapper de alto nível `BrUtils` em torno de [`lacus/cpf-utils`](https://packagist.org/packages/lacus/cpf-utils) e [`lacus/cnpj-utils`](https://packagist.org/packages/lacus/cnpj-utils), expondo todos os recursos empacotados em namespaces unificados.
 
-## Suporte a PHP
-
-| ![PHP 8.2](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white) | ![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white) | ![PHP 8.4](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white) | ![PHP 8.5](https://img.shields.io/badge/PHP-8.5-777BB4?logo=php&logoColor=white) |
-| --- | --- | --- | --- |
-| Passing ✔ | Passing ✔ | Passing ✔ | Passing ✔ |
-
 ## Recursos
 
 - ✅ **API unificada de alto nível**: Uma instância `BrUtils` com acessores de domínio `$cpf` e `$cnpj`
