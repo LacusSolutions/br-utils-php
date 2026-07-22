@@ -22,7 +22,12 @@ The root `README.md` at `php/README.md` documents `lacus/br-utils`. Edit it dire
 
 ### Portuguese parity
 
-English `README.md` is the source of truth for structure and content. Any change to a package's `README.md` must be reflected in that package's `README.pt.md` (faithful translation). V2 packages have both; v1 CPF packages currently have English only — add `README.pt.md` during v2 migration.
+English `README.md` is the source of truth for structure and content. Any change to a package's `README.md` must be reflected in that package's `README.pt.md` (faithful translation), **except** the English-only elements listed below. V2 packages have both; v1 CPF packages currently have English only — add `README.pt.md` during v2 migration.
+
+**Omit from `README.pt.md` (English `README.md` only):**
+
+- The **badges row** (Packagist / CI / license shields). Keep the cover image (or H1) and optional callouts.
+- The **`## PHP Support`** section (and its Portuguese heading `## Suporte a PHP`). Do not translate or recreate the PHP version badge table in Portuguese docs.
 
 ### Changelog links
 
@@ -63,10 +68,10 @@ Use these headings in this order. Omit optional sections; never reorder core sec
 
 ```
 [Cover image OR H1 title]
-[Badges row]
+[Badges row]            ← English README.md only; omit from README.pt.md
 [Optional blockquote callouts]
 [One-paragraph description]
-## PHP Support
+## PHP Support          ← English README.md only; omit from README.pt.md
 ## Features
 ## Installation
 ## Import
@@ -93,7 +98,9 @@ Made with ❤️ by Lacus Solutions
 
 Use the package folder slug (e.g. `cnpj-fmt`, `br-utils`). Foundation packages use an H1 instead.
 
-### Badges (always six, in this order)
+### Badges (always six, in this order) — English only
+
+> Include only in `README.md`. Never add these shields to `README.pt.md`.
 
 Replace `<packagist-name>` with `lacus/<pkg>`:
 
@@ -128,7 +135,9 @@ Pattern:
 
 ---
 
-## PHP Support
+## PHP Support — English only
+
+> Include only in `README.md`. Omit from `README.pt.md` (do not add `## Suporte a PHP`).
 
 Use the PHP version badge table (not a plain text table). Copy from `packages/cnpj-fmt/README.md`:
 
@@ -319,7 +328,7 @@ Made with ❤️ by [Lacus Solutions](https://github.com/LacusSolutions)
 
 | Rule | Detail |
 |------|--------|
-| Language | English in `README.md`; mirror structure faithfully in `README.pt.md` |
+| Language | English in `README.md`; mirror structure in `README.pt.md` except badges and `## PHP Support` / `## Suporte a PHP` (English only) |
 | Voice | Direct, technical, third-person; present tense |
 | Formatting | Backticks for identifiers, options, types; **`bold`** for class/method names in prose |
 | Code comments | `// 'formatted result'` for output; use realistic domain values |
@@ -345,6 +354,7 @@ When creating or updating a README:
 - [ ] CHANGELOG footer links to packages/<pkg>/CHANGELOG.md
 - [ ] README.pt.md link present (v2 packages)
 - [ ] README.pt.md updated when README.md changes
+- [ ] README.pt.md omits badges row and ## Suporte a PHP
 - [ ] Footer boilerplate unchanged
 ```
 

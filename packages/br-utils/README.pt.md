@@ -1,23 +1,10 @@
 ![br-utils para PHP](https://br-utils.vercel.app/img/cover_br-utils.jpg)
 
-[![Packagist Version](https://img.shields.io/packagist/v/lacus/br-utils)](https://packagist.org/packages/lacus/br-utils)
-[![Packagist Downloads](https://img.shields.io/packagist/dm/lacus/br-utils)](https://packagist.org/packages/lacus/br-utils)
-[![PHP Version](https://img.shields.io/packagist/php-v/lacus/br-utils)](https://www.php.net/)
-[![Test Status](https://img.shields.io/github/actions/workflow/status/LacusSolutions/br-utils-php/ci.yml?label=ci/cd)](https://github.com/LacusSolutions/br-utils-php/actions)
-[![Last Update Date](https://img.shields.io/github/last-commit/LacusSolutions/br-utils-php)](https://github.com/LacusSolutions/br-utils-php)
-[![Project License](https://img.shields.io/github/license/LacusSolutions/br-utils-php)](https://github.com/LacusSolutions/br-utils-php/blob/main/LICENSE)
-
 > 🚀 **Suporte total ao [novo formato alfanumérico de CNPJ](https://github.com/user-attachments/files/23937961/calculodvcnpjalfanaumerico.pdf).**
 
 > 🌎 [Access documentation in English](https://github.com/LacusSolutions/br-utils-php/blob/main/packages/br-utils/README.md)
 
 Kit de utilitários em PHP para formatar, gerar e validar CPF (Cadastro de Pessoa Física) e CNPJ (Cadastro Nacional da Pessoa Jurídica). Oferece um wrapper de alto nível `BrUtils` em torno de [`lacus/cpf-utils`](https://packagist.org/packages/lacus/cpf-utils) e [`lacus/cnpj-utils`](https://packagist.org/packages/lacus/cnpj-utils), expondo todos os recursos empacotados em namespaces unificados.
-
-## Suporte a PHP
-
-| ![PHP 8.2](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white) | ![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white) | ![PHP 8.4](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white) | ![PHP 8.5](https://img.shields.io/badge/PHP-8.5-777BB4?logo=php&logoColor=white) |
-| --- | --- | --- | --- |
-| Passing ✔ | Passing ✔ | Passing ✔ | Passing ✔ |
 
 ## Recursos
 
